@@ -12,6 +12,7 @@
         "no-mixed-spaces-and-tabs":[2,false],
         "no-tabs": 0,
         "eqeqeq": 1,
-        "no-new": 1
+        "no-new": 1,
+        "space-before-function-paren":0
     }
 }
