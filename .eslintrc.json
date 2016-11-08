@@ -1,0 +1,17 @@
+{
+    "extends": "standard",
+    "installedESLint": true,
+    "plugins": [
+        "standard",
+        "promise"
+    ],
+    "rules": {
+        "no-alert": 0,
+        "no-var": 1,
+        "indent": [2, 4],
+        "no-mixed-spaces-and-tabs":[2,false],
+        "no-tabs": 0,
+        "eqeqeq": 1,
+        "no-new": 1
+    }
+}

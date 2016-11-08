@@ -1,0 +1,53 @@
+{
+	"name": "gulp-pack",
+	"description": "gulp-pack",
+	"author":"shaokr",
+	"version": "0.0.1",
+	"private": true,
+	"scripts":{
+		"g" : "gulp"
+	},
+	"devDependencies": {
+		"gulp":"^3.9.1",
+		"webpack":"^1.13.3",
+		"glob":"^5.0.15",
+		"lodash":"^4.16.5",
+		"less":"^2.7.1",
+		"gulp-webpack":"^1.5.0",
+		"autoprefixer":"^6.5.1",
+		"gulp-connect":"^5.0.0",
+
+		"babel": "^6.5.2",
+		"babel-loader":"^6.2.7",
+		"babel-core":"^6.18.0",
+		"babel-preset-es2015":"^6.18.0",
+		"babel-preset-react":"^6.16.0",
+		"babel-preset-stage-0":"^6.16.0",
+		"babel-preset-stage-1":"^6.16.0",
+		"babel-preset-stage-2":"^6.16.0",
+		"babel-preset-stage-3":"^6.16.0",
+
+		"babel-plugin-transform-runtime":"^6.15.0",
+		"babel-plugin-transform-es2015-typeof-symbol":"^6.18.0",
+		"babel-plugin-transform-decorators-legacy":"^1.3.4",
+		
+		"style-loader":"^0.13.1",
+		"css-loader":"^0.23.1",
+		"less-loader":"^2.2.2",
+		"postcss-loader":"^0.8.1",
+		"image-webpack-loader":"^3.0.0",
+		
+
+		"file-loader":"^0.9.0",
+		"url-loader":"^0.5.7",
+		
+		"extract-text-webpack-plugin":"^1.0.1",
+		"html-webpack-plugin":"^2.24.1",
+
+		"colors": "^1.1.2",
+		"md5-file": "^2.0.4",
+		"mobx": "^2.6.1",
+		"mobx-react": "^3.5.8",
+		"systemjs":"^0.19.40"
+	}
+}
