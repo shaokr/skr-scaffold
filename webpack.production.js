@@ -9,8 +9,6 @@ let autoprefixer = require('autoprefixer')
 let ExtractTextPlugin = require('extract-text-webpack-plugin')
 let HtmlWebpackPlugin = require('html-webpack-plugin')
 
-let CopyWebpackPlugin = require('copy-webpack-plugin')
-
 let cssExtractor = new ExtractTextPlugin('[name].css')
 
 // var CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin')
@@ -32,7 +30,8 @@ class WebpackGe {
             'react-router': 'ReactRouter',
             'zepto': '$',
             'jquery': '$',
-            'systemjs': 'SystemJS'
+            'systemjs': 'SystemJS',
+            'kook-ui': 'kookUi',
         }
         this.resolve = {
             modulesDirectories: [
@@ -169,9 +168,6 @@ let getPackPlugins = ({path}) => {
     let _webpack = {}
     _webpack = assignRecursion(new WebpackGe(), wkcf, {
         plugins: [
-            new CopyWebpackPlugin([
-                {context: './node_modules/systemjs/dist', from: '*', to: 'systemjs'}
-            ]),
             // cssExtractor,
             new webpack.DefinePlugin({
                 __DEV__: true,

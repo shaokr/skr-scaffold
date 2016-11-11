@@ -1,5 +1,5 @@
 module.exports = {
-    path: __dirname + '/kook-fed', // 项目目录
+    path: __dirname + '/kook-web-fed', // 项目目录
     src: {
         path: 'src', // 目录地址(与src同级
         js: 'js/entry', // 需要编译的js目录

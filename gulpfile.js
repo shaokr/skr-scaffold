@@ -7,9 +7,11 @@ let glob = require('glob')
 let connect = require('gulp-connect')
 
 let webpack = require('gulp-webpack')
-let {getPackPlugins, getPackPluginsBuild} = require('./webpack.production')
+
 
 let md5File = require('md5-file')
+
+let fs = require('fs')
 
 // 引入配置
 let userConfig = require('./gulp-config')
@@ -23,11 +25,28 @@ let web = ({path, name, build = false}) => {
             let _name = item.split(userConfig.src.js + '/')[1].split('.')[0]
             _entry[_name] = item
         }
+        
+        // 获取共用配置
+        let {getPackPlugins, getPackPluginsBuild} = require('./webpack.production')
+        delete require.cache[require.resolve('./webpack.production')]
+        // 判断使用配置数据
         let plugins = build ? getPackPluginsBuild({ path }) : getPackPlugins({ path })
+        let _webpackConfig = _.assign(plugins , { entry: _entry })
+
+        // 项目配置
+        let ItemConfigName = `${path}/packconf/config.js`
+        if(fs.existsSync(ItemConfigName)){
+            let ItemConfig = require(ItemConfigName)
+            delete require.cache[require.resolve(`${path}/packconf/config`)]
+            _webpackConfig = ItemConfig({
+                data:_webpackConfig,
+                build,
+                path
+            })
+        }
+
         gulp.src(path)
-            .pipe(webpack(
-                _.assign({}, plugins, { entry: _entry })
-            ))
+            .pipe(webpack(_webpackConfig))
             .pipe(gulp.dest(`${path}/../${userConfig.dist.path}/${userConfig.dist.build}`))
             .pipe(connect.reload())
     })
