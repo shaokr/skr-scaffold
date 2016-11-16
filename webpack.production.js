@@ -1,15 +1,15 @@
 
-let _ = require('lodash')
-let glob = require('glob')
-// let paths = require('path')
-let webpack = require('webpack')
-let userConfig = require('./gulp-config')
-let autoprefixer = require('autoprefixer')
+let _ = require('lodash');
+let glob = require('glob');
+let paths = require('path')
+let webpack = require('webpack');
+let userConfig = require('./gulp-config');
+let autoprefixer = require('autoprefixer');
 
-let ExtractTextPlugin = require('extract-text-webpack-plugin')
-let HtmlWebpackPlugin = require('html-webpack-plugin')
+let ExtractTextPlugin = require('extract-text-webpack-plugin');
+let HtmlWebpackPlugin = require('html-webpack-plugin');
 
-let cssExtractor = new ExtractTextPlugin('[name].css')
+let cssExtractor = new ExtractTextPlugin('[name].css');
 
 // var CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin')
 // var ImageminPlugin = require('imagemin-webpack-plugin').default
@@ -19,11 +19,11 @@ let cssExtractor = new ExtractTextPlugin('[name].css')
  */
 class WebpackGe {
     constructor () {
-        this.entry = {}
+        this.entry = {};
         this.output = {
             filename: '[name].js',
             publicPath: './'
-        }
+        };
         this.externals = {
             'react': 'React',
             'react-dom': 'ReactDOM',
@@ -32,13 +32,14 @@ class WebpackGe {
             'jquery': '$',
             'systemjs': 'SystemJS',
             'kook-ui': 'kookUi',
-        }
+            'antd': 'antd'
+        };
         this.resolve = {
             modulesDirectories: [
-                'js', 'node_modules', 'src', 'less'
+                'node_modules', 'js', 'less', 'src'
             ]
-        }
-        this.postcss = [autoprefixer({ browsers: ['> 1%', 'last 5 versions'] })]
+        };
+        this.postcss = [autoprefixer({ browsers: ['> 1%', 'last 5 versions'] })];
     }
 
 }
@@ -59,7 +60,7 @@ let wkcf = {
                         'stage-0'
                         // 'stage-2',
                     ],
-                    plugins: ['transform-runtime', 'transform-es2015-typeof-symbol', 'transform-decorators-legacy']
+                    plugins: ['transform-runtime', 'transform-es2015-typeof-symbol', 'transform-decorators-legacy', 'lodash']
                 }
 
             },
@@ -83,7 +84,7 @@ let wkcf = {
     plugins: [
 
     ]
-}
+};
 
 /**
  * build打包配置
@@ -102,7 +103,7 @@ let wkcfBuild = {
                         'stage-0'
                         // 'stage-2',
                     ],
-                    plugins: ['transform-runtime', 'transform-es2015-typeof-symbol', 'transform-decorators-legacy']
+                    plugins: ['transform-runtime', 'transform-es2015-typeof-symbol', 'transform-decorators-legacy', 'lodash']
                 }
             },
             {
@@ -125,14 +126,14 @@ let wkcfBuild = {
     plugins: [
 
     ]
-}
+};
 /**
  * 生成html
  */
 let generateHtml = (path) => {
-    let lists = glob.sync(path + '/' + userConfig.src.html + '/*.html')
+    let lists = glob.sync(path + '/' + userConfig.src.html + '/*.html');
     return lists.map((item) => {
-        let name = item.split(userConfig.src.html)[1]
+        let name = item.split(userConfig.src.html)[1];
         return new HtmlWebpackPlugin({                        // 根据模板插入css/js等生成最终HTML
             filename: userConfig.dist.html + name,    // 生成的html存放路径，相对于 path
             template: item,    // html模板路径
@@ -143,9 +144,9 @@ let generateHtml = (path) => {
                 collapseWhitespace: false    // 删除空白符与换行符
             },
             excludeChunks: ['config']
-        })
-    })
-}
+        });
+    });
+};
 /**
  * 递归整合对象
  */
@@ -153,20 +154,23 @@ let assignRecursion = (object, ...sources) => {
     for (let item of sources) {
         _.assignWith(object, item, (a, b) => {
             if (typeof b !== 'object') {
-                return b
+                return b;
             } else {
-                return assignRecursion(a, b)
+                return assignRecursion(a, b);
             }
-        })
+        });
     }
-    return object
-}
+    return object;
+};
 /**
  * 查询打包配置
  */
 let getPackPlugins = ({path}) => {
-    let _webpack = {}
+    let _webpack = {};
     _webpack = assignRecursion(new WebpackGe(), wkcf, {
+        resolve: {
+            root: path + '/..'
+        },
         plugins: [
             // cssExtractor,
             new webpack.DefinePlugin({
@@ -176,15 +180,19 @@ let getPackPlugins = ({path}) => {
             ...generateHtml(path)
         ]
 
-    })
-    return _webpack
-}
+    });
+    return _webpack;
+};
 /**
  * 查询build配置
  */
 let getPackPluginsBuild = ({path}) => {
-    let _webpack = {}
+    let _webpack = {};
+    console.log(path)
     _webpack = assignRecursion(new WebpackGe(), wkcfBuild, {
+        resolve: {
+            root: path + '/..'
+        },
         plugins: [
             cssExtractor,
             new webpack.optimize.DedupePlugin(),
@@ -200,10 +208,10 @@ let getPackPluginsBuild = ({path}) => {
             }),
             ...generateHtml(path)
         ]
-    })
-    return _webpack
-}
+    });
+    return _webpack;
+};
 module.exports = {
     getPackPlugins,
     getPackPluginsBuild
-}
+};
