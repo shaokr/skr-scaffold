@@ -1,7 +1,7 @@
 
 let _ = require('lodash');
 let glob = require('glob');
-let paths = require('path')
+let paths = require('path');
 let webpack = require('webpack');
 let userConfig = require('./gulp-config');
 let autoprefixer = require('autoprefixer');
@@ -32,7 +32,10 @@ class WebpackGe {
             'jquery': '$',
             'systemjs': 'SystemJS',
             'kook-ui': 'kookUi',
-            'antd': 'antd'
+            'antd': 'antd',
+            'mobx': 'mobx',
+            'mobx-react': 'mobxReact',
+            'mobx-react-devtools': 'mobxDevtools'
         };
         this.resolve = {
             modulesDirectories: [
@@ -67,10 +70,10 @@ let wkcf = {
             {
                 test: /\.less$/,
                 exclude: /node_modules/,
-                loaders: [
+                loader: cssExtractor.extract(
                     'style',
                     'css?sourceMap!less?sourceMap!postcss'
-                ]
+                )
             },
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
@@ -172,7 +175,7 @@ let getPackPlugins = ({path}) => {
             root: path + '/..'
         },
         plugins: [
-            // cssExtractor,
+            cssExtractor,
             new webpack.DefinePlugin({
                 __DEV__: true,
                 __PRE__: false
