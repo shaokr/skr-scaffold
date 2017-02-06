@@ -5,9 +5,18 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "c": "npm config set registry https://registry.npm.taobao.org",
     "cnpm": "npm install -g cnpm --registry=https://registry.npm.taobao.org",
-    "eslint": "cnpm i eslint eslint-config-standard eslint-plugin-standard eslint-plugin-promise -g",
+    "eslint": "npm i eslint eslint-config-standard eslint-plugin-standard eslint-plugin-promise -g",
     "g": "gulp"
+  },
+  "dependencies": {
+    "classnames": "^2.2.5",
+    "lodash": "^4.16.5",
+    "mobx": "^2.6.1",
+    "mobx-react": "^3.5.8",
+    "systemjs": "^0.19.40",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.5.1",
@@ -24,7 +33,6 @@
     "babel-preset-stage-1": "^6.16.0",
     "babel-preset-stage-2": "^6.16.0",
     "babel-preset-stage-3": "^6.16.0",
-    "classnames": "^2.2.5",
     "colors": "^1.1.2",
     "copy-webpack-plugin": "^4.0.0",
     "css-loader": "^0.23.1",
@@ -38,13 +46,9 @@
     "image-webpack-loader": "^3.0.0",
     "less": "^2.7.1",
     "less-loader": "^2.2.2",
-    "lodash": "^4.16.5",
     "md5-file": "^2.0.4",
-    "mobx": "^2.6.1",
-    "mobx-react": "^3.5.8",
     "postcss-loader": "^0.8.1",
     "style-loader": "^0.13.1",
-    "systemjs": "^0.19.40",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.3"
   }

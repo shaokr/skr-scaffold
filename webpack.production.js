@@ -39,7 +39,7 @@ class WebpackGe {
         };
         this.resolve = {
             modulesDirectories: [
-                'node_modules', 'js', 'less', 'src'
+                'node_modules', 'js', 'less', 'src', 'img'
             ]
         };
         this.postcss = [autoprefixer({ browsers: ['> 1%', 'last 5 versions'] })];
@@ -80,6 +80,10 @@ let wkcf = {
                 loaders: [
                     `url?limit=10000&name=${userConfig.dist.img}/[name].[ext]`
                 ]
+            },
+            {
+                test: /\.ts$/,
+                loader: 'ts-loader?logInfoToStdOut=true'
             }
         ]
     },
@@ -123,6 +127,10 @@ let wkcfBuild = {
                     `url?limit=10000&name=${userConfig.dist.img}/[name].[ext]`,
                     'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=true'
                 ]
+            },
+            {
+                test: /\.ts$/,
+                loader: 'ts-loader'
             }
         ]
     },
@@ -191,8 +199,10 @@ let getPackPlugins = ({path}) => {
  */
 let getPackPluginsBuild = ({path}) => {
     let _webpack = {};
-    console.log(path)
     _webpack = assignRecursion(new WebpackGe(), wkcfBuild, {
+        output:{
+            filename: '[name].min.js',
+        },
         resolve: {
             root: path + '/..'
         },
