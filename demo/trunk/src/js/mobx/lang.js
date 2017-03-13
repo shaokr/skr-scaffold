@@ -19,7 +19,7 @@ class Language {
     }
 
     @action('设置语言') setLang = async (name = this.Language) => {
-        let data = await Systemjs.import(`./build/lang/${name}.js`);
+        let data = await Systemjs.import(`./lang/${name}.js`);
 
         runInAction('语言成功设置为:'+name, () => {
             this.Language = localStorage.Language = name;

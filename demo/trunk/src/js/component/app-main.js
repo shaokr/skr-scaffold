@@ -38,7 +38,6 @@ export default class NoticeMain extends Component{
 	render(){
 		const {store,lang,computed,action} = this.props;
 		const {title,tab} = store
-		console.log(this)
 		return (
 			<div onClick={()=>{
 				lang.setLang(lang.Language == 'en'? 'cn':'en')

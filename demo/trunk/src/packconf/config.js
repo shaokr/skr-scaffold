@@ -32,11 +32,11 @@ let CopyWebpackPlugin = require('copy-webpack-plugin');
  */
 function Copy(path) {
     let _data = [];
-    let _pa = paths.resolve(path + '/../dist/build/systemjs');
+    let _pa = paths.resolve(path + '/../dist/systemjs');
     if (!fs.existsSync(_pa)) {
         _data.push({ context: 'node_modules/systemjs/dist', from: '*', to: 'systemjs' });
     }
-    _data.push({ context: `${path}/js/conf/lang`, from: '*', to: 'lang' });
+    _data.push({ context: `${path}/js/conf/lang`, from: '**', to: 'lang' });
 
     return new CopyWebpackPlugin(_data);
 }
