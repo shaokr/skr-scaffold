@@ -78,7 +78,7 @@ let wkcf = {
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
                 loaders: [
-                    `url?limit=10000&name=${userConfig.dist.img}/[name].[ext]`
+                    `url?limit=10000&name=${userConfig.dist.img}/[name][hash].[ext]`
                 ]
             },
             {
@@ -124,7 +124,7 @@ let wkcfBuild = {
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
                 loaders: [
-                    `url?limit=10000&name=${userConfig.dist.img}/[name].[ext]`,
+                    `url?limit=10000&name=${userConfig.dist.img}/[name][hash].[ext]`,
                     'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=true'
                 ]
             },

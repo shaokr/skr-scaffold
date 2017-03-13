@@ -5,8 +5,6 @@
 
 import {observable, action, runInAction, useStrict} from "mobx";
 import Systemjs from 'systemjs';
-import log from 'util/widget/log';
-import _ from 'lodash';
 
 useStrict(true);
 
