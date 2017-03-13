@@ -43,7 +43,7 @@ let web = ({path, name, build = false}) => {
 
         gulp.src(path)
             .pipe(webpack(_webpackConfig))
-            .pipe(gulp.dest(`${path}/../${userConfig.dist.path}/${userConfig.dist.build}`))
+            .pipe(gulp.dest(`${path}/../${userConfig.dist.path}`))
             .pipe(connect.reload());
     });
 };

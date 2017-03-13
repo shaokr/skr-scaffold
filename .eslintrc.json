@@ -1,4 +1,7 @@
 {
+    "parserOptions":{
+        "ecmaVersion": 7
+    },
     "extends": "standard",
     "installedESLint": true,
     "plugins": [
@@ -13,6 +16,7 @@
         "no-tabs": 0,
         "eqeqeq": 1,
         "no-new": 1,
+        "semi": [2, "always"],
         "space-before-function-paren":0
     }
 }

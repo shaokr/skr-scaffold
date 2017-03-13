@@ -1,7 +1,7 @@
 
 let _ = require('lodash');
 let glob = require('glob');
-let paths = require('path');
+// let paths = require('path');
 let webpack = require('webpack');
 let userConfig = require('./gulp-config');
 let autoprefixer = require('autoprefixer');
@@ -21,7 +21,7 @@ class WebpackGe {
     constructor () {
         this.entry = {};
         this.output = {
-            filename: '[name].js',
+            filename: `${userConfig.dist.build}/[name].js`,
             publicPath: './'
         };
         this.externals = {
@@ -70,7 +70,7 @@ let wkcf = {
             {
                 test: /\.less$/,
                 exclude: /node_modules/,
-                loader: cssExtractor.extract(
+                loader: ExtractTextPlugin.extract(
                     'style',
                     'css?sourceMap!less?sourceMap!postcss'
                 )
@@ -116,7 +116,7 @@ let wkcfBuild = {
             {
                 test: /\.less$/,
                 exclude: /node_modules/,
-                loader: cssExtractor.extract(
+                loader: ExtractTextPlugin.extract(
                     'style',
                     'css!less!postcss'
                 )
@@ -183,7 +183,7 @@ let getPackPlugins = ({path}) => {
             root: path + '/..'
         },
         plugins: [
-            cssExtractor,
+            new ExtractTextPlugin(`${userConfig.dist.build}/[name].css`),
             new webpack.DefinePlugin({
                 __DEV__: true,
                 __PRE__: false
@@ -200,14 +200,14 @@ let getPackPlugins = ({path}) => {
 let getPackPluginsBuild = ({path}) => {
     let _webpack = {};
     _webpack = assignRecursion(new WebpackGe(), wkcfBuild, {
-        output:{
-            filename: '[name].min.js',
+        output: {
+            filename: `${userConfig.dist.build}/[name].min.js`
         },
         resolve: {
             root: path + '/..'
         },
         plugins: [
-            cssExtractor,
+            new ExtractTextPlugin(`${userConfig.dist.build}/[name].min.css`),
             new webpack.optimize.DedupePlugin(),
             new webpack.optimize.OccurenceOrderPlugin(),
             new webpack.optimize.UglifyJsPlugin({
