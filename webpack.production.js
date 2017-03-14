@@ -78,7 +78,7 @@ let wkcf = {
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
                 loaders: [
-                    `url?limit=10000&name=${userConfig.dist.img}/[name][hash].[ext]`
+                    `url?limit=10000&name=${userConfig.dist.img}/[name].[ext]`
                 ]
             },
             {
@@ -124,7 +124,7 @@ let wkcfBuild = {
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
                 loaders: [
-                    `url?limit=10000&name=${userConfig.dist.img}/[name][hash].[ext]`,
+                    `url?limit=10000&name=${userConfig.dist.img}/[name].[ext]`,
                     'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=true'
                 ]
             },
@@ -141,7 +141,7 @@ let wkcfBuild = {
 /**
  * 生成html
  */
-let generateHtml = (path) => {
+let generateHtml = (path, configJs) => {
     let lists = glob.sync(path + '/' + userConfig.src.html + '/*.html');
     return lists.map((item) => {
         let name = item.split(userConfig.src.html)[1];
@@ -154,7 +154,8 @@ let generateHtml = (path) => {
                 removeComments: true,    // 移除HTML中的注释
                 collapseWhitespace: false    // 删除空白符与换行符
             },
-            excludeChunks: ['config']
+            excludeChunks: ['config'],
+            configJs
         });
     });
 };
@@ -178,6 +179,7 @@ let assignRecursion = (object, ...sources) => {
  */
 let getPackPlugins = ({path}) => {
     let _webpack = {};
+    let configJs = `./${userConfig.dist.build}/config.js`;
     _webpack = assignRecursion(new WebpackGe(), wkcf, {
         resolve: {
             root: path + '/..'
@@ -188,7 +190,7 @@ let getPackPlugins = ({path}) => {
                 __DEV__: true,
                 __PRE__: false
             }),
-            ...generateHtml(path)
+            ...generateHtml(path,configJs)
         ]
 
     });
@@ -199,6 +201,7 @@ let getPackPlugins = ({path}) => {
  */
 let getPackPluginsBuild = ({path}) => {
     let _webpack = {};
+    let configJs = `./${userConfig.dist.build}/config.min.js`;
     _webpack = assignRecursion(new WebpackGe(), wkcfBuild, {
         output: {
             filename: `${userConfig.dist.build}/[name].min.js`
@@ -219,7 +222,7 @@ let getPackPluginsBuild = ({path}) => {
                 __DEV__: false,
                 __PRE__: true
             }),
-            ...generateHtml(path)
+            ...generateHtml(path,configJs)
         ]
     });
     return _webpack;

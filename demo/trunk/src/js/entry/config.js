@@ -40,7 +40,7 @@ let mainListObj = { // 载入文件的配置
     }
 };
 
-Systemjs.import(`${cdnHost}config.js`).then((res) => {
+Systemjs.import(`${cdnHost}/config/1.0.3/config.js`).then((res) => {
     // res中的map查看cdn目录下config.js文件
     Systemjs.config(res(cdnHost));
     Systemjs.config(mapListObj);
