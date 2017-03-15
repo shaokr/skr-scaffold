@@ -10,6 +10,8 @@
 
 开启服务 : ```npm run g```
 
+开启压缩服务 : ```npm run gb```
+
 ## 设置 
 
 在```gulp-config.js```文件里进行目录的设置
@@ -35,9 +37,9 @@
 
 > js:
 
->> compoent: 项目react组件
+>> component: 项目react组件
 
->> conf: 配置目录(语言等
+>> config: 配置目录(语言等
 
 >> entry: 入口(在此目录的文件会产出到产出环境
 

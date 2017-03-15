@@ -1,5 +1,7 @@
 let fs = require('fs');
 let paths = require('path');
+let _ = require('lodash');
+
 let itemWebConfig = {
     go: __dirname + '/webpackConfig.js',
     build: __dirname + '/webpackConfig-build.js'
@@ -14,6 +16,15 @@ function Last({data, build, path}) {
     } else if (fs.existsSync(itemWebConfig.build)) {
         return require(itemWebConfig.build);
     }
+    // let entry = [
+    //     'main',
+    // ];
+    // _.map(entry,(item) => {
+    //     return {
+    //         [item]: data.entry[item]
+    //     }
+    // });
+    // data.entry = {...entry};
 
     // 添加目录拷贝
     let _copyList = Copy(path);
@@ -36,7 +47,7 @@ function Copy(path) {
     if (!fs.existsSync(_pa)) {
         _data.push({ context: 'node_modules/systemjs/dist', from: '*', to: 'systemjs' });
     }
-    _data.push({ context: `${path}/js/conf/lang`, from: '**', to: 'lang' });
+    _data.push({ context: `${path}/js/config/lang`, from: '**', to: 'lang' });
 
     return new CopyWebpackPlugin(_data);
 }

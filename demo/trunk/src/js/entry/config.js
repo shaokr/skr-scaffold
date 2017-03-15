@@ -3,18 +3,18 @@
 //  */
 
 import Systemjs from 'systemjs';
-import cdnHost from 'conf/cdn-host';
+import cdnHost from 'config/cdn-host';
 import _ from 'lodash';
 
 let mainData = {
-    js: './build/main.js',
-    css: './build/main.css'
+    js: './main.js',
+    css: './main.css'
 }
 
 if(__PRE__){
     mainData = {
-        js: './build/main.min.js',
-        css: './build/main.min.css' // 位置相对于js
+        js: './main.min.js',
+        css: './main.min.css' // 位置相对于js
     }
 }
 

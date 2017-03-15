@@ -15,8 +15,8 @@ if (debug) {
  */
 let logGroup = {};
 let log = (str, group = 0) => {
-    if (debug) {
-        console.trace(str);
+     if (debug == 10086 || debug == group) {
+        console.trace(_.cloneDeep(str));
         if (typeof str !== 'object') {
             logGroup[group] = logGroup[group] >> 0; // 当前编号
             let _group = ++logGroup[group];

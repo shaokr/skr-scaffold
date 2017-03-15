@@ -1,4 +1,4 @@
-import env from '../util/env';
+import env from 'util/env';
 let {location} = window;
 // import 'common/widget/whatwg-fetch';
 // 设置公私有cdn云地址

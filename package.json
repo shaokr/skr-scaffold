@@ -5,10 +5,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "c": "npm config set registry https://registry.npm.taobao.org",
     "cnpm": "npm install -g cnpm --registry=https://registry.npm.taobao.org",
     "eslint": "npm i eslint eslint-config-standard eslint-plugin-standard eslint-plugin-promise -g",
-    "g": "gulp"
+    "g": "gulp",
+    "gb": "gulp bulid"
   },
   "dependencies": {
     "classnames": "^2.2.5",

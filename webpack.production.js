@@ -7,9 +7,27 @@ let userConfig = require('./gulp-config');
 let autoprefixer = require('autoprefixer');
 
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
+
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 
 let cssExtractor = new ExtractTextPlugin('[name].css');
+
+// function MyPlugin(options) {
+//   // Configure your plugin with options... 
+// }
+ 
+// MyPlugin.prototype.apply = function(compiler) {
+//   // ... 
+//   compiler.plugin('compilation', function(compilation) {
+//     compilation.plugin('html-webpack-plugin-alter-asset-tags', function(htmlPluginData, callback) {
+//         // console.log(htmlPluginData.plugin.assetJson)
+//       // console.log(htmlPluginData.plugin.options.assetJson)
+//       htmlPluginData.plugin.assetJson[0] = './';
+//       callback(null, htmlPluginData);
+//     });
+//   });
+ 
+// };
 
 // var CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin')
 // var ImageminPlugin = require('imagemin-webpack-plugin').default
@@ -21,8 +39,9 @@ class WebpackGe {
     constructor () {
         this.entry = {};
         this.output = {
-            filename: `${userConfig.dist.build}/[name].js`,
-            publicPath: './'
+            filename: `[name].js`,
+            // path: `${__dirname}/${userConfig.dist.build}`
+            publicPath: `./`
         };
         this.externals = {
             'react': 'React',
@@ -78,7 +97,7 @@ let wkcf = {
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
                 loaders: [
-                    `url?limit=10000&name=${userConfig.dist.img}/[name].[ext]`
+                    `url?limit=10000&name=${userConfig.dist.img}/[hash].[ext]`
                 ]
             },
             {
@@ -124,7 +143,7 @@ let wkcfBuild = {
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
                 loaders: [
-                    `url?limit=10000&name=${userConfig.dist.img}/[name].[ext]`,
+                    `url?limit=10000&name=${userConfig.dist.img}/[hash].[ext]`,
                     'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=true'
                 ]
             },
@@ -146,7 +165,7 @@ let generateHtml = (path, configJs) => {
     return lists.map((item) => {
         let name = item.split(userConfig.src.html)[1];
         return new HtmlWebpackPlugin({                        // 根据模板插入css/js等生成最终HTML
-            filename: userConfig.dist.html + name,    // 生成的html存放路径，相对于 path
+            filename: `.${name}`,    // 生成的html存放路径，相对于 path
             template: item,    // html模板路径
             inject: false,    // 允许插件修改哪些内容，包括head与body
             hash: false,    // 为静态资源生成hash值
@@ -179,13 +198,14 @@ let assignRecursion = (object, ...sources) => {
  */
 let getPackPlugins = ({path}) => {
     let _webpack = {};
-    let configJs = `./${userConfig.dist.build}/config.js`;
+    let configJs = `./config.js`;
+
     _webpack = assignRecursion(new WebpackGe(), wkcf, {
         resolve: {
             root: path + '/..'
         },
         plugins: [
-            new ExtractTextPlugin(`${userConfig.dist.build}/[name].css`),
+            new ExtractTextPlugin(`[name].css`),
             new webpack.DefinePlugin({
                 __DEV__: true,
                 __PRE__: false
@@ -201,16 +221,16 @@ let getPackPlugins = ({path}) => {
  */
 let getPackPluginsBuild = ({path}) => {
     let _webpack = {};
-    let configJs = `./${userConfig.dist.build}/config.min.js`;
+    let configJs = `./config.min.js`;
     _webpack = assignRecursion(new WebpackGe(), wkcfBuild, {
         output: {
-            filename: `${userConfig.dist.build}/[name].min.js`
+            filename: `[name].min.js`
         },
         resolve: {
             root: path + '/..'
         },
         plugins: [
-            new ExtractTextPlugin(`${userConfig.dist.build}/[name].min.css`),
+            new ExtractTextPlugin(`[name].min.css`),
             new webpack.optimize.DedupePlugin(),
             new webpack.optimize.OccurenceOrderPlugin(),
             new webpack.optimize.UglifyJsPlugin({
