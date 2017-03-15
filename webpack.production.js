@@ -62,6 +62,11 @@ class WebpackGe {
             ]
         };
         this.postcss = [autoprefixer({ browsers: ['> 1%', 'last 5 versions'] })];
+        this.plugins = [
+            new webpack.DefinePlugin({
+                __BUILD_PATH__: '"./"'
+            })
+        ]
     }
 
 }
@@ -108,7 +113,13 @@ let wkcf = {
     },
     devtool: 'inline-source-map',
     plugins: [
-
+        new webpack.DefinePlugin({
+            __DEV__: true,
+            __PRE__: false,
+            __BUILD_EXT__: '""',
+        }),
+        new ExtractTextPlugin(`[name].css`)
+        
     ]
 };
 
@@ -154,7 +165,19 @@ let wkcfBuild = {
         ]
     },
     plugins: [
-
+        new webpack.DefinePlugin({
+            __DEV__: false,
+            __PRE__: true,
+            __BUILD_EXT__: '".min"',
+        }),
+        new webpack.optimize.DedupePlugin(),
+        new webpack.optimize.OccurenceOrderPlugin(),
+        new webpack.optimize.UglifyJsPlugin({
+            mangle: {
+                except: ['jQuery']
+            }
+        }),
+        new ExtractTextPlugin(`[name].min.css`),
     ]
 };
 /**
@@ -205,11 +228,7 @@ let getPackPlugins = ({path}) => {
             root: path + '/..'
         },
         plugins: [
-            new ExtractTextPlugin(`[name].css`),
-            new webpack.DefinePlugin({
-                __DEV__: true,
-                __PRE__: false
-            }),
+            ...wkcf.plugins,
             ...generateHtml(path,configJs)
         ]
 
@@ -230,18 +249,7 @@ let getPackPluginsBuild = ({path}) => {
             root: path + '/..'
         },
         plugins: [
-            new ExtractTextPlugin(`[name].min.css`),
-            new webpack.optimize.DedupePlugin(),
-            new webpack.optimize.OccurenceOrderPlugin(),
-            new webpack.optimize.UglifyJsPlugin({
-                mangle: {
-                    except: ['jQuery']
-                }
-            }),
-            new webpack.DefinePlugin({
-                __DEV__: false,
-                __PRE__: true
-            }),
+            ...wkcfBuild.plugins,
             ...generateHtml(path,configJs)
         ]
     });
