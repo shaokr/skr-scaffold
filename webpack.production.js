@@ -61,7 +61,9 @@ class WebpackGe {
                 'node_modules', 'js', 'less', 'src', 'img'
             ]
         };
-        this.postcss = [autoprefixer({ browsers: ['> 1%', 'last 5 versions'] })];
+        this.postcss = [
+            autoprefixer({ browsers: ['> 1%', 'last 5 versions'] })
+        ];
         this.plugins = [
             new webpack.DefinePlugin({
                 __BUILD_PATH__: '"./"'
@@ -96,7 +98,7 @@ let wkcf = {
                 exclude: /node_modules/,
                 loader: ExtractTextPlugin.extract(
                     'style',
-                    'css?sourceMap!less?sourceMap!postcss'
+                    'css?sourceMap!postcss!less?sourceMap'
                 )
             },
             {
@@ -148,7 +150,7 @@ let wkcfBuild = {
                 exclude: /node_modules/,
                 loader: ExtractTextPlugin.extract(
                     'style',
-                    'css!less!postcss'
+                    'css!postcss!less'
                 )
             },
             {
