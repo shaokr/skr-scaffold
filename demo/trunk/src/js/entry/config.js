@@ -7,17 +7,9 @@ import cdnHost from 'config/cdn-host';
 import _ from 'lodash';
 
 let mainData = {
-    js: './main.js',
-    css: './main.css'
+    js: `${__BUILD_PATH__}main${__BUILD_EXT__}.js`,
+    css: `${__BUILD_PATH__}main${__BUILD_EXT__}.css`
 }
-
-if(__PRE__){
-    mainData = {
-        js: './main.min.js',
-        css: './main.min.css' // 位置相对于js
-    }
-}
-
 
 let mapListObj = { // 自定义map和依赖关系,可覆盖cdn中的配置(注释的是例子
     map: {

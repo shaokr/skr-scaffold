@@ -1,6 +1,7 @@
 /**
  * 入口文件
  */
+
 require('less/pages/index.less');
 
 import ReactDOM from 'react-dom';
