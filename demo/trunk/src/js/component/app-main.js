@@ -1,5 +1,5 @@
 /**
- * 电子公告主要框
+ * 主要输出js
  */
 import React, {Component} from 'react';
 
@@ -11,7 +11,6 @@ import lang from 'mobx/lang';
 import AppA from './app-a'; // 列表
 
 import DevTools from 'util/devtools'; // 详情
-import Png2 from 'img/2.png'; // 详情
 
 // 头部
 const Header = ({title}) =>{
@@ -44,7 +43,6 @@ export default class NoticeMain extends Component{
 				lang.setLang(lang.Language == 'en'? 'cn':'en')
 				action.title.add()
 			}}>
-				<img src={Png2} />
 				<Header title ={title.name +'---'+ computed.title.total} />
 
 				当前语言:{lang.Language}------{lang.data['hi']}
