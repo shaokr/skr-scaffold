@@ -1,6 +1,7 @@
 /**
  * 主要输出js
  */
+import 'less/pages/index.less';
 import React, {Component} from 'react';
 
 import {observer} from "mobx-react";
@@ -8,7 +9,7 @@ import {observer} from "mobx-react";
 import lang from 'mobx/lang';
 // import {todoListStore} from 'mobx/todo-list';
 
-import AppA from './app-a'; // 列表
+import AppA from './a'; // 列表
 
 import DevTools from 'util/devtools'; // 详情
 

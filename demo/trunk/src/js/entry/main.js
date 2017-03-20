@@ -2,11 +2,10 @@
  * 入口文件
  */
 
-require('less/pages/index.less');
 
 import ReactDOM from 'react-dom';
 
-import AppMain from 'component/app-main';
+import AppMain from 'component';
 
 import store from 'mobx/store';
 import lang from 'mobx/lang';
