@@ -9,6 +9,7 @@ let autoprefixer = require('autoprefixer');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 let HtmlWebpackPlugin = require('html-webpack-plugin');
+let md5File = require('md5-file');
 
 let cssExtractor = new ExtractTextPlugin('[name].css');
 
@@ -185,8 +186,18 @@ let wkcfBuild = {
 /**
  * 生成html
  */
+let oldHtmlMd5 = {};
 let generateHtml = (path, configJs) => {
     let lists = glob.sync(path + '/' + userConfig.src.html + '/*.html');
+    // 过滤掉没有改变的html
+    lists = _.filter(lists, (item) => {
+        let htmlMd5 = md5File(item);
+        if(oldHtmlMd5[item] != htmlMd5){
+            oldHtmlMd5[item] = htmlMd5;
+            return true;
+        }
+    })
+
     return lists.map((item) => {
         let name = item.split(userConfig.src.html)[1];
         return new HtmlWebpackPlugin({                        // 根据模板插入css/js等生成最终HTML
