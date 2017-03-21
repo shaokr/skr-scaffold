@@ -1,7 +1,7 @@
 /**
  * 处理url param
  */
-import jqueryParam from './jquery-param.min';
+import jqueryParam from 'util/widget/jquery-param.min';
 
 /**
  * obj可以是字符串、数组、对象

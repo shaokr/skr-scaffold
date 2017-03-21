@@ -1,19 +1,25 @@
+/**
+* 验证对象数据
+*
+*/
 
 // 获取表单数据
-function getForm(id) {
-    if (typeof id === 'string') {
-        let _body = {};
-        let _form = $('#' + id).serializeArray();
+// function getForm(id) {
+//     if (typeof id === 'string') {
+//         let _body = {};
+//         let _form = $('#' + id).serializeArray();
 
-        for (let i = 0, l = _form.length; i < l; i++) {
-            let _fo = _form[i];
-            _body[_fo.name] = _fo.value;
-        };
-        return _body;
-    } else if (typeof id === 'object') {
-        return id;
-    }
-}
+//         for (let i = 0, l = _form.length; i < l; i++) {
+//             let _fo = _form[i];
+//             _body[_fo.name] = _fo.value;
+//         };
+//         return _body;
+//     } else if (typeof id === 'object') {
+//         return id;
+//     }
+// }
+
+import _ from 'lodash';
 /* 验证表单数据,全部验证成功后返回数据,
 *  @param id form表单元素的id
 *  @param nameObj (可无) 表单元素name:{} or []  // 可为对象 或 数组,当无传入值返回表单数据
@@ -41,15 +47,14 @@ function getForm(id) {
 *    }
 *   @param config (可无) {} 公共配置(参数和上面一样)
 **/
-function verify(id, nameObj, config) {
+function verify(obj, nameObj, config) {
     var p, _l,
         _nameObj,  // 当前nameObj数据
-        _form = getForm(id),
+        _form = obj,
         nameObj = nameObj || {};
 
-    if (_form) {
+    if (typeof _form === 'object') {
         for (p in nameObj) {
-            _form[p] = $.trim(_form[p]);
             _nameObj = nameObj[p];
 
             if (typeof _nameObj === 'object') {
@@ -75,7 +80,7 @@ function verify(id, nameObj, config) {
 function judgeRegular(data, regulars, config) {
     let _bool = false;
 
-    regulars = $.extend(true, {}, config, regulars);
+    regulars = _.assign({}, config, regulars);
     if (!regulars.off) { // 判断是否开启
         if (typeof regulars.way === 'function') { // 判断是否为方法
             _bool = regulars.way(data, regulars);

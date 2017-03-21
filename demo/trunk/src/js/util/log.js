@@ -1,4 +1,4 @@
-import param from 'util/widget/param';
+import param from 'util/param';
 
 let {debug} = param;
 const DLog = document.createElement('div');

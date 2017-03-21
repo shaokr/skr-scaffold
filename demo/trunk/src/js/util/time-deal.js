@@ -149,8 +149,8 @@ function patchZero(a, l) {
 }
 
 module.exports = {
-    setTime: setTime,   // 获取时间差
-    getDate: getDate,   // 获取相对应的年月日等
-    patchZero: patchZero, // 前面加0
-    examine: examine   // 转换日期
+    setTime,   // 获取时间差
+    getDate,   // 获取相对应的年月日等
+    patchZero, // 前面加0
+    examine   // 转换日期
 };
