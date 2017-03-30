@@ -6,7 +6,8 @@ let paths = require('path');
 let glob = require('glob');
 let connect = require('gulp-connect');
 
-let webpack = require('gulp-webpack');
+let webpackStream = require('webpack-stream');
+let webpack = require('webpack');
 
 // let md5File = require('md5-file');
 
@@ -37,13 +38,14 @@ let web = ({path, name, build = false}) => {
             _webpackConfig = ItemConfig({
                 data: _webpackConfig,
                 build,
-                path
+                path,
+                userConfig
             });
         }
-
+        
         gulp.src(path)
-            .pipe(webpack(_webpackConfig))
-            .pipe(gulp.dest(`${path}/../${userConfig.dist.path}`))
+            .pipe(webpackStream(_webpackConfig, webpack))
+            .pipe(gulp.dest(`${path}/../${userConfig.dist.path}${build?'/min':''}`))
             .pipe(connect.reload());
     });
 };
