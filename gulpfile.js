@@ -28,8 +28,7 @@ let web = ({path, name, build = false}) => {
         }
 
         // 判断使用配置数据
-        let plugins = build ? getPackPluginsBuild({ path }) : getPackPlugins({ path });
-        let _webpackConfig = _.assign(_.cloneDeep(plugins), { entry: _entry });
+        let _webpackConfig = build ? getPackPluginsBuild({ path, entry: _entry }) : getPackPlugins({ path, entry: _entry });
         // 项目配置
         let ItemConfigName = `${path}/${userConfig.src.packconf}`;
         if (fs.existsSync(ItemConfigName)) {
@@ -39,13 +38,19 @@ let web = ({path, name, build = false}) => {
                 data: _webpackConfig,
                 build,
                 path,
-                userConfig
+                userConfig,
+                packPath: paths.resolve()
             });
         }
-        
+
+        // webpack(_webpackConfig);
+        // appExpress.use(webpackDevMiddleware(webpack(_webpackConfig), {
+        //     publicPath: '/'
+        // }));
+
         gulp.src(path)
             .pipe(webpackStream(_webpackConfig, webpack))
-            .pipe(gulp.dest(`${path}/../${userConfig.dist.path}${build?'/min':''}`))
+            .pipe(gulp.dest(`${path}/../${userConfig.dist.path}${build ? '/min':''}`))
             .pipe(connect.reload());
     });
 };

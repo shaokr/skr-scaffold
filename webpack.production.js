@@ -1,8 +1,10 @@
 
+let webpack = require('webpack');
+
 let _ = require('lodash');
 let glob = require('glob');
 let paths = require('path');
-let webpack = require('webpack');
+
 let userConfig = require('./gulp-config');
 let autoprefixer = require('autoprefixer')({ browsers: userConfig.browsers });
 
@@ -10,28 +12,6 @@ let ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 let md5File = require('md5-file');
-
-// let cssExtractor = new ExtractTextPlugin('[name].css');
-
-// function MyPlugin(options) {
-//   // Configure your plugin with options... 
-// }
- 
-// MyPlugin.prototype.apply = function(compiler) {
-//   // ... 
-//   compiler.plugin('compilation', function(compilation) {
-//     compilation.plugin('html-webpack-plugin-alter-asset-tags', function(htmlPluginData, callback) {
-//         // console.log(htmlPluginData.plugin.assetJson)
-//       // console.log(htmlPluginData.plugin.options.assetJson)
-//       htmlPluginData.plugin.assetJson[0] = './';
-//       callback(null, htmlPluginData);
-//     });
-//   });
- 
-// };
-
-// var CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin')
-// var ImageminPlugin = require('imagemin-webpack-plugin').default
 
 /**
  * 共用打包配置构造函数
@@ -67,10 +47,10 @@ class WebpackGe {
         this.plugins = [
             new webpack.DefinePlugin({
                 __BUILD_PATH__: '"./"'
-            }),
+            })
             // require('precss'),
             // autoprefixer({ browsers: ['> 1%', 'last 5 versions'] })
-        ]
+        ];
     }
 }
 /**
@@ -85,7 +65,7 @@ let wkcf = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                      presets: [
+                        presets: [
                             // ['env',
                             //     {
                             //         "targets": {
@@ -97,11 +77,11 @@ let wkcf = {
                             'stage-0',
                             'react'
                         ],
-                      plugins: [
+                        plugins: [
                             // "react-hot-loader/babel",
-                            'transform-runtime', 
-                            'transform-es2015-typeof-symbol', 
-                            'transform-decorators-legacy', 
+                            'transform-runtime',
+                            'transform-es2015-typeof-symbol',
+                            'transform-decorators-legacy',
                             'lodash'
                         ]
                     }
@@ -115,15 +95,15 @@ let wkcf = {
                     use: [
                         'css-loader?sourceMap',
                         {
-                            loader:'postcss-loader',
+                            loader: 'postcss-loader',
                             options: {
-                              plugins: [
-                                autoprefixer
-                              ]
+                                plugins: [
+                                    autoprefixer
+                                ]
                             }
                         },
-                        'less-loader?sourceMap',
-                        ],
+                        'less-loader?sourceMap'
+                    ],
                     allChunks: true
                 })
             },
@@ -135,13 +115,14 @@ let wkcf = {
     },
     devtool: 'inline-source-map',
     plugins: [
+        // new webpack.HotModuleReplacementPlugin(),
         new webpack.DefinePlugin({
             __DEV__: true,
             __PRE__: false,
-            __BUILD_EXT__: '""',
+            __BUILD_EXT__: '""'
         }),
         new ExtractTextPlugin(`[name].css`)
-        
+
     ]
 };
 
@@ -157,7 +138,7 @@ let wkcfBuild = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                      presets: [
+                        presets: [
                             // ['env',
                             //     {
                             //         "targets": {
@@ -169,11 +150,11 @@ let wkcfBuild = {
                             'stage-0',
                             'react'
                         ],
-                      plugins: [
+                        plugins: [
                             // "react-hot-loader/babel",
-                            'transform-runtime', 
-                            'transform-es2015-typeof-symbol', 
-                            'transform-decorators-legacy', 
+                            'transform-runtime',
+                            'transform-es2015-typeof-symbol',
+                            'transform-decorators-legacy',
                             'lodash'
                         ]
                     }
@@ -187,15 +168,15 @@ let wkcfBuild = {
                     use: [
                         'css-loader',
                         {
-                            loader:'postcss-loader',
+                            loader: 'postcss-loader',
                             options: {
                                 plugins: [
                                     autoprefixer
                                 ]
                             }
                         },
-                        'less-loader',
-                        ],
+                        'less-loader'
+                    ],
                     allChunks: true
                 })
             },
@@ -209,10 +190,14 @@ let wkcfBuild = {
         ]
     },
     plugins: [
+        new webpack.LoaderOptionsPlugin({
+            minimize: true,
+            debug: false
+        }),
         new webpack.DefinePlugin({
             __DEV__: false,
             __PRE__: true,
-            __BUILD_EXT__: '".min"',
+            __BUILD_EXT__: '".min"'
         }),
         new webpack.optimize.DedupePlugin(),
         // new webpack.optimize.OccurenceOrderPlugin(),
@@ -221,7 +206,7 @@ let wkcfBuild = {
                 except: ['jQuery']
             }
         }),
-        new ExtractTextPlugin(`[name].min.css`),
+        new ExtractTextPlugin(`[name].min.css`)
     ]
 };
 /**
@@ -233,11 +218,11 @@ let generateHtml = (path, configJs) => {
     // 过滤掉没有改变的html
     lists = _.filter(lists, (item) => {
         let htmlMd5 = md5File(item);
-        if(oldHtmlMd5[item] != htmlMd5){
+        if (oldHtmlMd5[item] != htmlMd5) {
             oldHtmlMd5[item] = htmlMd5;
             return true;
         }
-    })
+    });
 
     return lists.map((item) => {
         let name = item.split(userConfig.src.html)[1];
@@ -273,17 +258,23 @@ let assignRecursion = (object, ...sources) => {
 /**
  * 查询打包配置
  */
-let getPackPlugins = ({path}) => {
+let getPackPlugins = ({path, entry}) => {
     let _webpack = new WebpackGe({path});
     let configJs = `./config.js`;
     // console.log(path,paths.resolve(__dirname, 'node_modules'))
     _webpack = assignRecursion(_webpack, wkcf, {
+        entry,
+        // entry: _.map(entry, (item, key) => {
+        //     return {
+        //         [key]: [item, 'webpack-hot-middleware/client?reload=true']
+        //     };
+        // }),
         output: {
             path: paths.join(path, '/../dist')
         },
         plugins: [
             ...wkcf.plugins,
-            ...generateHtml(path,configJs)
+            ...generateHtml(path, configJs)
         ]
 
     });
@@ -292,16 +283,17 @@ let getPackPlugins = ({path}) => {
 /**
  * 查询build配置
  */
-let getPackPluginsBuild = ({path}) => {
+let getPackPluginsBuild = ({path, entry}) => {
     let _webpack = new WebpackGe({path});
     let configJs = `./config.min.js`;
     _webpack = assignRecursion(_webpack, wkcfBuild, {
+        entry,
         output: {
             filename: `[name].min.js`
         },
         plugins: [
             ...wkcfBuild.plugins,
-            ...generateHtml(path,configJs)
+            ...generateHtml(path, configJs)
         ]
     });
     return _webpack;
