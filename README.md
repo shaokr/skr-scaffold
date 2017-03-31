@@ -24,6 +24,7 @@ jsconfig.json
 # demo代码说明(前端构建基本框架)
 
 ## 目录文件说明
+```
 .
 ├── release/: 上线目录(一般使用压缩后代码
 ├── trunk/: 源代码
@@ -64,3 +65,5 @@ jsconfig.json
 │        
 └── dist: 产出代码
     └── min 压缩后代码
+```
+
