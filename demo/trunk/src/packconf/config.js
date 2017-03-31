@@ -1,19 +1,31 @@
-let fs = require('fs');
-let paths = require('path');
+// const _ = require('lodash');
+const fs = require('fs');
+const paths = require('path');
 
-
-let itemWebConfig = {
+const itemWebConfig = {
     go: paths.resolve(__dirname, 'webpackConfig.js'),
-    build: paths.resolve(__dirname, 'webpackConfig-build.js')
+    build: paths.resolve(__dirname, 'webpackConfig-build.js'),
 };
-let _require = (packPath, name) => {
-    return require(paths.resolve(packPath, `node_modules/${name}`))
-};
+
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+/**
+ * 拷贝的目录
+ */
+function Copy(path, build) {
+    const _data = [];
+    const _pa = paths.resolve(path, `../dist${build ? '/min' : ''}/systemjs`);
+
+    if (!fs.existsSync(_pa)) {
+        _data.push({ context: 'node_modules/systemjs/dist', from: '*', to: 'systemjs' });
+    }
+    _data.push({ context: `${path}/js/config/lang`, from: '**', to: 'lang' });
+
+    return new CopyWebpackPlugin(_data);
+}
 /**
  * 最后配置
  */
-function Last({data, build, path, packPath}) {
-    let _ = _require(packPath, 'lodash');
+function Last({ data, build, path, userConfig, packPath }) {
     // 判断是否存在当前项目配置
     if (!build && fs.existsSync(itemWebConfig.go)) {
         return require(itemWebConfig.go);
@@ -37,31 +49,17 @@ function Last({data, build, path, packPath}) {
     /**
      * ------------------------------------------------
      * */
+
     // 添加目录拷贝
-    let _copyList = Copy(path, build, packPath);
+    const _copyList = Copy(path, build);
     if (_copyList) {
         data.plugins.push(_copyList);
     }
 
-    // data.output.library = 'kookUi'; // 输出到全局的名称
+    // data.output.library = '[name]'; // 输出到全局的名称
     // data.output.libraryTarget = 'umd'; // 输出方式
     return data;
 }
 
-
-/**
- * 拷贝的目录
- */
-function Copy(path, build, packPath) {
-    let CopyWebpackPlugin = _require(packPath, 'copy-webpack-plugin');
-    let _data = [];
-    let _pa = paths.resolve(path + `/../dist${build ? '/min': ''}/systemjs`);
-    if (!fs.existsSync(_pa)) {
-        _data.push({ context: 'node_modules/systemjs/dist', from: '*', to: 'systemjs' });
-    }
-    _data.push({ context: `${path}/js/config/lang`, from: '**', to: 'lang' });
-
-    return new CopyWebpackPlugin(_data);
-}
 
 module.exports = Last;

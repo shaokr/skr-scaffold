@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "cnpm": "npm install -g cnpm --registry=https://registry.npm.taobao.org",
-    "eslint": "npm i eslint eslint-config-standard eslint-plugin-standard eslint-plugin-promise -g",
+    "eslint": "npm install -g eslint eslint-config-airbnb eslint-plugin-import eslint-plugin-react eslint-plugin-jsx-a11y babel-eslint",
     "g": "gulp",
     "gb": "gulp bulid"
   },

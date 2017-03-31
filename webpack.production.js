@@ -1,39 +1,39 @@
 
-let webpack = require('webpack');
+const webpack = require('webpack');
 
-let _ = require('lodash');
-let glob = require('glob');
-let paths = require('path');
+const _ = require('lodash');
+const glob = require('glob');
+const paths = require('path');
 
-let userConfig = require('./gulp-config');
-let autoprefixer = require('autoprefixer')({ browsers: userConfig.browsers });
+const userConfig = require('./gulp-config');
+const autoprefixer = require('autoprefixer')({ browsers: userConfig.browsers });
 
-let ExtractTextPlugin = require('extract-text-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-let HtmlWebpackPlugin = require('html-webpack-plugin');
-let md5File = require('md5-file');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const md5File = require('md5-file');
 
 /**
  * 共用打包配置构造函数
  */
 class WebpackGe {
-    constructor ({path}) {
+    constructor({ path }) {
         this.entry = {};
         this.output = {
-            filename: `[name].js`,
+            filename: '[name].js',
             // path: `${__dirname}/${userConfig.dist.build}`
-            publicPath: `./`
+            publicPath: './'
         };
         this.externals = {
-            'react': 'React',
+            react: 'React',
             'react-dom': 'ReactDOM',
             'react-router': 'ReactRouter',
-            'zepto': '$',
-            'jquery': '$',
-            'systemjs': 'SystemJS',
+            zepto: '$',
+            jquery: '$',
+            systemjs: 'SystemJS',
             'kook-ui': 'kookUi',
-            'antd': 'antd',
-            'mobx': 'mobx',
+            antd: 'antd',
+            mobx: 'mobx',
             'mobx-react': 'mobxReact',
             'mobx-react-devtools': 'mobxDevtools'
         };
@@ -56,7 +56,7 @@ class WebpackGe {
 /**
  * 打包配置
  */
-let wkcf = {
+const wkcf = {
     module: {
         rules: [
             {
@@ -66,19 +66,12 @@ let wkcf = {
                     loader: 'babel-loader',
                     options: {
                         presets: [
-                            // ['env',
-                            //     {
-                            //         "targets": {
-                            //            "browsers": userConfig.browsers
-                            //         }
-                            //     }
-                            // ],
                             'es2015',
                             'stage-0',
                             'react'
                         ],
                         plugins: [
-                            // "react-hot-loader/babel",
+                            'react-hot-loader/babel',
                             'transform-runtime',
                             'transform-es2015-typeof-symbol',
                             'transform-decorators-legacy',
@@ -121,7 +114,7 @@ let wkcf = {
             __PRE__: false,
             __BUILD_EXT__: '""'
         }),
-        new ExtractTextPlugin(`[name].css`)
+        new ExtractTextPlugin('[name].css')
 
     ]
 };
@@ -129,7 +122,7 @@ let wkcf = {
 /**
  * build打包配置
  */
-let wkcfBuild = {
+const wkcfBuild = {
     module: {
         loaders: [
             {
@@ -139,13 +132,6 @@ let wkcfBuild = {
                     loader: 'babel-loader',
                     options: {
                         presets: [
-                            // ['env',
-                            //     {
-                            //         "targets": {
-                            //            "browsers": userConfig.browsers
-                            //         }
-                            //     }
-                            // ],
                             'es2015',
                             'stage-0',
                             'react'
@@ -206,18 +192,18 @@ let wkcfBuild = {
                 except: ['jQuery']
             }
         }),
-        new ExtractTextPlugin(`[name].min.css`)
+        new ExtractTextPlugin('[name].min.css')
     ]
 };
 /**
  * 生成html
  */
-let oldHtmlMd5 = {};
-let generateHtml = (path, configJs) => {
-    let lists = glob.sync(path + '/' + userConfig.src.html + '/*.html');
+const oldHtmlMd5 = {};
+const generateHtml = (path, configJs) => {
+    let lists = glob.sync(`${path }/${userConfig.src.html }/*.html`);
     // 过滤掉没有改变的html
     lists = _.filter(lists, (item) => {
-        let htmlMd5 = md5File(item);
+        const htmlMd5 = md5File(item);
         if (oldHtmlMd5[item] != htmlMd5) {
             oldHtmlMd5[item] = htmlMd5;
             return true;
@@ -225,7 +211,7 @@ let generateHtml = (path, configJs) => {
     });
 
     return lists.map((item) => {
-        let name = item.split(userConfig.src.html)[1];
+        const name = item.split(userConfig.src.html)[1];
         return new HtmlWebpackPlugin({                        // 根据模板插入css/js等生成最终HTML
             filename: `.${name}`,    // 生成的html存放路径，相对于 path
             template: item,    // html模板路径
@@ -243,14 +229,13 @@ let generateHtml = (path, configJs) => {
 /**
  * 递归整合对象
  */
-let assignRecursion = (object, ...sources) => {
-    for (let item of sources) {
+const assignRecursion = (object, ...sources) => {
+    for (const item of sources) {
         _.assignWith(object, item, (a, b) => {
             if (typeof b !== 'object') {
                 return b;
-            } else {
-                return assignRecursion(a, b);
             }
+            return assignRecursion(a, b);
         });
     }
     return object;
@@ -258,19 +243,17 @@ let assignRecursion = (object, ...sources) => {
 /**
  * 查询打包配置
  */
-let getPackPlugins = ({path, entry}) => {
-    let _webpack = new WebpackGe({path});
-    let configJs = `./config.js`;
-    // console.log(path,paths.resolve(__dirname, 'node_modules'))
+const getPackPlugins = ({ path, entry }) => {
+    let _webpack = new WebpackGe({ path });
+    const configJs = './config.js';
     _webpack = assignRecursion(_webpack, wkcf, {
-        entry,
-        // entry: _.map(entry, (item, key) => {
-        //     return {
-        //         [key]: [item, 'webpack-hot-middleware/client?reload=true']
-        //     };
-        // }),
+        // entry,
+        entry: _.mapValues(entry, item => [
+            item
+                // 'webpack-hot-middleware/client?reload=true'
+        ]),
         output: {
-            path: paths.join(path, '/../dist')
+            path: paths.resolve(path, '../dist')
         },
         plugins: [
             ...wkcf.plugins,
@@ -283,13 +266,13 @@ let getPackPlugins = ({path, entry}) => {
 /**
  * 查询build配置
  */
-let getPackPluginsBuild = ({path, entry}) => {
-    let _webpack = new WebpackGe({path});
-    let configJs = `./config.min.js`;
+const getPackPluginsBuild = ({ path, entry }) => {
+    let _webpack = new WebpackGe({ path });
+    const configJs = './config.min.js';
     _webpack = assignRecursion(_webpack, wkcfBuild, {
         entry,
         output: {
-            filename: `[name].min.js`
+            filename: '[name].min.js'
         },
         plugins: [
             ...wkcfBuild.plugins,

@@ -1,0 +1,13 @@
+{
+    presets: [
+        'es2015',
+        'stage-0',
+        'react'
+    ],
+    plugins: [
+        'transform-runtime',
+        'transform-es2015-typeof-symbol',
+        'transform-decorators-legacy',
+        'lodash'
+    ]
+}

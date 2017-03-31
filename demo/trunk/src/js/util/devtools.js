@@ -7,6 +7,6 @@ import param from 'util/param'; // 参数对象
 let DevTools = null;
 if (param.debug) {
     DevTools = require('mobx-react-devtools').default;
-};
+}
 
 export default DevTools;

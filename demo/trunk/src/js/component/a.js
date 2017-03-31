@@ -1,25 +1,13 @@
 /**
  * 例子
  */
-import { Component } from 'react';
 
-const Li = ({item}) => {
-    return (
-        <li>{item}</li>
-    );
-};
+const Li = ({ item }) => (
+    <li>{item}</li>
+);
 
-export default class AppA extends Component {
-    render () {
-        let {data} = this.props;
-        return (
-            <ul>
-                {
-                    data.map((item) => {
-                        return <Li item={item} />;
-                    })
-                }
-            </ul>
-        );
-    }
-};
+export default ({ data }) => (
+    <ul>
+        { data.map(item => <Li item={item} />) }
+    </ul>
+);

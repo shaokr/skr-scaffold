@@ -7,11 +7,11 @@ import jqueryParam from 'util/widget/jquery-param.min';
  * obj可以是字符串、数组、对象
  */
 function createUrl(obj, url = false) {
-    let _data = jqueryParam(obj);
+    const _data = jqueryParam(obj);
     if (url !== false && typeof url === 'string') {
-        let urlArr = url.split('#');
+        const urlArr = url.split('#');
         let _url = urlArr[0];
-        let i = _url.indexOf('?');
+        const i = _url.indexOf('?');
         let _getParam = `?${_data}`;
         if (~i) {
             if (i != (_url.length - 1)) {

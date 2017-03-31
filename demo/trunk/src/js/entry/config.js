@@ -6,14 +6,14 @@ import Systemjs from 'systemjs';
 import cdnHost from 'config/cdn-host';
 import _ from 'lodash';
 
-let mainData = {
+const mainData = {
     js: `${__BUILD_PATH__}main${__BUILD_EXT__}.js`,
     css: `${__BUILD_PATH__}main${__BUILD_EXT__}.css`
-}
+};
 
-let mapListObj = { // 自定义map和依赖关系,可覆盖cdn中的配置(注释的是例子
+const mapListObj = { // 自定义map和依赖关系,可覆盖cdn中的配置(注释的是例子
     map: {
-        'mainCss': mainData.css
+        mainCss: mainData.css
         // 'ReactDom': `${cdnHost}js/react/15.4.0/react-dom.min.js`,
     },
     meta: { // map的依赖关系
@@ -24,7 +24,7 @@ let mapListObj = { // 自定义map和依赖关系,可覆盖cdn中的配置(注�
 };
 
 
-let mainListObj = { // 载入文件的配置
+const mainListObj = { // 载入文件的配置
     [mainData.js]: { // 入口文件
         ToLoad: true, // 是否马上加载
          // 依赖库

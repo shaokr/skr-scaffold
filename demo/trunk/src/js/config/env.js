@@ -4,19 +4,19 @@
  */
 import param from 'util/param'; // 参数对象
 
-let {location} = window;
+const { location } = window;
 /**
  * 环境ios中默认 2为正式 3为外侧
  * 如果是应用内部本地调用去除 !location.host 的条件
  */
-let env = (() => {
+const env = (() => {
     let envmark = 1;
     if (!location.host || ~location.host.lastIndexOf('.cn') || ~location.host.lastIndexOf('localhost')) {
         envmark = 2;
     }
 
     if (location.hostname.match(/^[0-9.]+$/)) {
-       envmark = 3;
+        envmark = 3;
     }
 
     envmark = param.env || param.envmark || window.envmark || window.env || envmark;

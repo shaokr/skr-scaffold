@@ -1,8 +1,8 @@
-let ts = 1000 * 60 * 60 * 24;
-let xs = 1000 * 60 * 60;
-let fz = 1000 * 60;
-let hm = 1000;
-let date_list = {}; // 缓存数据
+const ts = 1000 * 60 * 60 * 24;
+const xs = 1000 * 60 * 60;
+const fz = 1000 * 60;
+const hm = 1000;
+const date_list = {}; // 缓存数据
 /**
  * [setTime 获取时间差]
  * @param {[时间格式]} start [开始时间]
@@ -11,7 +11,7 @@ let date_list = {}; // 缓存数据
  */
 function setTime(start, end, poor) {
     let m = 0;
-    let _key = start + '_' + end;
+    const _key = `${start  }_${  end}`;
 
     /** [if 检查相对应‘毫秒差’是否已存在缓存中，不存在则获取数据并缓存] */
     if (!date_list[_key]) {
@@ -28,9 +28,9 @@ function setTime(start, end, poor) {
         m = date_list[_key];
     }
     // console.log(m)
-    m = m - ((m >= 0 ? poor : -poor) || 0);
+    m -= ((m >= 0 ? poor : -poor) || 0;
 
-    let _data = {
+    const _data = {
         day: '0', // 天
         hour: '00', // 小时
         min: '00', // 分钟
@@ -41,10 +41,10 @@ function setTime(start, end, poor) {
     /** 开始计算 */
     m = Math.abs(m);
     if (m > 0) {
-        let day = (m / ts) >> 0;
-        let hour = ((m - day * ts) / xs) >> 0;
-        let min = ((m - day * ts - hour * xs) / fz) >> 0;
-        let sec = ((m - day * ts - hour * xs - min * fz) / hm) >> 0;
+        const day = (m / ts) >> 0;
+        const hour = ((m - day * ts) / xs) >> 0;
+        const min = ((m - day * ts - hour * xs) / fz) >> 0;
+        const sec = ((m - day * ts - hour * xs - min * fz) / hm) >> 0;
 
         _data.day = patchZero(day, _data.day.length);
         _data.hour = patchZero(hour, _data.hour.length);
@@ -68,9 +68,9 @@ function examine(str) {
         /** [if 判断是否为时间戳格式] */
         if (str >> 0) {
             if ((str).toString().length == 10) {
-                str = str * 1000;
+                str *= 1000;
             } else {
-                str = str * 1;
+                str *= 1;
             }
         } else {
             /** 为了兼容坑爹的ios */
@@ -98,19 +98,19 @@ function examine(str) {
  * @return {[对象]}      [description]
  */
 function getDate(date, fmt = '!y-M-d h:m:s.S') {
-    let _date = examine(date);
+    const _date = examine(date);
 
     if (_date) {
         let _regfun;
-        let o = {
-            'y': _date.getFullYear(), // 年份
-            'M': _date.getMonth() + 1, // 月份
-            'd': _date.getDate(), // 日
-            'h': _date.getHours(), // 小时
-            'm': _date.getMinutes(), // 分
-            's': _date.getSeconds(), // 秒
-            'q': Math.floor((_date.getMonth() + 3) / 3), // 季度
-            'S': _date.getMilliseconds() // 毫秒
+        const o = {
+            y: _date.getFullYear(), // 年份
+            M: _date.getMonth() + 1, // 月份
+            d: _date.getDate(), // 日
+            h: _date.getHours(), // 小时
+            m: _date.getMinutes(), // 分
+            s: _date.getSeconds(), // 秒
+            q: Math.floor((_date.getMonth() + 3) / 3), // 季度
+            S: _date.getMilliseconds() // 毫秒
         };
 
         if (fmt.charAt(0) === '!') {
@@ -118,12 +118,12 @@ function getDate(date, fmt = '!y-M-d h:m:s.S') {
             fmt = fmt.slice(1);
         } else {
             _regfun = function (a, l) {
-                return ('00000' + a).slice(-l);
+                return (`00000${  a}`).slice(-l);
             };
         }
 
-        for (let k in o) {
-            if (new RegExp('(' + k + '+)').test(fmt)) {
+        for (const k in o) {
+            if (new RegExp(`(${  k  }+)`).test(fmt)) {
                 fmt = fmt.replace(
                     RegExp.$1, _regfun(o[k], RegExp.$1.length)
                 );
@@ -143,8 +143,8 @@ function getDate(date, fmt = '!y-M-d h:m:s.S') {
  */
 function patchZero(a, l) {
     for (let i = (a).toString().length; i < l; i++) {
-        a = '0' + a;
-    };
+        a = `0${  a}`;
+    }
     return a;
 }
 

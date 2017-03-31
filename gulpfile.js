@@ -1,38 +1,39 @@
 // 引入 gulp
 // 俺就是任性就是不写注释
-let gulp = require('gulp');
-let _ = require('lodash');
-let paths = require('path');
-let glob = require('glob');
-let connect = require('gulp-connect');
+const gulp = require('gulp');
+const _ = require('lodash');
+const paths = require('path');
+const glob = require('glob');
+const connect = require('gulp-connect');
 
-let webpackStream = require('webpack-stream');
-let webpack = require('webpack');
+const webpackStream = require('webpack-stream');
+const webpack = require('webpack');
 
 // let md5File = require('md5-file');
+const userConfig = require('./gulp-config'); // 配置
+const fs = require('fs');
 
-let fs = require('fs');
-let {sep} = paths;
-// 引入配置
-let userConfig = require('./gulp-config');
-let {getPackPlugins, getPackPluginsBuild} = require(userConfig.webpackConfig);
+const { sep } = paths;
+
+
+const { getPackPlugins, getPackPluginsBuild } = require(userConfig.webpackConfig);
 
 // 配置目录
-let web = ({path, name, build = false}) => {
+const web = ({ path, name, build = false }) => {
     console.log(`开始编项目${path}`);
-    glob(path + '/' + userConfig.src.js + '/*.*', function (er, files) {
-        let _entry = {};
-        for (let item of files) {
-            let _name = item.split(userConfig.src.js + '/')[1].split('.')[0];
+    glob(`${path}/${userConfig.src.js}/*.*`, (er, files) => {
+        const _entry = {};
+        for (const item of files) {
+            const _name = item.split(`${userConfig.src.js}/`)[1].split('.')[0];
             _entry[_name] = item;
         }
 
         // 判断使用配置数据
         let _webpackConfig = build ? getPackPluginsBuild({ path, entry: _entry }) : getPackPlugins({ path, entry: _entry });
         // 项目配置
-        let ItemConfigName = `${path}/${userConfig.src.packconf}`;
+        const ItemConfigName = `${path}/${userConfig.src.packconf}`;
         if (fs.existsSync(ItemConfigName)) {
-            let ItemConfig = require(ItemConfigName);
+            const ItemConfig = require(ItemConfigName);
             delete require.cache[require.resolve(ItemConfigName)];
             _webpackConfig = ItemConfig({
                 data: _webpackConfig,
@@ -50,7 +51,7 @@ let web = ({path, name, build = false}) => {
 
         gulp.src(path)
             .pipe(webpackStream(_webpackConfig, webpack))
-            .pipe(gulp.dest(`${path}/../${userConfig.dist.path}${build ? '/min':''}`))
+            .pipe(gulp.dest(`${path}/../${userConfig.dist.path}${build ? '/min' : ''}`))
             .pipe(connect.reload());
     });
 };
@@ -59,9 +60,9 @@ gulp.task('connect', () => {
     connect.server({
         root: userConfig.path,
         livereload: true,
-        middleware: function(connect, options, next) {
+        middleware(connect, options, next) {
             return [
-                function(req, res, next) {
+                function (req, res, next) {
                     res.setHeader('Access-Control-Allow-Origin', '*');
                     res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
                     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -73,8 +74,8 @@ gulp.task('connect', () => {
 });
 
 // 系统文件变化事件
-let timeoutList = {}; // 防止多次保持按键和git更新时
-let _change = ({event, build = false}) => {
+const timeoutList = {}; // 防止多次保持按键和git更新时
+const _change = ({ event, build = false }) => {
     let [_path, _name] = paths.resolve(event.path).split(sep + userConfig.src.path + sep);
     _path += sep + userConfig.src.path;
 
@@ -91,14 +92,14 @@ let _change = ({event, build = false}) => {
 };
 // 开始监听
 gulp.task('go', ['connect'], () => {
-    let _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/**/*.*`);
+    const _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/**/*.*`);
     _watch.on('change', (event) => {
         _change({ event });
     });
 });
 // 开始监听（压缩
 gulp.task('build', ['connect'], () => {
-    let _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/**/*.*`);
+    const _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/**/*.*`);
 
     _watch.on('change', (event) => {
         _change({ event, build: true });

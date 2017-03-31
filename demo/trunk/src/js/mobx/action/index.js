@@ -1,15 +1,15 @@
 /**
  * action:操作
  */
-import {action, runInAction} from "mobx";
+import { action, runInAction } from 'mobx';
 
 export class AppAction {
-    constructor({title}){
+    constructor({ title }) {
         this.title = title;
     }
 
     // 创建动作
-    @action('加加') add = () =>{
+    @action('加加') add() {
         this.title.data++;
     }
 }
