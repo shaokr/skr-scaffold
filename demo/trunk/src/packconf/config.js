@@ -50,6 +50,7 @@ function Last({ data, build, path, userConfig, packPath }) {
      * ------------------------------------------------
      * */
 
+    // data.externals[] = '';
     // 添加目录拷贝
     const _copyList = Copy(path, build);
     if (_copyList) {
