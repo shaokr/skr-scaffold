@@ -31,7 +31,6 @@ class WebpackGe {
             zepto: '$',
             jquery: '$',
             systemjs: 'SystemJS',
-            'kook-ui': 'kookUi',
             antd: 'antd',
             mobx: 'mobx',
             'mobx-react': 'mobxReact',
@@ -71,7 +70,7 @@ const wkcf = {
                             'react'
                         ],
                         plugins: [
-                            'react-hot-loader/babel',
+                            // 'react-hot-loader/babel',
                             'transform-runtime',
                             'transform-es2015-typeof-symbol',
                             'transform-decorators-legacy',
@@ -247,11 +246,11 @@ const getPackPlugins = ({ path, entry }) => {
     let _webpack = new WebpackGe({ path });
     const configJs = './config.js';
     _webpack = assignRecursion(_webpack, wkcf, {
-        // entry,
-        entry: _.mapValues(entry, item => [
-            item
-                // 'webpack-hot-middleware/client?reload=true'
-        ]),
+        entry,
+        // entry: _.mapValues(entry, item => [
+        //     item
+        //         // 'webpack-hot-middleware/client?reload=true'
+        // ]),
         output: {
             path: paths.resolve(path, '../dist')
         },
