@@ -15,6 +15,7 @@
         "global-require":"off",
         "no-restricted-syntax":"off",
         "max-len":"warn",
+        "consistent-return":"off",
 
         "linebreak-style":"off",
         "jsx-a11y/no-static-element-interactions": "warn",
