@@ -22,6 +22,11 @@ const Header = ({ title }) => (
 // 主
 @observer
 export default class NoticeMain extends Component {
+    constructor(props) {
+        super(props);
+
+        this._toggleLang = this._toggleLang.bind(this);
+    }
     _toggleLang() {
         const { lang, action } = this.props;
         lang.setLang(lang.Language == 'en' ? 'cn' : 'en');
