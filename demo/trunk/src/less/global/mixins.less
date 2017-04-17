@@ -1,7 +1,7 @@
 //
 // mixins 自定义函数
 //---------------------------------------
-
+@import './var.less'; 
 // 设置大小
 //----------------------------
 .size(@width, @height) {
@@ -110,15 +110,15 @@ box-shadow: inset 0 @a 0 @b,
 	@b:unit(@a,px);
 	[data-dpr="1"] &{
 		&:extend([data-dpr="1"]);
-		font-size: @b/(3/1);
+		font-size: @b/(@multiple/1);
 	}
 	[data-dpr="2"] &{
 		&:extend([data-dpr="2"]);
-		font-size: @b/(3/2);
+		font-size: @b/(@multiple/2);
 	}
 	[data-dpr="3"] &{
 		&:extend([data-dpr="3"]);
-		font-size: @b/(3/3);
+		font-size: @b/(@multiple/3);
 	}
 }
 // rem单位
