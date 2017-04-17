@@ -198,7 +198,7 @@ const wkcfBuild = {
  * 生成html
  */
 const oldHtmlMd5 = {};
-const generateHtml = (path, configJs) => {
+const generateHtml = (path, data={}) => {
     let lists = glob.sync(`${path }/${userConfig.src.html }/*.html`);
     // 过滤掉没有改变的html
     lists = _.filter(lists, (item) => {
@@ -211,18 +211,20 @@ const generateHtml = (path, configJs) => {
 
     return lists.map((item) => {
         const name = item.split(userConfig.src.html)[1];
-        return new HtmlWebpackPlugin({                        // 根据模板插入css/js等生成最终HTML
-            filename: `.${name}`,    // 生成的html存放路径，相对于 path
-            template: item,    // html模板路径
-            inject: false,    // 允许插件修改哪些内容，包括head与body
-            hash: false,    // 为静态资源生成hash值
-            minify: {    // 压缩HTML文件
-                removeComments: true,    // 移除HTML中的注释
-                collapseWhitespace: false    // 删除空白符与换行符
-            },
-            excludeChunks: ['config'],
-            configJs
-        });
+        return new HtmlWebpackPlugin(
+            _.assign({
+                // 根据模板插入css/js等生成最终HTML
+                filename: `.${name}`,    // 生成的html存放路径，相对于 path
+                template: item,    // html模板路径
+                inject: false,    // 允许插件修改哪些内容，包括head与body
+                hash: false,    // 为静态资源生成hash值
+                minify: {    // 压缩HTML文件
+                    removeComments: true,    // 移除HTML中的注释
+                    collapseWhitespace: false    // 删除空白符与换行符
+                },
+                excludeChunks: ['config'],
+                
+            }, data));
     });
 };
 /**
@@ -244,7 +246,6 @@ const assignRecursion = (object, ...sources) => {
  */
 const getPackPlugins = ({ path, entry }) => {
     let _webpack = new WebpackGe({ path });
-    const configJs = './config.js';
     _webpack = assignRecursion(_webpack, wkcf, {
         entry,
         // entry: _.mapValues(entry, item => [
@@ -256,7 +257,10 @@ const getPackPlugins = ({ path, entry }) => {
         },
         plugins: [
             ...wkcf.plugins,
-            ...generateHtml(path, configJs)
+            ...generateHtml(path, {
+                configJs: './config.js',
+                minName: ''
+            })
         ]
 
     });
@@ -267,7 +271,6 @@ const getPackPlugins = ({ path, entry }) => {
  */
 const getPackPluginsBuild = ({ path, entry }) => {
     let _webpack = new WebpackGe({ path });
-    const configJs = './config.min.js';
     _webpack = assignRecursion(_webpack, wkcfBuild, {
         entry,
         output: {
@@ -275,7 +278,10 @@ const getPackPluginsBuild = ({ path, entry }) => {
         },
         plugins: [
             ...wkcfBuild.plugins,
-            ...generateHtml(path, configJs)
+            ...generateHtml(path, {
+                configJs: './config.min.js',
+                minName: '.min'
+            })
         ]
     });
     return _webpack;
@@ -284,3 +290,4 @@ module.exports = {
     getPackPlugins,
     getPackPluginsBuild
 };
+ 
