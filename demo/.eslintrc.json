@@ -16,12 +16,14 @@
         "no-restricted-syntax":"off",
         "max-len":"warn",
         "consistent-return":"off",
+        "no-param-reassign": "warn",
 
         "linebreak-style":"off",
         "jsx-a11y/no-static-element-interactions": "warn",
         "jsx-a11y/img-has-alt":"warn",
-        
+
         "react/jsx-indent": [2, 4],
+        "react/jsx-indent-props": [2, 4],
         "react/react-in-jsx-scope": "off",
         "react/prop-types": "warn",
         "react/jsx-filename-extension":"off",

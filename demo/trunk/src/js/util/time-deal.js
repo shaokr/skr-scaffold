@@ -9,9 +9,9 @@ const date_list = {}; // 缓存数据
  * @param {[(可为空)时间格式]} end   [结束时间]
  * @param {[(可为空)数值]} poor  [差(毫秒)]
  */
-function setTime(start, end, poor) {
+function setTime(start, end, poor = 0) {
     let m = 0;
-    const _key = `${start  }_${  end}`;
+    const _key = `${start}_${end}`;
 
     /** [if 检查相对应‘毫秒差’是否已存在缓存中，不存在则获取数据并缓存] */
     if (!date_list[_key]) {
