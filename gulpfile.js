@@ -79,8 +79,8 @@ const _change = ({ event, build = false }) => {
     let [_path, _name] = paths.resolve(event.path).split(sep + userConfig.src.path + sep);
     _path += sep + userConfig.src.path;
 
-    clearTimeout(timeoutList[_path]);
-    timeoutList[_path] = setTimeout(() => {
+    clearTimeout(timeoutList[`${build}${_path}`]);
+    timeoutList[`${build}${_path}`] = setTimeout(() => {
         _name = _name.split(sep);
         _name = _name[_name.length - 1];
         web({
@@ -105,6 +105,10 @@ gulp.task('build', ['connect'], () => {
         _change({ event, build: true });
     });
 });
+
+// 开始监听 (压缩和非压缩)
+gulp.task('all', ['go','build']);
+
 // 监听文件变化
 gulp.task('default', ['go']);
 
