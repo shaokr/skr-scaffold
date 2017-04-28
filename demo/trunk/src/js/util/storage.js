@@ -3,7 +3,7 @@
 */
 const { localStorage, sessionStorage, location } = window;
 const KEY = location.pathname;
-const getKEY = key => `${KEY}-${key}`;
+const getKEY = key => `${KEY}${key}`;
 
 class Storage {
     constructor(props) {
@@ -28,7 +28,7 @@ class Storage {
     // 清除全部
     clear() {
         for (const key in this.storage) {
-            if (key.indexOf(KEY) === 0) this.remove(key.split(KEY)[1]);
+            if (key.indexOf(KEY) === 0) this.remove(key.replace(KEY,''));
         }
     }
     has(key) {
@@ -38,6 +38,7 @@ class Storage {
 
 export const local = new Storage(localStorage);
 export const session = new Storage(sessionStorage);
+
 export default {
     local, session
 };
