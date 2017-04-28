@@ -1,6 +1,9 @@
-// let _
-
-const { localStorage, sessionStorage } = window;
+/**
+* h5 本地存储
+*/
+const { localStorage, sessionStorage, location } = window;
+const KEY = location.pathname;
+const getKEY = key => `${KEY}-${key}`;
 
 class Storage {
     constructor(props) {
@@ -12,24 +15,28 @@ class Storage {
     }
     // 获取
     get(key) {
-        return JSON.parse(this.storage.getItem(key));
+        return JSON.parse(this.storage.getItem(getKEY(key)));
     }
     // 设置
     set(key, val) {
-        this.storage.setItem(key, JSON.stringify(val));
+        this.storage.setItem(getKEY(key), JSON.stringify(val));
     }
     // 删除项
     remove(key) {
-        this.storage.removeItem(key);
+        this.storage.removeItem(getKEY(key));
     }
     // 清除全部
     clear() {
         this.storage.clear();
+        for (const key in this.storage) {
+            if (key.indexOf(KEY) === 0) this.remove(key.split(KEY)[1]);
+        }
     }
     has(key) {
-        return this.storage.hasOwnProperty(key);
+        return this.storage.hasOwnProperty(getKEY(key));
     }
 }
+
 export const local = new Storage(localStorage);
 export const session = new Storage(sessionStorage);
 export default {
