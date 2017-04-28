@@ -27,7 +27,6 @@ class Storage {
     }
     // 清除全部
     clear() {
-        this.storage.clear();
         for (const key in this.storage) {
             if (key.indexOf(KEY) === 0) this.remove(key.split(KEY)[1]);
         }
