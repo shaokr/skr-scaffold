@@ -35,15 +35,12 @@ function Last({ data, build, path, userConfig, packPath }) {
     /**
      * 多项目情况-----------------------------------------
      * */
-    // let entry = [
+    // const entry = {};
+    // _.forEach([
     //     'main',
-    // ];
-    // _.map(entry,(item) => {
-    //     return {
-    //         [item]: data.entry[item]
-    //     }
-    // });
-    // data.entry = {...entry};
+    //     'config'
+    // ], (item) => entry[item] = data.entry[item]);
+    // data.entry = entry;
 
     // data.resolve.modules.push(...userConfig.modules)
     /**
