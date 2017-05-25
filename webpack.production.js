@@ -101,7 +101,7 @@ const wkcf = {
             },
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
-                use: [`url-loader?limit=10000&name=${userConfig.dist.img}/[hash].[ext]`]
+                use: [`url-loader?limit=1&name=${userConfig.dist.img}/[hash].[ext]`]
             }
         ]
     },
