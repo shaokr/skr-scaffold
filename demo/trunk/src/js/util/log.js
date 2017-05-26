@@ -18,6 +18,16 @@ const getDLog = () => {
         `);
         DLog.setAttribute('id', 'DLog');
         document.body.appendChild(DLog);
+        
+        const Dreload = document.createElement('button');
+        Dreload.setAttribute('style', `
+            margin: 10px;
+        `);
+        Dreload.innerHTML = '清除页面刷新缓存';
+        Dreload.onclick = function () {
+            window.location.reload(true);
+        };
+        DLog.appendChild(Dreload);
 
         const Fixed = document.createElement('div');
         Fixed.setAttribute('style', `
