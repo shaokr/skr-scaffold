@@ -13,15 +13,40 @@
 
 	<script src="./systemjs/system.js"></script>
 	<script>
-		SystemJS.config({
-			 meta: {
-				'*.js': {
-					format: 'global',
-					scriptload: true
+		var SystemJSConfigMain = <%= JSON.stringify(htmlWebpackPlugin.files.chunks) %>;
+		(function(){
+			var config = (function(){
+				var hash = '';
+				var r = {
+					meta: {
+						'*.js': {
+							format: 'global',
+							scriptload: true
+						}
+					},
+					map: {
+
+					}
+				};
+				for (var key in SystemJSConfigMain) {
+					var _item = SystemJSConfigMain[key];
+					var _key = '_' + key;
+					r.map[_key] = _item.entry + '?' + _item.hash;
+					hash += _item.hash;
+					r.meta[_key] = {
+						format: 'global',
+						scriptload: true
+					}
 				}
-			 }
-		});
-		SystemJS.import('./config<%= htmlWebpackPlugin.options.minName %>.js');
+				return {
+					hash: hash,
+					r:r
+				};
+			})();
+			SystemJS.config(config.r);
+		
+			SystemJS.import('./config<%= htmlWebpackPlugin.options.minName %>.js?' + config.hash);
+		})();
 	</script>
 
 </body>
