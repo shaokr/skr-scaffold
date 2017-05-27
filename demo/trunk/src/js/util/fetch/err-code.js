@@ -30,9 +30,7 @@ export default function err(id) {
     if (!_err) {
         _err = errList['-1'];
     }
-    return {
-        res: _err
-    };
+    return _err;
 }
 err.res = function (data) {
     if (data.res) {
