@@ -9,7 +9,36 @@
 </head>
 <body>
 	
-	<div id="app-main"></div>
+	<div id="app-main">
+		<style>
+			html[data-dpr] .cup-main {
+				opacity: 0;
+			}
+			
+			.cup-main{
+				position: absolute;
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+				height: 3px;
+				width: 0%;
+				top:0;
+				left: 0;
+				background: #459EF2;
+				animation: fader 2s infinite linear;
+			}
+
+			@keyframes fader {
+				0% { 
+				width: 0%;
+				}
+				100% {
+				width: 100%;
+				}
+			}
+		</style>
+		<div class="cup-main"></div>
+	</div>
 
 	<script src="./systemjs/system.js"></script>
 	<script>

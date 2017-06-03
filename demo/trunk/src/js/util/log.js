@@ -21,7 +21,8 @@ const getDLog = () => {
         
         const Dreload = document.createElement('button');
         Dreload.setAttribute('style', `
-            margin: 10px;
+            margin: 0.2rem;
+            height: 0.5rem;
         `);
         Dreload.innerHTML = '清除页面刷新缓存';
         Dreload.onclick = function () {
@@ -34,8 +35,8 @@ const getDLog = () => {
             position: fixed;
             right: 5%;
             top: 5%;
-            height: 50px;
-            width: 50px;
+            height: 1rem;
+            width: 1rem;
             background: rgba(253, 189, 0, 0.4);
             border-radius: 50%;
             z-index:1000001;
@@ -63,15 +64,16 @@ const getLogGroup = (id, group) => {
     if (!LogGroup) {
         LogGroup = document.createElement('div');
         LogGroup.setAttribute('style', `
-            margin: -30px 10px 10px;
-            padding: 30px 10px 10px;
+            margin: -0.6rem 0.2rem 0.2rem;
+            padding: 0.6rem 0.2rem 0.2rem;
             border: 1px solid #000;
         `);
         LogGroup.id = id;
 
         const DQc = document.createElement('button');
         DQc.setAttribute('style', `
-            margin: 10px;
+            margin: 0.2rem;
+            height: 0.5rem;
         `);
         DQc.innerHTML = `清除'${group}'组内容信息`;
         DQc.onclick = function () {
@@ -92,7 +94,11 @@ const getLogGroup = (id, group) => {
 const logGroup = {};
 const log = (str, group = 0, show = false) => {
     if (param.debug || show) {
-        console.trace(str);
+        if (param.console) {
+            console.trace(str);
+        } else {
+            console.log(str);
+        }
         logGroup[group] = logGroup[group] >> 0; // 当前编号
         const _group = ++logGroup[group];
         const DLogGroup = getLogGroup(`Log-${group}`, group);
