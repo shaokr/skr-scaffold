@@ -8,7 +8,6 @@ const errList = {
         err_msg: '服务器500错误'
     },
     '-1': {
-        err_code: '99999999999999',
         err_msg: '未知错误'
     },
     '-2': {
@@ -22,6 +21,14 @@ const errList = {
     '-4': {
         err_code: '-4',
         err_msg: 'webSocket链接失败'
+    },
+    '-5': {
+        err_code: '-5',
+        err_msg: '请求超时'
+    },
+    '-6': {
+        err_code: '-6',
+        err_msg: '请求中断'
     }
 };
 

@@ -1,7 +1,7 @@
 
 import _ from 'lodash';
 import createUrl from 'util/create-url-params';
-import log from 'util/log';
+import utilLog from 'util/log';
 
 import './fetch';
 import errCode from './err-code';
@@ -21,7 +21,9 @@ export function toFetch(params, pkey, objectList = {}) {
     });
     return objectList;
 }
+
 let i = 0;
+const log = a => utilLog(a, 'fetch请求');
 export function fetchParam({ host, url, param }) {
     const { body } = param;
 
@@ -35,30 +37,52 @@ export function fetchParam({ host, url, param }) {
         url = createUrl(body, url);
         delete param.body;
     }
+    param.timeout = param.timeout || 30000;
 
     const fetchApiUrl = `${scheme}//${host}/${url}`;
     const _i = i++;
-    log([`${_i}请求:`, fetchApiUrl, param, ['body', body]], 'fetch请求');
-    return window.fetch(fetchApiUrl, param)
-        .then((res) => {
-            let resPromise = '';
-            if (res.ok) {
-                try {
-                    resPromise = res.json();
-                } catch (err) {
-                    resPromise = res.text();
-                }
-            }
-            if (!resPromise) {
-                resPromise = Promise.resolve(errCode(res.status));
-            }
-            resPromise.then((a)=>{
-                log([`${_i}回调:`, a], 'fetch请求');
-            });
-            
-            return resPromise;
-        }).catch((e) => {
-            log([`${_i}错误:`, e.toString(), e], 'fetch请求');
-            return errCode(-3);
+    log([_i, '请求', fetchApiUrl, param, ['请求参数:', body]]);
+    const fetchPromise = (() => {
+        let _resolve;
+        let _reject;
+        const _promise = new Promise((resolve, reject) => {
+            _resolve = resolve;
+            _reject = reject;
         });
+        // 超时处理
+        const timeoutId = setTimeout(() => {
+            log([_i, '超时', param.timeout]);
+            _resolve(errCode(-5));
+        }, param.timeout);
+
+        window.fetch(fetchApiUrl, param)
+            .then((res) => {
+                let _res = '';
+                if (res.ok) {
+                    try {
+                        _res = res.json();
+                    } catch (err) {
+                        _res = res.text();
+                    }
+                }
+                if (!_res) {
+                    _res = Promise.resolve(errCode(res.status));
+                }
+                _resolve(_res);
+            }).catch((e) => {
+                log([_i, '错误', e.toString(), e]);
+                _resolve(errCode(-3));
+            });
+        _promise.then((res) => {
+            clearTimeout(timeoutId);
+            if (res.err_code != '-5') log([_i, '回调', res]);
+        });
+        _promise.abort = function (msg) {
+            log([_i, 'abort中断', msg]);
+            _reject(errCode(-6));
+        };
+        return _promise;
+    })();
+
+    return fetchPromise;
 }
