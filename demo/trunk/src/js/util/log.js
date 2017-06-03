@@ -91,7 +91,7 @@ const getLogGroup = (id, group) => {
  */
 const logGroup = {};
 const log = (str, group = 0, show = false) => {
-    if (param.debug == 10086 || param.debug == group || show) {
+    if (param.debug || show) {
         console.trace(str);
         logGroup[group] = logGroup[group] >> 0; // 当前编号
         const _group = ++logGroup[group];

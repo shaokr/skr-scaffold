@@ -41,22 +41,22 @@ export function fetchParam({ host, url, param }) {
     log([`${_i}请求:`, fetchApiUrl, param, ['body', body]], 'fetch请求');
     return window.fetch(fetchApiUrl, param)
         .then((res) => {
-            let _res = '';
+            let resPromise = '';
             if (res.ok) {
                 try {
-                    _res = res.json();
+                    resPromise = res.json();
                 } catch (err) {
-                    _res = res.text();
+                    resPromise = res.text();
                 }
             }
-            if (!_res) {
-                _res = Promise.resolve(errCode(res.status));
+            if (!resPromise) {
+                resPromise = Promise.resolve(errCode(res.status));
             }
-            _res.then((a)=>{
+            resPromise.then((a)=>{
                 log([`${_i}回调:`, a], 'fetch请求');
             });
             
-            return _res;
+            return resPromise;
         }).catch((e) => {
             log([`${_i}错误:`, e.toString(), e], 'fetch请求');
             return errCode(-3);
