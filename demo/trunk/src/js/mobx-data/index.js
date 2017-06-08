@@ -3,11 +3,11 @@
  */
 import { useStrict } from 'mobx';
 // 数据
-import { Title, Tab } from 'mobx/store';
+import { Title, Tab } from './store';
 // 操作
-import { AppAction } from 'mobx/action';
+import { AppAction } from './action';
 // 计算
-import { AppComputed } from 'mobx/computed';
+import { AppComputed } from './computed';
 
 useStrict(true);
 
