@@ -74,7 +74,7 @@
 			})();
 			SystemJS.config(config.r);
 		
-			SystemJS.import('./config<%= htmlWebpackPlugin.options.minName %>.js?' + config.hash);
+			SystemJS.import('_config');
 		})();
 	</script>
 

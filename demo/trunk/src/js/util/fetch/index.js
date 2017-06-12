@@ -1,11 +1,14 @@
 
+import Systemjs from 'systemjs';
 import _ from 'lodash';
 import createUrl from 'util/create-url-params';
 import utilLog from 'util/log';
 
-import './fetch';
 import errCode from './err-code';
 
+if (!window.fetch) {
+    Systemjs.import('fetch');
+}
 
 const scheme = window.location.protocol === 'file:' ? 'http:' : '';
 
@@ -24,7 +27,10 @@ export function toFetch(params, pkey, objectList = {}) {
 
 let i = 0;
 const log = a => utilLog(a, 'fetch请求');
-export function fetchParam({ host, url, param }) {
+export async function fetchParam({ host, url, param }) {
+    if (!window.fetch) {
+        await Systemjs.import('fetch');
+    }
     const { body } = param;
 
     if (param.method === 'POST') {

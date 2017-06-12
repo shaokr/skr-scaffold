@@ -222,7 +222,7 @@ const generateHtml = (path, data={}, build) => {
                     removeComments: true,    // 移除HTML中的注释
                     collapseWhitespace: false    // 删除空白符与换行符
                 },
-                excludeChunks: ['config'],
+                // excludeChunks: ['config'],
                 
             }, data));
     });
