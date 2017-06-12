@@ -9,7 +9,7 @@ const { SystemJSConfigMain } = window;
 
 const mapListObj = { // 自定义map和依赖关系,可覆盖cdn中的配置(注释的是例子
     map: {
-        // 'ReactDom': `${cdnHost}js/react/15.4.0/react-dom.min.js`,
+        // 'ReactDom': 'host/js/react/15.4.0/react-dom.min.js',
     },
     meta: { // map的依赖关系
         // 'ReactDom': {
@@ -20,14 +20,18 @@ const mapListObj = { // 自定义map和依赖关系,可覆盖cdn中的配置(注
 
 
 const mainListObj = { // 载入文件的配置
-    '_main': { // 入口文件
+    '_main': { // 入口文件 签名
         ToLoad: true, // 是否马上加载
          // 依赖库
-        deps: ['React', 'ReactRouter', 'mobx', 'mobxReact'
-        ].concat(SystemJSConfigMain['main'].css)
+        deps: ['React', 'ReactRouter', 'mobx', 'mobxReact']
     }
 };
-
+for (const key in mainListObj) {
+    const _key = key.slice(1);
+    if (SystemJSConfigMain[_key]) {
+        mainListObj[key].deps.concat(SystemJSConfigMain[_key].css);
+    }
+}
 Systemjs.import(`${cdnHost}/config/1.0.5/config.js`).then((res) => {
     // res中的map查看cdn目录下config.js文件
     Systemjs.config(res(cdnHost));
