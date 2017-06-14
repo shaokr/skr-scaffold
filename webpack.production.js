@@ -34,7 +34,8 @@ class WebpackGe {
             antd: 'antd',
             mobx: 'mobx',
             'mobx-react': 'mobxReact',
-            'mobx-react-devtools': 'mobxDevtools'
+            'mobx-react-devtools': 'mobxDevtools',
+            'mock': 'Mock'
         };
         this.resolve = {
             modules: [
@@ -201,13 +202,13 @@ const oldHtmlMd5 = {};
 const generateHtml = (path, data={}, build) => {
     let lists = glob.sync(`${path }/${userConfig.src.html }/*.html`);
     // 过滤掉没有改变的html
-    lists = _.filter(lists, (item) => {
-        const htmlMd5 = md5File(item);
-        if (oldHtmlMd5[item + build] != htmlMd5) {
-            oldHtmlMd5[item + build] = htmlMd5;
-            return true;
-        }
-    });
+    // lists = _.filter(lists, (item) => {
+    //     const htmlMd5 = md5File(item);
+    //     if (oldHtmlMd5[item + build] != htmlMd5) {
+    //         oldHtmlMd5[item + build] = htmlMd5;
+    //         return true;
+    //     }
+    // });
 
     return lists.map((item) => {
         const name = item.split(userConfig.src.html)[1];
@@ -260,7 +261,7 @@ const getPackPlugins = ({ path, entry }) => {
             ...generateHtml(path, {
                 configJs: './config.js',
                 minName: ''
-            },false)
+            })
         ]
 
     });
