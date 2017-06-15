@@ -29,7 +29,7 @@ const mainListObj = { // 载入文件的配置
 for (const key in mainListObj) {
     const _key = key.slice(1);
     if (SystemJSConfigMain[_key]) {
-        mainListObj[key].deps.concat(SystemJSConfigMain[_key].css);
+        mainListObj[key].deps = mainListObj[key].deps.concat(SystemJSConfigMain[_key].css);
     }
 }
 Systemjs.import(`${cdnHost}/config/1.0.6/config.js`).then((res) => {

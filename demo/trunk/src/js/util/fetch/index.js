@@ -45,7 +45,12 @@ export async function fetchParam({ host, url, param }) {
     }
     param.timeout = param.timeout || 30000;
 
-    const fetchApiUrl = `${scheme}//${host}/${url}`;
+    let fetchApiUrl = '';
+    if (host.match(/^((http(|s):\/\/)|(\/\/))/)) {
+        fetchApiUrl = `${host}/${url}`;
+    } else {
+        fetchApiUrl = `${scheme}//${host}/${url}`;
+    }
     const _i = i++;
     log([_i, '请求', fetchApiUrl, param, ['请求参数:', body]]);
     const fetchPromise = (() => {
