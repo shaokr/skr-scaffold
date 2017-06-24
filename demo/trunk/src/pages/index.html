@@ -21,19 +21,26 @@
 				padding: 0;
 				box-sizing: border-box;
 				height: 3px;
-				width: 0%;
 				top:0;
 				left: 0;
-				background: #459EF2;
-				animation: fader 2s infinite linear;
+				background: #4EFCFF;
+				width: 100%;
+				overflow: hidden;
 			}
-
+			.cup-main::after{
+				content: '';
+				background: linear-gradient(-90deg, #4EFCFF, #459EF2, #4EFCFF);
+				animation: fader 2s infinite linear;
+				width: 100%;
+				height: 100%;
+				position: absolute;
+			}
 			@keyframes fader {
 				0% { 
-				width: 0%;
+					transform: translateX(-100%);
 				}
 				100% {
-				width: 100%;
+					transform: translateX(100%);
 				}
 			}
 		</style>
