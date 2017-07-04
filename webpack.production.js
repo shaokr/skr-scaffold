@@ -152,7 +152,12 @@ const wkcfBuild = {
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: [
-                        'css-loader',
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                minimize: true //css压缩
+                            }
+                        },
                         {
                             loader: 'postcss-loader',
                             options: {
