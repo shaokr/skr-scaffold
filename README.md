@@ -14,6 +14,10 @@
 
 开启编译非压缩和压缩 : ```npm run ga```
 
+使用只使用webpack编译
+```npm run b -- --env.path=项目地址```
+```npm run b -- --env.path=项目地址 --output-path 输出到的目录```
+
 ## 设置 
 
 在```gulp-config.js```文件里进行目录的设置
@@ -28,8 +32,7 @@ jsconfig.json
 ## 目录文件说明
 ```
 .
-├── release/: 上线目录(一般使用压缩后代码
-├── trunk/: 源代码
+├── demo
 │   ├── doc/: 项目相关文件(比如ui，流程图
 │   └── src/: 生产环境
 │       ├── img/: 图片
@@ -38,7 +41,7 @@ jsconfig.json
 │       │   │   ├── config.js: 异步加载主要配置文件
 │       │   │   └── main.js: 主入口
 │       │   ├── component/: 项目react组件
-│       │   ├── mobx/
+│       │   ├── mobx-data/
 │       │   │   ├── lang.js: 语言相关方法
 │       │   │   ├── store-main.js: 所有 数据、计算、操作 统一出口
 │       │   │   ├── store/: 数据
@@ -46,9 +49,11 @@ jsconfig.json
 │       │   │   └── computed/: 计算
 │       │   ├── helpers/: 业务相关的方法
 │       │   ├── config/: 配置目录(语言等
+│				│		│		├── lang/: 多语言
+│       │		│		│		├── data: 语言包
+│				│		│		│		└── index.js: 主要实现
 │       │   │   ├── cdn-host.js: cdn的路径配置
-│       │   │   ├── env.js: 环境配置
-│       │   │   └── lang/: 语言包目录
+│       │   │   └── env.js: 环境配置
 │       │   └── util/: 其他代码库
 │       │       ├── log.js: 打印数据方法
 │       │       ├── devtools.js: 追踪store数据调试工具

@@ -299,21 +299,29 @@ const assignRecursion = (object, ...sources) => {
 };
 
 function function_name(env) {
-    const { path } = env;
-    const data = {
-        path
+    let { path = '' } = env;
+    if (path){
+        if (!path.match(/src[\/\\]?$/)) {
+            path = glob.sync(`${path}/**/${userConfig.src.path}`)[0];
+        }
+        if (path) {
+            const data = {
+                path
+            }
+            const ItemConfigName = `${data.path}/${userConfig.src.packconf}`;
+            const ItemConfig = require(ItemConfigName);
+            delete require.cache[require.resolve(ItemConfigName)];
+            return ItemConfig({
+                data: new WkcfBuild(data),
+                build: true,
+                path: data.path,
+                userConfig,
+                packPath: paths.resolve()
+            });
+            return;
+        }
     }
-    const ItemConfigName = `${data.path}/${userConfig.src.packconf}`;
-    const ItemConfig = require(ItemConfigName);
-    delete require.cache[require.resolve(ItemConfigName)];
-    return ItemConfig({
-        data: new WkcfBuild(data),
-        build: true,
-        path: data.path,
-        userConfig,
-        packPath: paths.resolve()
-    });
-    // webpack()
+    console.log('编译地址错误');
 }
 /**
  * 查询打包配置
