@@ -255,18 +255,24 @@ class WkcfBuild extends WebpackGe{
  */
 const oldHtmlMd5 = {};
 const generateHtml = (path, data={}, build) => {
-    let lists = glob.sync(`${path }/${userConfig.src.html }/*.html`);
-    // 过滤掉没有改变的html
-    // lists = _.filter(lists, (item) => {
-    //     const htmlMd5 = md5File(item);
-    //     if (oldHtmlMd5[item + build] != htmlMd5) {
-    //         oldHtmlMd5[item + build] = htmlMd5;
-    //         return true;
-    //     }
-    // });
+    let lists = glob.sync(`${path}/${userConfig.src.js}/**/*.html`);
+    if(build){
+        if(!lists.length){
+            lists = glob.sync(`${path}/${userConfig.src.html}/**/*.html`);
+        }
+    } else {
+        lists = _.concat([], glob.sync(`${path}/${userConfig.src.html}/**/*.html`), lists)
+    }
 
     return lists.map((item) => {
-        const name = item.split(userConfig.src.html)[1];
+        const itemData = paths.resolve(item);
+        const jsPath = paths.resolve(path, userConfig.src.js);
+        let name = itemData.split(jsPath)[1];
+        if(!name){
+            const htmlPath = paths.resolve(path, userConfig.src.html);
+            name = itemData.split(htmlPath)[1];
+        }
+
         return new HtmlWebpackPlugin(
             _.assign({
                 // 根据模板插入css/js等生成最终HTML
