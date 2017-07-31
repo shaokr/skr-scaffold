@@ -51,9 +51,9 @@ jsconfig.json
 │       │   │   └── computed/: 计算
 │       │   ├── helpers/: 业务相关的方法
 │       │   ├── config/: 配置目录(语言等
-│		│	│	├── lang/: 多语言
-│       │	│	│   ├── data: 语言包
-│		│	│	│	└── index.js: 主要实现
+│       │   │   ├── lang/: 多语言
+│       │   │   │   ├── data: 语言包
+│       │   │   │   └── index.js: 主要实现
 │       │   │   ├── cdn-host.js: cdn的路径配置
 │       │   │   └── env.js: 环境配置
 │       │   └── util/: 其他代码库
