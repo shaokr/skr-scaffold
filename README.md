@@ -14,7 +14,8 @@
 
 开启编译非压缩和压缩 : ```npm run ga```
 
-使用只使用webpack编译(压缩后代码)
+使用只使用webpack编译(压缩后代码):
+
 ```npm run b -- --env.path=项目地址```
 
 ```npm run b -- --env.path=项目地址 --output-path 输出到的目录```
@@ -78,4 +79,4 @@ jsconfig.json
 
 目录 src/js/entry 支持含目录格式 如：src/js/entry/1.0.0
 
-如果在 src/js/entry 中含有html，压缩编译的时候不会编译 pages 目录中的html
+如果在 src/js/entry 中含有html, 压缩模式编译的时候不会编译 pages 目录中的html
