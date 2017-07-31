@@ -14,8 +14,9 @@
 
 开启编译非压缩和压缩 : ```npm run ga```
 
-使用只使用webpack编译
+使用只使用webpack编译(压缩后代码)
 ```npm run b -- --env.path=项目地址```
+
 ```npm run b -- --env.path=项目地址 --output-path 输出到的目录```
 
 ## 设置 
@@ -49,9 +50,9 @@ jsconfig.json
 │       │   │   └── computed/: 计算
 │       │   ├── helpers/: 业务相关的方法
 │       │   ├── config/: 配置目录(语言等
-│				│		│		├── lang/: 多语言
-│       │		│		│		├── data: 语言包
-│				│		│		│		└── index.js: 主要实现
+│		│	│	├── lang/: 多语言
+│       │	│	│   ├── data: 语言包
+│		│	│	│	└── index.js: 主要实现
 │       │   │   ├── cdn-host.js: cdn的路径配置
 │       │   │   └── env.js: 环境配置
 │       │   └── util/: 其他代码库
@@ -73,4 +74,8 @@ jsconfig.json
 └── dist: 产出代码
     └── min 压缩后代码
 ```
+## 其他说明
 
+目录 src/js/entry 支持含目录格式 如：src/js/entry/1.0.0
+
+如果在 src/js/entry 中含有html，压缩编译的时候不会编译 pages 目录中的html

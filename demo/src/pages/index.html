@@ -51,11 +51,11 @@
 	<script>
 		var SystemJSConfigMain = <%= JSON.stringify(htmlWebpackPlugin.files.chunks) %>;
 		(function(){
-			var config = (function(){
-				var hash = '';
-				var r = {
+			var config = <%= (() => {
+				let hash = '';
+				let r = {
 					meta: {
-						'*.js': {
+						'*': {
 							format: 'global',
 							scriptload: true
 						}
@@ -64,21 +64,17 @@
 
 					}
 				};
-				for (var key in SystemJSConfigMain) {
-					var _item = SystemJSConfigMain[key];
+				
+				_.forEach(htmlWebpackPlugin.files.chunks, (item, key) =>{
 					var _key = '_' + key;
-					r.map[_key] = _item.entry + '?' + _item.hash;
-					hash += _item.hash;
-					r.meta[_key] = {
-						format: 'global',
-						scriptload: true
-					}
-				}
-				return {
+					r.map[_key] = item.entry + '?' + item.hash;
+					hash += item.hash;
+				});
+				return JSON.stringify({
 					hash: hash,
 					r:r
-				};
-			})();
+				});
+			})() %>;
 			SystemJS.config(config.r);
 		
 			SystemJS.import('_config');

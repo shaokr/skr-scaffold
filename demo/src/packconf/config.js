@@ -18,7 +18,7 @@ function Copy(path, build) {
     if (!fs.existsSync(_pa)) {
         _data.push({ context: 'node_modules/systemjs/dist', from: '*', to: 'systemjs' });
     }
-    _data.push({ context: `${path}/js/lang/data`, from: '**', to: 'lang' });
+    _data.push({ context: `${path}/js/config/lang/data`, from: '**', to: 'lang' });
 
     return new CopyWebpackPlugin(_data);
 }
@@ -34,6 +34,7 @@ function Last({ data, build, path, userConfig, packPath }) {
     }
     /**
      * 多项目情况-----------------------------------------
+     * 可对部分项目不进行编译
      * */
     // const entry = {};
     // _.forEach([
