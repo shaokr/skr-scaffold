@@ -41,6 +41,7 @@ jsconfig.json
 │       ├── js/
 │       │   ├── entry/: 入口(在此目录的文件会产出到产出环境
 │       │   │   ├── config.js: 异步加载主要配置文件
+│       │   │   ├── index.html: build的时候生成的页面
 │       │   │   └── main.js: 主入口
 │       │   ├── component/: 项目react组件
 │       │   ├── mobx-data/

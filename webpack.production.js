@@ -44,7 +44,8 @@ class WebpackGe {
             mobx: 'mobx',
             'mobx-react': 'mobxReact',
             'mobx-react-devtools': 'mobxDevtools',
-            'mock': 'Mock'
+            'mock': 'Mock',
+            'fed-const': 'fedConst'
         };
         this.resolve = {
             modules: [
