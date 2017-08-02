@@ -43,6 +43,7 @@ function Last({ data, build, path, userConfig, packPath }) {
     // ], (item) => entry[item] = data.entry[item]);
     // data.entry = entry;
 
+    // data.resolve.modules.unshift(paths.resolve(__dirname, '../node_modules'));
     // data.resolve.modules.push(...userConfig.modules)
     /**
      * ------------------------------------------------

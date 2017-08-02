@@ -45,20 +45,23 @@ let web = ({path, name, build, all}) => {
     }
     // let _webpackConfig = build ? getPackPluginsBuild({ path, entry: _entry }) : getPackPlugins({ path, entry: _entry });
     // 项目配置
-    let ItemConfigName = `${path}/${userConfig.src.packconf}`;
-    if (fs.existsSync(ItemConfigName)) {
-        let ItemConfig = require(ItemConfigName);
-        delete require.cache[require.resolve(ItemConfigName)];
-        _webpackConfig = _.map(_webpackConfig, (item) => (
-            _.assign(ItemConfig({
-                data: item.conf,
-                build: item.build,
-                path,
-                userConfig,
-                packPath: paths.resolve()
-            }))
-        ));
-    }
+    _.forEach(userConfig.src.packconf, (item) => {
+        let ItemConfigName = `${path}/${item}`;
+        if (fs.existsSync(ItemConfigName)) {
+            let ItemConfig = require(ItemConfigName);
+            delete require.cache[require.resolve(ItemConfigName)];
+            _webpackConfig = _.map(_webpackConfig, (item) => (
+                _.assign(ItemConfig({
+                    data: item.conf,
+                    build: item.build,
+                    path,
+                    userConfig,
+                    packPath: paths.resolve()
+                }))
+            ));
+            return false;
+        }
+    });
     // console.log(_webpackConfig)
     // webpack(_webpackConfig);
     // appExpress.use(webpackDevMiddleware(webpack(_webpackConfig), {
@@ -109,14 +112,14 @@ let _change = ({event, build = false, all = false}) => {
 };
 // 开始监听
 gulp.task('go', ['connect'], () => {
-    let _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/${userConfig.src.js}/*.*`);
+    let _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/${userConfig.src.js}/**/*.*`);
     _watch.on('change', (event) => {
         _change({ event });
     });
 });
 // 开始监听（压缩
 gulp.task('build', ['connect'], () => {
-    let _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/${userConfig.src.js}/*.*`);
+    let _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/${userConfig.src.js}/**/*.*`);
 
     _watch.on('change', (event) => {
         _change({ event, build: true });
