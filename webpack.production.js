@@ -315,17 +315,25 @@ function function_name(env) {
             const data = {
                 path
             }
-            const ItemConfigName = `${data.path}/${userConfig.src.packconf}`;
-            const ItemConfig = require(ItemConfigName);
-            delete require.cache[require.resolve(ItemConfigName)];
-            return ItemConfig({
-                data: new WkcfBuild(data),
-                build: true,
-                path: data.path,
-                userConfig,
-                packPath: paths.resolve()
+
+            let _webpackConfig;
+            _.forEach(userConfig.src.packconf, (item) => {
+                const ItemConfigName = `${path}/${item}`;
+                if (fs.existsSync(ItemConfigName)) {
+                    const ItemConfig = require(ItemConfigName);
+                    delete require.cache[require.resolve(ItemConfigName)];
+                    _webpackConfig = ItemConfig({
+                        data: new WkcfBuild(data),
+                        build: true,
+                        path: data.path,
+                        userConfig,
+                        packPath: paths.resolve()
+                    });
+                    return false;
+                }
             });
-            return;
+
+            return _webpackConfig || new WkcfBuild(data);
         }
     }
     console.log('编译地址错误');
