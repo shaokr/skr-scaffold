@@ -46,7 +46,7 @@ let web = ({path, name, build, all}) => {
     // let _webpackConfig = build ? getPackPluginsBuild({ path, entry: _entry }) : getPackPlugins({ path, entry: _entry });
     // 项目配置
     _.forEach(userConfig.src.packconf, (item) => {
-        let ItemConfigName = `${path}/${item}`;
+        let ItemConfigName = paths.resolve(path, item);
         if (fs.existsSync(ItemConfigName)) {
             let ItemConfig = require(ItemConfigName);
             delete require.cache[require.resolve(ItemConfigName)];
