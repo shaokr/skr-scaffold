@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const _ = require('lodash');
 const glob = require('glob');
 const paths = require('path');
+const fs = require('fs');
 // const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 const userConfig = require('./gulp-config');
