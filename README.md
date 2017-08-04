@@ -44,8 +44,8 @@ demo
 │   │   │   ├── index.html: build的时候生成的页面
 │   │   │   └── main.js: 主入口
 │   │   ├── component/: 项目react组件
+│   │   ├── mock-dome/: 模拟接口数据工具
 │   │   ├── mobx-data/
-│   │   │   ├── lang.js: 语言相关方法
 │   │   │   ├── store-main.js: 所有 数据、计算、操作 统一出口
 │   │   │   ├── store/: 数据
 │   │   │   ├── action/: 操作
@@ -57,16 +57,18 @@ demo
 │   │   │   │   └── index.js: 主要实现
 │   │   │   ├── cdn-host.js: cdn的路径配置
 │   │   │   └── env.js: 环境配置
-│   │   └── util/: 其他代码库
-│   │       ├── log.js: 打印数据方法
-│   │       ├── devtools.js: 追踪store数据调试工具
-│   │       ├── param.js: 获取url参数
-│   │       ├── time-deal.js: 时间相关方法
-│   │       ├── validate-form.js: 验证数据
-│   │       ├── storage.js: h5存储
-│   │       ├── create-url-params.js: 把对象变成url参数
-│   │       ├── client.js: 客户端信息
-│   │       └── widget/: 第三方代码
+│   │   ├── util/: 其他代码库
+│   │   │   ├── log.js: 打印数据方法
+│   │   │   ├── devtools.js: 追踪store数据调试工具
+│   │   │   ├── param.js: 获取url参数
+│   │   │   ├── time-deal.js: 时间相关方法
+│   │   │   ├── validate-form.js: 验证数据
+│   │   │   ├── storage.js: h5存储
+│   │   │   ├── create-url-params.js: 把对象变成url参数
+│   │   │   ├── client.js: 客户端信息
+│   │   │   ├── guid.js: guid
+│   │   │   └── widget/: 第三方代码
+│   │   └── webpack-set/: webpack的一些自定义设置
 │   ├── less/: 样式
 │   ├── pages/: html
 │   └── static/: 静态样式
