@@ -7,7 +7,7 @@ import { local } from 'util/storage';
 import Systemjs from 'systemjs';
 
 useStrict(true);
-const DefLang = 'cn';
+const DefLang = 'zh';
 class Language {
     @observable Language = local.get('Language', true) || DefLang // 当前语言
     @observable data = {} // 当前语言数据
@@ -26,6 +26,11 @@ class Language {
                 this.data = data;
             });
         } else if (name !== DefLang) {
+            const _name = name.split(/[-_]/)[0];
+            if (_name !== name) {
+                this.setLang(_name);
+                return;
+            }
             if (name !== this.Language) {
                 this.setLang();
             } else {
