@@ -124,7 +124,7 @@ class Wkcf extends WebpackGe {
                     })
                 },
                 {
-                    test: /\.(jpe?g|png|gif|svg)$/i,
+                    test: /\.(jpe?g|png|gif|svg|ico)$/i,
                     use: [`url-loader?limit=1&name=${userConfig.dist.img}/[hash].[ext]`]
                 }
             ]
@@ -208,7 +208,7 @@ class WkcfBuild extends WebpackGe{
                     })
                 },
                 {
-                    test: /\.(jpe?g|png|gif|svg)$/i,
+                    test: /\.(jpe?g|png|gif|svg|ico)$/i,
                     use: [
                         `url-loader?limit=10000&name=${userConfig.dist.img}/[hash].[ext]`,
                         'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=true'

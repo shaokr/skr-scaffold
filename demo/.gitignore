@@ -8,3 +8,8 @@ doc/*
 !doc/*.zip
 !doc/*.rar
 !doc/*.7z
+
+trunk/doc/*
+!trunk/doc/*.zip
+!trunk/doc/*.rar
+!trunk/doc/*.7z
