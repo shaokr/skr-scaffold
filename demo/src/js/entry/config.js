@@ -26,11 +26,17 @@ const mainListObj = { // 载入文件的配置
         deps: ['React', 'ReactRouter', 'mobx', 'mobxReact']
     }
 };
-for (const key in mainListObj) {
-    const _key = key.slice(1);
-    if (SystemJSConfigMain[_key]) {
-        mainListObj[key].deps = mainListObj[key].deps.concat(SystemJSConfigMain[_key].css);
+for (const key in SystemJSConfigMain) {
+    const _key = `_${key}`;
+    if (!mainListObj[_key]) {
+        mainListObj[_key] = {
+            deps: []
+        };
     }
+    if (!mainListObj[_key].deps) {
+        mainListObj[_key].deps = [];
+    }
+    mainListObj[_key].deps = mainListObj[_key].deps.concat(SystemJSConfigMain[key].css);
 }
 Systemjs.import(`${cdnHost}/config/1.0.6/config.js`).then((res) => {
     // res中的map查看cdn目录下config.js文件
