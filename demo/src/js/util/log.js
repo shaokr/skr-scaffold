@@ -23,6 +23,7 @@ const getDLog = () => {
         Dreload.setAttribute('style', `
             margin: 0.2rem;
             height: 0.5rem;
+            min-height: 30px;
         `);
         Dreload.innerHTML = '清除页面刷新缓存';
         Dreload.onclick = function () {
