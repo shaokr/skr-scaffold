@@ -112,14 +112,18 @@ let _change = ({event, build = false, all = false}) => {
 };
 // 开始监听
 gulp.task('go', ['connect'], () => {
-    let _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/${userConfig.src.js}/**/*.*`);
+    const matches = glob.sync(`${userConfig.path}/**/{!node_modules,${userConfig.src.path}/${userConfig.src.js}/**/*.*}`)
+    let _watch = gulp.watch(matches);
+    // let _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/${userConfig.src.js}/**/*.*`);
     _watch.on('change', (event) => {
         _change({ event });
     });
 });
 // 开始监听（压缩
 gulp.task('build', ['connect'], () => {
-    let _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/${userConfig.src.js}/**/*.*`);
+    const matches = glob.sync(`${userConfig.path}/**/{!node_modules,${userConfig.src.path}/${userConfig.src.js}/**/*.*}`)
+    let _watch = gulp.watch(matches);
+    // let _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/${userConfig.src.js}/**/*.*`);
 
     _watch.on('change', (event) => {
         _change({ event, build: true });
