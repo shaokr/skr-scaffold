@@ -126,6 +126,10 @@ class Wkcf extends WebpackGe {
                 {
                     test: /\.(jpe?g|png|gif|svg|ico)$/i,
                     use: [`url-loader?limit=1&name=${userConfig.dist.img}/[hash].[ext]`]
+                },
+                {
+                    test: /\.(woff|woff2|eot|ttf|otf)$/,
+                    use: [`url-loader?name=font/[hash].[ext]`]
                 }
             ]
         };
@@ -213,6 +217,10 @@ class WkcfBuild extends WebpackGe{
                         `url-loader?limit=10000&name=${userConfig.dist.img}/[hash].[ext]`,
                         'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=true'
                     ]
+                },
+                {
+                    test: /\.(woff|woff2|eot|ttf|otf)$/,
+                    use: [`url-loader?limit=500000&name=font/[hash].[ext]`]
                 }
             ]
         }
@@ -307,16 +315,21 @@ const assignRecursion = (object, ...sources) => {
 };
 
 function function_name(env) {
-    let { path = '' } = env;
+    let { path = '', dev = false } = env;
     if (path){
         if (!path.match(/src[\/\\]?$/)) {
-            path = glob.sync(`${path}/**/${userConfig.src.path}`)[0];
+            path = glob.sync(`${path}/**{!node_modules,${userConfig.src.path}}`)[0];
         }
         if (path) {
             const data = {
                 path
             }
-
+            let ThisWebpack;
+            if(dev){
+                ThisWebpack = Wkcf;
+            } else {
+                ThisWebpack = WkcfBuild;
+            }
             let _webpackConfig;
             _.forEach(userConfig.src.packconf, (item) => {
                 const ItemConfigName = `${path}/${item}`;
@@ -324,7 +337,7 @@ function function_name(env) {
                     const ItemConfig = require(ItemConfigName);
                     delete require.cache[require.resolve(ItemConfigName)];
                     _webpackConfig = ItemConfig({
-                        data: new WkcfBuild(data),
+                        data: new ThisWebpack(data),
                         build: true,
                         path: data.path,
                         userConfig,
@@ -334,7 +347,7 @@ function function_name(env) {
                 }
             });
 
-            return _webpackConfig || new WkcfBuild(data);
+            return _webpackConfig || new ThisWebpack(data);
         }
     }
     console.log('编译地址错误');
