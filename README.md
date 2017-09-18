@@ -14,11 +14,13 @@
 
 开启编译非压缩和压缩 : ```npm run ga```
 
-使用只使用webpack编译(压缩后代码):
+使用只使用webpack编译(默认压缩代码):
 
 ```npm run b -- --env.path=项目地址```
 
 ```npm run b -- --env.path=项目地址 --output-path 输出到的目录```
+
+```npm run b -- --env.path=项目地址 --env.dev=true``` (非压缩模式)
 
 ## 设置 
 
