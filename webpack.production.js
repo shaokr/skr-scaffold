@@ -318,7 +318,7 @@ function function_name(env) {
     let { path = '', dev = false } = env;
     if (path){
         if (!path.match(/src[\/\\]?$/)) {
-            path = glob.sync(`${path}/**/${userConfig.src.path}`)[0];
+            path = glob.sync(`${path}/**{!node_modules,/${userConfig.src.path}}`)[0];
         }
 
         if (path) {
