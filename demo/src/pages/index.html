@@ -68,7 +68,16 @@
 				
 				_.forEach(htmlWebpackPlugin.files.chunks, (item, key) =>{
 					var _key = '_' + key;
-					r.map[_key] = item.entry + '?' + item.hash;
+					r.map[_key] = item.entry;
+					_.forEach(item.css, (cssItem) => {
+						r.map[cssItem] = cssItem;
+						r.meta[cssItem] = {
+							deps: [
+								'systemjs-plugin-css'
+							],
+							loader: 'systemjs-plugin-css'
+						}
+					});
 				});
 				return JSON.stringify(r);
 			})() %>;

@@ -289,7 +289,7 @@ const generateHtml = (path, data={}, build) => {
                 filename: `.${name}`,    // 生成的html存放路径，相对于 path
                 template: item,    // html模板路径
                 inject: false,    // 允许插件修改哪些内容，包括head与body
-                hash: false,    // 为静态资源生成hash值
+                hash: true,    // 为静态资源生成hash值
                 minify: {    // 压缩HTML文件
                     removeComments: true,    // 移除HTML中的注释
                     collapseWhitespace: false    // 删除空白符与换行符
