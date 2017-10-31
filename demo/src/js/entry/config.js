@@ -23,7 +23,7 @@ const mainListObj = { // 载入文件的配置
     '_main': { // 入口文件 签名
         ToLoad: true, // 是否马上加载
          // 依赖库
-        deps: ['React', 'ReactRouter', 'mobx', 'mobxReact']
+        deps: ['react', 'react-router', 'mobx', 'mobx-react']
     }
 };
 for (const key in SystemJSConfigMain) {
@@ -38,7 +38,7 @@ for (const key in SystemJSConfigMain) {
     }
     mainListObj[_key].deps = mainListObj[_key].deps.concat(SystemJSConfigMain[key].css);
 }
-Systemjs.import(`${cdnHost}/config/2.0.1/config.js?${fedBuildDate}`).then((res) => {
+Systemjs.import(`${cdnHost}/config/2.1.0/config.js?${fedBuildDate}`).then((res) => {
     // res中的map查看cdn目录下config.js文件
     Systemjs.config(res(cdnHost));
     Systemjs.config(mapListObj);
