@@ -38,7 +38,7 @@ for (const key in SystemJSConfigMain) {
     }
     mainListObj[_key].deps = mainListObj[_key].deps.concat(SystemJSConfigMain[key].css);
 }
-Systemjs.import(`${cdnHost}/config/2.1.0/config.js?${fedBuildDate}`).then((res) => {
+Systemjs.import(`${cdnHost}/config/2.0.0/config.js?${fedBuildDate}`).then((res) => {
     // res中的map查看cdn目录下config.js文件
     Systemjs.config(res(cdnHost));
     Systemjs.config(mapListObj);
