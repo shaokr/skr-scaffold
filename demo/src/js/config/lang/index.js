@@ -18,7 +18,7 @@ class Language {
 
     @action('设置语言')
     setLang = async function (name = this.Language) {
-        const data = await Systemjs.import(`${__webpack_public_path__}/lang/${name}.js`).catch(() => false);
+        const data = await Systemjs.import(`${__webpack_public_path__}lang/${name}.js`).catch(() => false);
         if (data) {
             runInAction(`语言成功设置为:${name}`, () => {
                 local.set('Language', name, true);

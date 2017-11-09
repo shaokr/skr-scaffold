@@ -46,7 +46,9 @@ class WebpackGe {
             'mobx-react': 'mobxReact',
             'mobx-react-devtools': 'mobxDevtools',
             'mock': 'Mock',
-            'fed-const': 'fedConst'
+            'fed-const': 'fedConst',
+            'react-router-dom': 'ReactRouterDOM',
+            'debug-tool': 'debugTool'
         };
         this.resolve = {
             modules: [
@@ -134,7 +136,7 @@ class Wkcf extends WebpackGe {
             ]
         };
 
-        this.devtool = 'inline-source-map';
+        this.devtool = 'eval-source-map';
 
         _.assign(this.output,{
             filename: '[name].js',
