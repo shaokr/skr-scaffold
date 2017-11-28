@@ -8,7 +8,7 @@ const _protocol = location.protocol === 'file:' ? 'http:' : location.protocol;
 
 const host = {
     production: `${param.cdnHref}`,
-    test: `${_protocol}//192.168.1.251:82/fed/web-cdn`,
+    test: `${_protocol}//192.168.1.251:8282/fed/web-cdn`,
     cloud: `${location.origin}/fed/web-cdn`
 }[env];
 
