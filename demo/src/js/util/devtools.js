@@ -3,6 +3,7 @@
  * shaokr 2016.11.18
  */
 import param from 'util/param'; // 参数对象
+import { Component } from 'react';
 
 let DevTools = null;
 if (param.debug) {
