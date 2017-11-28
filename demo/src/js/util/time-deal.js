@@ -28,7 +28,7 @@ function setTime(start, end, poor = 0) {
         m = date_list[_key];
     }
     // console.log(m)
-    m -= ((m >= 0 ? poor : -poor) || 0;
+    m -= (m >= 0 ? poor : -poor) || 0;
 
     const _data = {
         day: '0', // 天
