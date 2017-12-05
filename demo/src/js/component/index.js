@@ -4,7 +4,7 @@
 import 'less/pages/index.less';
 import { Component } from 'react';
 import { observer } from 'mobx-react';
-import DevTools from 'util/devtools'; // 详情
+// import DevTools from 'util/devtools'; // 详情
 
 import AppA from './a'; // 列表
 
@@ -43,7 +43,6 @@ export default class NoticeMain extends Component {
 
                 <AppA data={tab.list} />
 
-                {DevTools && <DevTools />}
             </div>
         );
     }
