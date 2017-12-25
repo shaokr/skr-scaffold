@@ -21,7 +21,6 @@ const {sep} = paths;
  */
 class WebpackGe {
     constructor({ path }) {
-        
         const entryArr = glob.sync(`${path}/${userConfig.src.js}/**/*.js`);
         const _entry = {};
         for (const item of entryArr) {
@@ -68,12 +67,11 @@ class WebpackGe {
     }
 }
 
-
 /**
  * 打包配置
  */
 class Wkcf extends WebpackGe {
-    constructor(props){
+    constructor(props) {
         super(props);
         const { path } = props;
 
@@ -100,7 +98,7 @@ class Wkcf extends WebpackGe {
                                 'lodash',
                                 'transform-decorators-legacy',
                                 'transform-class-properties',
-                                'transform-runtime',
+                                'transform-runtime'
                             ]
                         }
                     }
@@ -138,7 +136,7 @@ class Wkcf extends WebpackGe {
 
         this.devtool = 'eval-source-map';
 
-        _.assign(this.output,{
+        _.assign(this.output, {
             filename: '[name].js',
             path: paths.resolve(path, '../dist')
         });
@@ -156,12 +154,12 @@ class Wkcf extends WebpackGe {
                 configJs: './config.js',
                 minName: ''
             })
-        ]
+        ];
     }
 }
 
-class WkcfBuild extends WebpackGe{
-    constructor(props){
+class WkcfBuild extends WebpackGe {
+    constructor(props) {
         super(props);
 
         const { path } = props;
@@ -196,8 +194,8 @@ class WkcfBuild extends WebpackGe{
                         use: [
                             {
                                 loader: 'css-loader',
-                                options:{
-                                    minimize: true //css压缩
+                                options: {
+                                    minimize: true // css压缩
                                 }
                             },
                             {
@@ -225,9 +223,9 @@ class WkcfBuild extends WebpackGe{
                     use: [`url-loader?limit=500000&name=font/[hash].[ext]`]
                 }
             ]
-        }
+        };
 
-        _.assign(this.output,{
+        _.assign(this.output, {
             filename: '[name].min.js',
             path: paths.resolve(path, '../dist/min')
         });
@@ -258,29 +256,29 @@ class WkcfBuild extends WebpackGe{
             ...generateHtml(path, {
                 configJs: './config.min.js',
                 minName: '.min'
-            },true)
-        ]
+            }, true)
+        ];
     }
 }
 /**
  * 生成html
  */
 const oldHtmlMd5 = {};
-const generateHtml = (path, data={}, build) => {
+const generateHtml = (path, data = {}, build) => {
     let lists = glob.sync(`${path}/${userConfig.src.js}/**/*.html`);
-    if(build){
-        if(!lists.length){
+    if (build) {
+        if (!lists.length) {
             lists = glob.sync(`${path}/${userConfig.src.html}/**/*.html`);
         }
     } else {
-        lists = _.concat([], glob.sync(`${path}/${userConfig.src.html}/**/*.html`), lists)
+        lists = _.concat([], glob.sync(`${path}/${userConfig.src.html}/**/*.html`), lists);
     }
 
     return lists.map((item) => {
         const itemData = paths.resolve(item);
         const jsPath = paths.resolve(path, userConfig.src.js);
         let name = itemData.split(jsPath)[1];
-        if(!name){
+        if (!name) {
             const htmlPath = paths.resolve(path, userConfig.src.html);
             name = itemData.split(htmlPath)[1];
         }
@@ -295,9 +293,9 @@ const generateHtml = (path, data={}, build) => {
                 minify: {    // 压缩HTML文件
                     removeComments: true,    // 移除HTML中的注释
                     collapseWhitespace: false    // 删除空白符与换行符
-                },
+                }
                 // excludeChunks: ['config'],
-                
+
             }, data));
     });
 };
@@ -318,7 +316,7 @@ const assignRecursion = (object, ...sources) => {
 
 function function_name(env) {
     let { path = '', dev = false } = env;
-    if (path){
+    if (path) {
         if (!path.match(/src[\/\\]?$/)) {
             path = glob.sync(`${path}/**{!node_modules,/${userConfig.src.path}}`)[0];
         }
@@ -326,9 +324,9 @@ function function_name(env) {
         if (path) {
             const data = {
                 path
-            }
+            };
             let ThisWebpack;
-            if(dev){
+            if (dev) {
                 ThisWebpack = Wkcf;
             } else {
                 ThisWebpack = WkcfBuild;
