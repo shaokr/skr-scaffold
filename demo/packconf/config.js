@@ -1,10 +1,11 @@
 const _ = require('lodash');
 const fs = require('fs');
 const paths = require('path');
+const HtmlSystemjsConfig = require('./html-systemjs-config');
 
 const itemWebConfig = {
     go: paths.resolve(__dirname, 'webpackConfig.js'),
-    build: paths.resolve(__dirname, 'webpackConfig-build.js'),
+    build: paths.resolve(__dirname, 'webpackConfig-build.js')
 };
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -22,6 +23,7 @@ function Copy(path, build) {
 
     return new CopyWebpackPlugin(_data);
 }
+
 /**
  * 最后配置
  */
@@ -56,6 +58,7 @@ function Last({ data, build, path, userConfig, packPath }) {
         data.plugins.push(_copyList);
     }
 
+    data.plugins.push(new HtmlSystemjsConfig());
     // data.output.library = '[name]'; // 输出到全局的名称
     // data.output.libraryTarget = 'umd'; // 输出方式
     return data;

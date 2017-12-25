@@ -50,41 +50,10 @@
 
 	<script src="./systemjs/system.js"></script>
 	<script>
-		var fedBuildDate = '<%= `${new Date()}` %>';
-		var SystemJSConfigMain = <%= JSON.stringify(htmlWebpackPlugin.files.chunks) %>;
-		(function(){
-			var config = <%= (() => {
-				let r = {
-					meta: {
-						'*': {
-							format: 'global',
-							scriptload: true
-						}
-					},
-					map: {
-
-					}
-				};
-				
-				_.forEach(htmlWebpackPlugin.files.chunks, (item, key) =>{
-					var _key = '_' + key;
-					r.map[_key] = item.entry;
-					_.forEach(item.css, (cssItem) => {
-						r.map[cssItem] = cssItem;
-						r.meta[cssItem] = {
-							deps: [
-								'systemjs-plugin-css'
-							],
-							loader: 'systemjs-plugin-css'
-						}
-					});
-				});
-				return JSON.stringify(r);
-			})() %>;
-			SystemJS.config(config);
-		
-			SystemJS.import('_config');
-		})();
+		var fedBuildDate = '<%= `${new Date()}` %>'; // 编译时间
+		var SystemJSConfig = <%= JSON.stringify(htmlWebpackPlugin.options.systemJSConfig) %>;
+		SystemJS.config(SystemJSConfig);
+		SystemJS.import('_config');
 	</script>
 
 </body>
