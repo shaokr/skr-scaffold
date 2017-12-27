@@ -105,7 +105,7 @@ class Wkcf extends WebpackGe {
                 },
                 {
                     test: /\.less$/,
-                    exclude: /node_modules/,
+                    // exclude: /node_modules/,
                     use: ExtractTextPlugin.extract({
                         fallback: 'style-loader',
                         use: [
@@ -188,7 +188,7 @@ class WkcfBuild extends WebpackGe {
                 },
                 {
                     test: /\.less$/,
-                    exclude: /node_modules/,
+                    // exclude: /node_modules/,
                     use: ExtractTextPlugin.extract({
                         fallback: 'style-loader',
                         use: [

@@ -24,7 +24,7 @@ let web = ({path, name, build, all}) => {
 
         // 判断使用配置数据
     let _webpackConfig = [];
-    if(all){
+    if (all) {
         _webpackConfig = [{
             conf: getPackPlugins({ path }),
             build: false
@@ -79,6 +79,7 @@ gulp.task('connect', () => {
     connect.server({
         root: userConfig.path,
         livereload: true,
+        port: 8081,
         middleware: function(connect, options, next) {
             return [
                 function(req, res, next) {
