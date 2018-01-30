@@ -79,7 +79,7 @@ gulp.task('connect', () => {
     connect.server({
         root: userConfig.path,
         livereload: true,
-        port: 8081,
+        port: 8080,
         middleware: function(connect, options, next) {
             return [
                 function(req, res, next) {
