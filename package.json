@@ -9,7 +9,8 @@
     "eslint": "npm install -g eslint eslint-config-airbnb eslint-plugin-import eslint-plugin-react eslint-plugin-jsx-a11y babel-eslint",
     "eslint2": "npm i eslint eslint-config-standard eslint-plugin-standard eslint-plugin-promise -g",
     "g": "gulp",
-    "gb": "gulp bulid",
+    "gb": "gulp build",
+    "ga": "gulp all",
     "b": "webpack --progress --config webpack.production.js"
   },
   "dependencies": {
