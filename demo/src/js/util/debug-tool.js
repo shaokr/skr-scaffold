@@ -5,8 +5,14 @@ import Systemjs from 'systemjs';
 import param from 'util/param';
 import Monitor from 'util/monitor';
 
+const { debugToolOpen: windowDebugToolOpen } = window;
 let debug = false;
 let monitorList = new Monitor();
+// 开启
+const debugToolOpen = () => {
+    debug = true;
+    monitorList.go(Systemjs.import('debug-tool'));
+};
 
 if (param.debug) {
     debug = true;
@@ -56,6 +62,10 @@ function tool(key, ...data) {
     }
 }
 
+window.debugToolOpen = () => {
+    debugToolOpen();
+    if (windowDebugToolOpen) windowDebugToolOpen();
+};
 
 export const log = tool.bind(this, 'log'); // .apply() (...data) => tool('log', ...data);
 
