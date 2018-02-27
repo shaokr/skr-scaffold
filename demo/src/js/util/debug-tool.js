@@ -1,19 +1,23 @@
 /**
- * 开启调试: 点击5次并且按住5秒钟
+ * 开启调试:(2分钟后会清除2分钟内的各种请求
+ * 1.引入debugTool组件
+ * 2.点击5次并且按住5秒钟
+ * 3.url中存在debug的参数
+ * 4.变量var debug = 1;
+ * 5.执行debugToolOpen();
  */
 // import Systemjs from 'systemjs';
 import param from 'util/param';
 import Monitor from 'util/monitor';
 
 const { debugToolOpen: windowDebugToolOpen, SystemJS, debugTool, Promise } = window;
-let debug = false;
+let debug = !!debugTool;
 let monitorList = new Monitor();
-const cachingTime = 1000 * 60 * 2;// // 设置清除缓存时间
 // 开启
 const debugToolOpen = () => {
     debug = true;
-    if (debugTool) {
-        monitorList.go(Promise.resolve(debugTool));
+    if (window.debugTool) {
+        monitorList.go(Promise.resolve(window.debugTool));
     } else if (SystemJS) {
         monitorList.go(SystemJS.import('debug-tool'));
     }
@@ -21,11 +25,12 @@ const debugToolOpen = () => {
 if (param.debug) {
     debug = true;
 } else {
+    // 2分钟设置清除缓存
     setTimeout(() => {
         if (!debug) {
             monitorList = null;
         }
-    }, cachingTime);
+    }, 1000 * 60 * 2);
 }
 let i = 0;
 let ct = 0;

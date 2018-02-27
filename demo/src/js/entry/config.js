@@ -1,3 +1,4 @@
+/* eslint guard-for-in: "off", quote-props: "off", dot-notation: "off" */
 /**
 * systemjs加载配置
 */

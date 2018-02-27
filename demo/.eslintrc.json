@@ -2,6 +2,10 @@
     "parser": "babel-eslint",
     "extends": "airbnb",
     "installedESLint": true,
+    "globals": {
+        "__DEV__": false,
+        "__PRE__": false
+    },
     "rules": {
         "indent": [2, 4],
         "eqeqeq":"warn",
