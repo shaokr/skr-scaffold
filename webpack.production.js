@@ -7,8 +7,8 @@ const paths = require('path');
 const fs = require('fs');
 // const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
-const userConfig = require('./gulp-config');
-const autoprefixer = require('autoprefixer')({ browsers: userConfig.browsers });
+// const userConfig = require('./gulp-config');
+
 
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
@@ -20,7 +20,7 @@ const {sep} = paths;
  * 共用打包配置构造函数
  */
 class WebpackGe {
-    constructor({ path }) {
+    constructor({ path, userConfig }) {
         const entryArr = glob.sync(`${path}/${userConfig.src.js}/**/*.js`);
         const _entry = {};
         for (const item of entryArr) {
@@ -31,7 +31,11 @@ class WebpackGe {
         this.entry = _entry;
         this.output = {
             // path: `${__dirname}/${userConfig.dist.build}`
-            publicPath: './'
+            publicPath: './',
+            // filename: 'bundle.js',
+            // filename: '[name].js',
+            // path: paths.resolve(__dirname, 'dist')
+            path: userConfig.dist.path
         };
         this.externals = {
             react: 'React',
@@ -63,7 +67,19 @@ class WebpackGe {
             // require('precss'),
             // autoprefixer({ browsers: ['> 1%', 'last 5 versions'] })
         ];
+        this.watch = true;
+        this.watchOptions = {
+            aggregateTimeout: 300,
+            poll: 1000,
+            ignored: /node_modules/
+        };
         // this.stats = 'normal';
+        
+        this.devServer = {
+            // contentBase: paths.resolve(devServerPath, './dist'),
+            // compress: true,
+            port: 9000
+        };
     }
 }
 
@@ -73,8 +89,9 @@ class WebpackGe {
 class Wkcf extends WebpackGe {
     constructor(props) {
         super(props);
-        const { path } = props;
+        const { path, userConfig } = props;
 
+        const autoprefixer = require('autoprefixer')({ browsers: userConfig.browsers });
         this.module = {
             rules: [
                 {
@@ -150,7 +167,7 @@ class Wkcf extends WebpackGe {
                 __BUILD_EXT__: '""'
             }),
             new ExtractTextPlugin('[name].css'),
-            ...generateHtml(path, {
+            ...generateHtml({ path, userConfig }, {
                 configJs: './config.js',
                 minName: ''
             })
@@ -161,8 +178,9 @@ class Wkcf extends WebpackGe {
 class WkcfBuild extends WebpackGe {
     constructor(props) {
         super(props);
+        const { path, userConfig } = props;
 
-        const { path } = props;
+        const autoprefixer = require('autoprefixer')({ browsers: userConfig.browsers });
         this.module = {
             rules: [
                 {
@@ -253,7 +271,7 @@ class WkcfBuild extends WebpackGe {
             new webpack.optimize.DedupePlugin(),
             // new webpack.optimize.OccurenceOrderPlugin(),
             new ExtractTextPlugin('[name].min.css'),
-            ...generateHtml(path, {
+            ...generateHtml({ path, userConfig }, {
                 configJs: './config.min.js',
                 minName: '.min'
             }, true)
@@ -264,7 +282,7 @@ class WkcfBuild extends WebpackGe {
  * 生成html
  */
 const oldHtmlMd5 = {};
-const generateHtml = (path, data = {}, build) => {
+const generateHtml = ({ path, userConfig }, data = {}, build) => {
     let lists = glob.sync(`${path}/${userConfig.src.js}/**/*.html`);
     if (build) {
         if (!lists.length) {
@@ -315,6 +333,7 @@ const assignRecursion = (object, ...sources) => {
 };
 
 function function_name(env) {
+    const userConfig = require('./gulp-config');
     let { path = '', dev = false } = env;
     if (path) {
         if (!path.match(/src[\/\\]?$/)) {
