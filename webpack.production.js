@@ -75,11 +75,11 @@ class WebpackGe {
         };
         // this.stats = 'normal';
         
-        this.devServer = {
-            // contentBase: paths.resolve(devServerPath, './dist'),
-            // compress: true,
-            port: 9000
-        };
+        // this.devServer = {
+        //     // contentBase: paths.resolve(devServerPath, './dist'),
+        //     // compress: true,
+        //     port: 9000
+        // };
     }
 }
 
