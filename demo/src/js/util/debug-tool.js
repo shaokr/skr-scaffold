@@ -59,15 +59,20 @@ document.addEventListener('click', onOpenDebug);
 document.addEventListener('click', onClearTimeout);
 
 function tool(key, ...data) {
-    if (monitorList) {
-        monitorList.once((debugToolPromise) => {
-            debugToolPromise.then((Tool) => {
-                Tool(key, ...data);
+    if (monitorList && Promise) {
+        return new Promise((resolve, reject) => {
+            monitorList.once((debugToolPromise) => {
+                debugToolPromise.then((Tool) => {
+                    if (typeof Tool !== 'function') {
+                        return Tool;
+                    }
+                    return Tool(key, ...data);
+                }).then(resolve).catch(reject);
             });
+            if (debug) {
+                debugToolOpen();
+            }
         });
-        if (debug) {
-            debugToolOpen();
-        }
     }
 }
 
