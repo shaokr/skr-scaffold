@@ -17,7 +17,7 @@ export default class Monitor {
     once = (fn) => {
         const _id = this.on((res) => {
             this.off(_id);
-            fn(res);
+            return fn(res);
         });
         return _id;
     }
@@ -27,9 +27,15 @@ export default class Monitor {
         return true;
     }
     go = (res) => {
+        const resList = [];
         for (const key in this.list) {
-            this.list[key](res);
+            try {
+                resList.push(this.list[key](res));
+            } catch (e) {
+                resList.push(new Error(e));
+            }
         }
+        return resList;
     }
     // // 删除所有事件注册
     offAll = () => {

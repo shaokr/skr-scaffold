@@ -2,7 +2,7 @@
 import Systemjs from 'systemjs';
 import _ from 'lodash';
 import createUrl from 'util/create-url-params';
-import utilLog from 'util/log';
+import { log as utilLog } from 'util/debug-tool';
 
 import errCode from './err-code';
 
