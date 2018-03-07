@@ -6,7 +6,7 @@ import { log as utilLog } from 'util/debug-tool';
 
 import errCode from './err-code';
 
-if (!window.fetch) {
+if (!window.fetch && Systemjs) {
     Systemjs.import('fetch');
 }
 
@@ -50,7 +50,7 @@ const isBodyFile = (params) => {
 let i = 0;
 const log = a => utilLog(a, 'fetch请求');
 export async function fetchParam({ host, url, param, explain = '' }) {
-    if (!window.fetch) {
+    if (!window.fetch && Systemjs) {
         await Systemjs.import('fetch');
     }
     const { body } = param;
