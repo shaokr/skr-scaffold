@@ -20,7 +20,7 @@ const {sep} = paths;
  * 共用打包配置构造函数
  */
 class WebpackGe {
-    constructor({ path, userConfig }) {
+    constructor({ path, userConfig, watch = true }) {
         const entryArr = glob.sync(`${path}/${userConfig.src.js}/**/*.js`);
         const _entry = {};
         for (const item of entryArr) {
@@ -68,7 +68,14 @@ class WebpackGe {
             // autoprefixer({ browsers: ['> 1%', 'last 5 versions'] })
         ];
         // this.stats = 'normal';
-        
+        if (watch) {
+            this.watch = true;
+            this.watchOptions = {
+                aggregateTimeout: 300,
+                poll: 1000,
+                ignored: /node_modules/
+            };
+        }
         // this.devServer = {
         //     // contentBase: paths.resolve(devServerPath, './dist'),
         //     // compress: true,
@@ -166,13 +173,6 @@ class Wkcf extends WebpackGe {
                 minName: ''
             })
         ];
-
-        this.watch = true;
-        this.watchOptions = {
-            aggregateTimeout: 300,
-            poll: 1000,
-            ignored: /node_modules/
-        };
     }
 }
 
@@ -349,7 +349,8 @@ function function_name(env) {
         if (path) {
             const data = {
                 path,
-                userConfig
+                userConfig,
+                watch: false
             };
             let ThisWebpack;
             if (dev) {
