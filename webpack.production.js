@@ -67,12 +67,6 @@ class WebpackGe {
             // require('precss'),
             // autoprefixer({ browsers: ['> 1%', 'last 5 versions'] })
         ];
-        this.watch = true;
-        this.watchOptions = {
-            aggregateTimeout: 300,
-            poll: 1000,
-            ignored: /node_modules/
-        };
         // this.stats = 'normal';
         
         // this.devServer = {
@@ -172,6 +166,13 @@ class Wkcf extends WebpackGe {
                 minName: ''
             })
         ];
+
+        this.watch = true;
+        this.watchOptions = {
+            aggregateTimeout: 300,
+            poll: 1000,
+            ignored: /node_modules/
+        };
     }
 }
 
