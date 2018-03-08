@@ -347,7 +347,8 @@ function function_name(env) {
 
         if (path) {
             const data = {
-                path
+                path,
+                userConfig
             };
             let ThisWebpack;
             if (dev) {
