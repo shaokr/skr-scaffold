@@ -9,7 +9,6 @@ let connect = require('gulp-connect');
 const gutil = require('gulp-util');
 const argv = require('optimist').argv;
 
-let webpackStream = require('webpack-stream');
 let webpack = require('webpack');
 
 // let md5File = require('md5-file');
@@ -95,7 +94,7 @@ let web = ({path, name, build, all}) => {
 gulp.task('connect', () => {
     connect.server({
         root: userConfig.path,
-        port: 8080,
+        port: 8081,
         livereload: true,
         middleware: function(connect, options, next) {
             return [
@@ -111,7 +110,7 @@ gulp.task('connect', () => {
 });
 
 // 系统文件变化事件
-let timeoutList = new Map(); // 防止多次保持按键和git更新时
+let timeoutList = {}; // 防止多次保持按键和git更新时
 let _change = ({event, build = false, all = false}) => {
     let [_path, _name] = paths.resolve(event.path).split(sep + userConfig.src.path + sep);
     const key = `${build}${_path}`;
@@ -119,15 +118,15 @@ let _change = ({event, build = false, all = false}) => {
 
     _name = _name.split(sep);
     _name = _name[_name.length - 1];
-    if (!timeoutList.has(key)) {
-        timeoutList.set(key, true);
+    if (!timeoutList[key]) {
+        timeoutList[key] = true;
         web({
             path: _path,
             name: _name,
             build,
             all
         }).catch(() => {
-            timeoutList.del(key);
+            delete timeoutList[key];
         });
     }
 };

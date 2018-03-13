@@ -9,7 +9,7 @@ const fs = require('fs');
 
 // const userConfig = require('./gulp-config');
 
-
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -124,23 +124,41 @@ class Wkcf extends WebpackGe {
                 {
                     test: /\.less$/,
                     // exclude: /node_modules/,
-                    use: ExtractTextPlugin.extract({
-                        fallback: 'style-loader',
-                        use: [
-                            'css-loader?sourceMap',
-                            {
-                                loader: 'postcss-loader',
-                                options: {
-                                    plugins: [
-                                        autoprefixer
-                                    ]
-                                }
-                            },
-                            'less-loader?sourceMap'
-                        ],
-                        allChunks: true
-                    })
+                    use: [
+                        MiniCssExtractPlugin.loader,
+                        'css-loader?sourceMap',
+                        {
+                            loader: 'postcss-loader',
+                            options: {
+                                sourceMap: true,
+                                plugins: [
+                                    autoprefixer
+                                ]
+                            }
+                        },
+                        'less-loader?sourceMap'
+                    ]
                 },
+                // {
+                //     test: /\.less$/,
+                //     // exclude: /node_modules/,
+                //     use: ExtractTextPlugin.extract({
+                //         fallback: 'style-loader',
+                //         use: [
+                //             'css-loader?sourceMap',
+                //             {
+                //                 loader: 'postcss-loader',
+                //                 options: {
+                //                     plugins: [
+                //                         autoprefixer
+                //                     ]
+                //                 }
+                //             },
+                //             'less-loader?sourceMap'
+                //         ],
+                //         allChunks: true
+                //     })
+                // },
                 {
                     test: /\.(jpe?g|png|gif|svg|ico)$/i,
                     use: [`url-loader?limit=1&name=${userConfig.dist.img}/[hash].[ext]`]
@@ -152,8 +170,8 @@ class Wkcf extends WebpackGe {
             ]
         };
 
-        this.devtool = 'eval-source-map';
-
+        // this.devtool = 'eval-source-map';
+        this.mode = 'development';
         _.assign(this.output, {
             filename: '[name].js',
             path: paths.resolve(path, '../dist')
@@ -167,7 +185,11 @@ class Wkcf extends WebpackGe {
                 __PRE__: false,
                 __BUILD_EXT__: '""'
             }),
-            new ExtractTextPlugin('[name].css'),
+            new MiniCssExtractPlugin({
+                filename: "[name].css",
+                chunkFilename: "[id].css"
+            }),
+            // new ExtractTextPlugin('[name].css'),
             ...generateHtml({ path, userConfig }, {
                 configJs: './config.js',
                 minName: ''
