@@ -22,7 +22,8 @@ module.exports = class {
                     systemJSConfig.meta[_key].depsCss = _.map(item.css, cssItem => `${cssItem}?${htmlPluginData.plugin.childCompilerHash}`);
                 });
                 htmlPluginData.plugin.options.systemJSConfig = systemJSConfig;
-                callback(null, htmlPluginData);
+                if (_.isFunction(callback)) callback(null, htmlPluginData);
+                return htmlPluginData;
             });
         });
     }
