@@ -1,12 +1,15 @@
 /**
  * 解析参数等
- * shaokr 2016.8.29
+ * shaokr 2018.3.14
  */
 const { location } = window;
+/**
+ * 传入url可解析url中的参数
+ */
 export const getParam = (url) => {
     const args = {};
     let match = null;
-    let search = url.match(/\?(.+)#/);
+    let search = url.match(/\?([^#].+)/);
     if (search) {
         search = search[1];
         const reg = /(?:([^&]+)=([^&]+))/g;
@@ -25,6 +28,7 @@ export const getGash = (url) => {
     }
 };
 
+// 输出给外面的param处理
 const param = getParam(location.href);
 const debug = param.debug || window.debug;
 if (typeof debug !== 'undefined') {
