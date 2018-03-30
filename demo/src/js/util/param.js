@@ -9,7 +9,7 @@ const { location } = window;
 export const getParam = (url) => {
     const args = {};
     let match = null;
-    let search = url.match(/\?(.+)#?/);
+    let search = url.match(/\?([^#].+)/);
     if (search) {
         search = search[1];
         const reg = /(?:([^&]+)=([^&]+))/g;
