@@ -186,8 +186,7 @@ class Wkcf extends WebpackGe {
                 __BUILD_EXT__: '""'
             }),
             new MiniCssExtractPlugin({
-                filename: "[name].css",
-                chunkFilename: "[id].css"
+                filename: "[name].css"
             }),
             // new ExtractTextPlugin('[name].css'),
             ...generateHtml({ path, userConfig }, {
@@ -230,28 +229,50 @@ class WkcfBuild extends WebpackGe {
                 {
                     test: /\.less$/,
                     // exclude: /node_modules/,
-                    use: ExtractTextPlugin.extract({
-                        fallback: 'style-loader',
-                        use: [
-                            {
-                                loader: 'css-loader',
-                                options: {
-                                    minimize: true // css压缩
-                                }
-                            },
-                            {
-                                loader: 'postcss-loader',
-                                options: {
-                                    plugins: [
-                                        autoprefixer
-                                    ]
-                                }
-                            },
-                            'less-loader'
-                        ],
-                        allChunks: true
-                    })
+                    use: [
+                        MiniCssExtractPlugin.loader,
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                minimize: true
+                            }
+                        },
+                        {
+                            loader: 'postcss-loader',
+                            options: {
+                                plugins: [
+                                    autoprefixer
+                                ]
+                            }
+                        },
+                        'less-loader'
+                    ]
                 },
+                // {
+                //     test: /\.less$/,
+                //     // exclude: /node_modules/,
+                //     use: ExtractTextPlugin.extract({
+                //         fallback: 'style-loader',
+                //         use: [
+                //             {
+                //                 loader: 'css-loader',
+                //                 options: {
+                //                     minimize: true // css压缩
+                //                 }
+                //             },
+                //             {
+                //                 loader: 'postcss-loader',
+                //                 options: {
+                //                     plugins: [
+                //                         autoprefixer
+                //                     ]
+                //                 }
+                //             },
+                //             'less-loader'
+                //         ],
+                //         allChunks: true
+                //     })
+                // },
                 {
                     test: /\.(jpe?g|png|gif|svg|ico)$/i,
                     use: [
@@ -274,10 +295,10 @@ class WkcfBuild extends WebpackGe {
         this.plugins = [
             ...this.plugins,
 
-            new webpack.LoaderOptionsPlugin({
-                minimize: true,
-                debug: false
-            }),
+            // new webpack.LoaderOptionsPlugin({
+            //     minimize: true,
+            //     debug: false
+            // }),
 
             new webpack.DefinePlugin({
                 __DEV__: false,
@@ -285,15 +306,10 @@ class WkcfBuild extends WebpackGe {
                 __BUILD_EXT__: '".min"'
             }),
 
-            new webpack.optimize.UglifyJsPlugin({
-                mangle: {
-                    except: ['jQuery']
-                }
+            new MiniCssExtractPlugin({
+                filename: "[name].min.css"
             }),
 
-            new webpack.optimize.DedupePlugin(),
-            // new webpack.optimize.OccurenceOrderPlugin(),
-            new ExtractTextPlugin('[name].min.css'),
             ...generateHtml({ path, userConfig }, {
                 configJs: './config.min.js',
                 minName: '.min'

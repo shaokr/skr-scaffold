@@ -39,7 +39,7 @@ export default class NoticeMain extends Component {
             <div onClick={this._toggleLang}>
                 <Header title={`${title.name}---${computed.title.total}`} />
 
-					当前语言1:{lang.Language}------{lang.data.hi}
+					当前语言:{lang.Language}------{lang.data.hi}
 
                 <AppA data={tab.list} />
 

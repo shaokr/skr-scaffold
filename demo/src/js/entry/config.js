@@ -27,7 +27,6 @@ const mainListObj = { // 载入文件的配置
         deps: ['react', 'react-router-dom', 'mobx', 'mobx-react', 'flexible']
     }
 };
-
 for (const key in SystemJSConfig.meta) {
     const itme = SystemJSConfig.meta[key];
     const _key = key;
