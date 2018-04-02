@@ -95,7 +95,7 @@ let web = ({path, name, build, all}) => {
 gulp.task('connect', () => {
     connect.server({
         root: userConfig.path,
-        port: 8080,
+        port: 8081,
         livereload: true,
         middleware: function(connect, options, next) {
             return [

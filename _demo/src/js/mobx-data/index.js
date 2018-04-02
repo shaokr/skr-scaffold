@@ -1,7 +1,7 @@
 /**
  * 数据,操作,计算 整合文件
  */
-import './configure';
+import { useStrict } from 'mobx';
 // 数据
 import { Title, Tab } from './store';
 // 操作
@@ -9,6 +9,7 @@ import { AppAction } from './action';
 // 计算
 import { AppComputed } from './computed';
 
+useStrict(true);
 
 const store = {
     title: new Title(),

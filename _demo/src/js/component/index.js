@@ -4,7 +4,7 @@
 import 'less/pages/index.less';
 import { Component } from 'react';
 import { observer } from 'mobx-react';
-import storeData from 'mobx-data';
+// import DevTools from 'util/devtools'; // 详情
 
 import AppA from './a'; // 列表
 
@@ -25,18 +25,21 @@ export default class NoticeMain extends Component {
     constructor(props) {
         super(props);
 
-        this.onToggleLang = this.onToggleLang.bind(this);
+        this._toggleLang = this._toggleLang.bind(this);
     }
-    onToggleLang() {
-        const { action } = storeData;
+    _toggleLang() {
+        const { lang, action } = this.props;
+        lang.setLang(lang.Language == 'en' ? 'cn' : 'en');
         action.title.add();
     }
     render() {
-        const { store, computed } = storeData;
+        const { store, lang, computed } = this.props;
         const { title, tab } = store;
         return (
-            <div onClick={this.onToggleLang}>
+            <div onClick={this._toggleLang}>
                 <Header title={`${title.name}---${computed.title.total}`} />
+
+					当前语言:{lang.Language}------{lang.data.hi}
 
                 <AppA data={tab.list} />
 
