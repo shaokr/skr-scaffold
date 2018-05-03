@@ -14,7 +14,11 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
  */
 function Copy(path, build) {
     const _data = [];
+    const _pa = paths.resolve(path, `../dist${build ? '/min' : ''}/systemjs`);
 
+    if (!fs.existsSync(_pa)) {
+        _data.push({ context: 'node_modules/systemjs/dist', from: '*', to: 'systemjs' });
+    }
     _data.push({ context: `${path}/js/config/lang/data`, from: '**', to: 'lang' });
 
     return new CopyWebpackPlugin(_data);
@@ -30,6 +34,16 @@ function Last({ data, build, path, userConfig, packPath }) {
     } else if (fs.existsSync(itemWebConfig.build)) {
         return require(itemWebConfig.build);
     }
+    /**
+     * 多项目情况-----------------------------------------
+     * 可对部分项目不进行编译
+     * */
+    // const entry = {};
+    // _.forEach([
+    //     'main',
+    //     'config'
+    // ], (item) => entry[item] = data.entry[item]);
+    // data.entry = entry;
 
     data.resolve.modules.unshift(paths.resolve(__dirname, '../node_modules'));
     // data.resolve.modules.push(...userConfig.modules)

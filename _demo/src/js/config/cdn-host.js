@@ -1,6 +1,3 @@
-/**
- * cdn根据环境变化地址
- */
 import env from './env';
 import param from 'util/param';
 
@@ -11,8 +8,8 @@ const _protocol = location.protocol === 'file:' ? 'http:' : location.protocol;
 
 const host = {
     production: `${param.cdnHref}`,
-    test: `${_protocol}//192.168.1.251:8282`,
-    cloud: `${location.origin}`
+    test: `${_protocol}//192.168.1.251:8282/fed/web-cdn`,
+    cloud: `${location.origin}/fed/web-cdn`
 }[env];
 
 export default host;

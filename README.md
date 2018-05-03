@@ -35,8 +35,48 @@ jsconfig.json
 
 ## 目录文件说明
 ```
-.
 demo
+├── doc/: 项目相关文件(比如ui，流程图
+├── src/: 生产环境
+│   ├── img/: 图片
+│   ├── js/
+│   │   ├── entry/: 入口(在此目录的文件会产出到产出环境
+│   │   │   ├── index.html: build的时候生成的页面
+│   │   │   └── main.js: 主入口
+│   │   ├── component/: 项目react组件
+│   │   ├── mobx-data/
+│   │   │   ├── configure.js: mobx的全局配置
+│   │   │   ├── index.js: 所有 数据、计算、操作 统一出口
+│   │   │   ├── store/: 数据
+│   │   │   ├── action/: 操作
+│   │   │   └── computed/: 计算
+│   │   ├── helpers/: 业务相关的方法
+│   │   ├── config/: 配置目录(语言等
+│   │   │   ├── cdn-host.js: cdn的路径配置
+│   │   │   └── env.js: 环境配置
+│   │   ├── util/: 其他代码库
+│   │   │   ├── log.js: 打印数据方法
+│   │   │   ├── devtools.js: 追踪store数据调试工具
+│   │   │   ├── param.js: 获取url参数
+│   │   │   ├── time-deal.js: 时间相关方法
+│   │   │   ├── validate-form.js: 验证数据
+│   │   │   ├── storage.js: h5存储
+│   │   │   ├── create-url-params.js: 把对象变成url参数
+│   │   │   ├── client.js: 客户端信息
+│   │   │   ├── guid.js: guid
+│   │   │   └── widget/: 第三方代码
+│   │   └── webpack-set/: webpack的一些自定义设置
+│   ├── less/: 样式
+│   └── pages/: html
+│
+│        
+├── dist: 产出代码
+│    └── min 压缩后代码
+└── packconf/: 项目打包配置
+```
+
+```
+_demo(现在公司中使用的版本)
 ├── doc/: 项目相关文件(比如ui，流程图
 ├── src/: 生产环境
 │   ├── img/: 图片
