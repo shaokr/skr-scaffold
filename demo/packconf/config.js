@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const fs = require('fs');
 const paths = require('path');
-const HtmlSystemjsConfig = require('./html-systemjs-config');
+const HtmlAddChunkConfig = require('./html-add-chunk-config');
 
 const itemWebConfig = {
     go: paths.resolve(__dirname, 'webpackConfig.js'),
@@ -44,7 +44,7 @@ function Last({ data, build, path, userConfig, packPath }) {
         data.plugins.push(_copyList);
     }
 
-    data.plugins.push(new HtmlSystemjsConfig());
+    data.plugins.push(new HtmlAddChunkConfig());
     // data.output.library = '[name]'; // 输出到全局的名称
     // data.output.libraryTarget = 'umd'; // 输出方式
     return data;
