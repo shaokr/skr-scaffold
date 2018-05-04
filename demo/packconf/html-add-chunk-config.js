@@ -28,7 +28,6 @@ module.exports = class {
                     list.push(jsTemplate({ url: `${item.entry}?${item.hash}` }));
                 });
                 htmlPluginData.plugin.options.addChunk = list.join('');
-                console.log(htmlPluginData.plugin.options.addChunk);
                 if (_.isFunction(callback)) callback(null, htmlPluginData);
                 return htmlPluginData;
             });
