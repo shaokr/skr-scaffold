@@ -93,8 +93,9 @@ let web = ({path, name, build, all}) => {
 // 本地服务
 gulp.task('connect', () => {
     connect.server({
+        host: '0.0.0.0',
         root: userConfig.path,
-        port: 8081,
+        port: 8080,
         livereload: true,
         middleware: function(connect, options, next) {
             return [
