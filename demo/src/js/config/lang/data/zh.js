@@ -1,3 +1,4 @@
+/* eslint no-var: "off", prefer-arrow-callback: "off" */
 /**
  * 中文语言包
  */
