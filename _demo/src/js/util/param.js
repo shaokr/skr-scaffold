@@ -15,7 +15,7 @@ export const getParam = (url) => {
         const reg = /(?:([^&]+)=([^&]+))/g;
         while ((match = reg.exec(search)) !== null) {
             if (match[2]) {
-                args[match[1]] = decodeURIComponent(match[2]);
+                args[match[1]] = decodeURIComponent(match[2].replace(/\+/g, '%20'));
             }
         }
     }
@@ -24,7 +24,7 @@ export const getParam = (url) => {
 export const getGash = (url) => {
     const gash = url.match(/#(.+)/);
     if (gash) {
-        return decodeURIComponent(gash[1]);
+        return decodeURIComponent(gash[1].replace(/\+/g, '%20'));
     }
 };
 
