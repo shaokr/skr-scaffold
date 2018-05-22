@@ -1,7 +1,7 @@
 /**
  * 多语言包
  */
-
+import _ from 'lodash';
 import { observable, action, runInAction, useStrict } from 'mobx';
 import { local } from 'util/storage';
 import Systemjs from 'systemjs';
