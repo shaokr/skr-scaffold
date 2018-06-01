@@ -9,10 +9,6 @@ let connect = require('gulp-connect');
 const gutil = require('gulp-util');
 const argv = require('optimist').argv;
 
-<<<<<<< HEAD
-=======
-// let webpackStream = require('webpack-stream');
->>>>>>> master
 let webpack = require('webpack');
 
 // let md5File = require('md5-file');
