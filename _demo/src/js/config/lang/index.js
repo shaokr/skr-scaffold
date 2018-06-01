@@ -1,7 +1,7 @@
 /**
  * 多语言包
  */
-
+import _ from 'lodash';
 import { observable, action, runInAction, useStrict } from 'mobx';
 import { local } from 'util/storage';
 import Systemjs from 'systemjs';
@@ -11,9 +11,17 @@ const DefLang = 'zh';
 class Language {
     @observable Language = local.get('Language', true) || DefLang // 当前语言
     @observable data = {} // 当前语言数据
-
     constructor() {
         this.setLang();
+    }
+    replace(data, ...arr) {
+        let _str = data || '';
+        if (_str) {
+            _.forEach(arr, (item, index) => {
+                _str = _str.replace(new RegExp(`\\$${index}`, 'g'), item);
+            });
+        }
+        return _str;
     }
 
     @action('设置语言')
