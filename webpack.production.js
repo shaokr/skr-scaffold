@@ -277,7 +277,7 @@ class WkcfBuild extends WebpackGe {
                     test: /\.(jpe?g|png|gif|svg|ico)$/i,
                     use: [
                         `url-loader?limit=10000&name=${userConfig.dist.img}/[hash].[ext]`,
-                        'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=true'
+                        'img-loader'
                     ]
                 },
                 {
@@ -291,7 +291,7 @@ class WkcfBuild extends WebpackGe {
             filename: '[name].min.js',
             path: paths.resolve(path, '../dist/min')
         });
-
+        this.mode = 'production';
         this.plugins = [
             ...this.plugins,
 
