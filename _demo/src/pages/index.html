@@ -1,34 +1,37 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="UTF-8">
 	<title>例子</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta http-equiv="Cache-Control" content="no-cache" />
 	<!--<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">-->
-	
+
 </head>
+
 <body>
-	
+
 	<div id="app-main">
 		<style>
 			html[data-dpr] .cup-main {
 				opacity: 0;
 			}
-			
-			.cup-main{
+
+			.cup-main {
 				position: absolute;
 				margin: 0;
 				padding: 0;
 				box-sizing: border-box;
 				height: 3px;
-				top:0;
+				top: 0;
 				left: 0;
 				background: #4EFCFF;
 				width: 100%;
 				overflow: hidden;
 			}
-			.cup-main::after{
+
+			.cup-main::after {
 				content: '';
 				background: linear-gradient(-90deg, #4EFCFF, #459EF2, #4EFCFF);
 				animation: fader 2s infinite linear;
@@ -36,8 +39,9 @@
 				height: 100%;
 				position: absolute;
 			}
+
 			@keyframes fader {
-				0% { 
+				0% {
 					transform: translateX(-100%);
 				}
 				100% {

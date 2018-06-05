@@ -7,7 +7,7 @@ import { Component } from 'react';
 
 let DevTools = null;
 if (param.debug) {
-    DevTools = require('mobx-react-devtools').default;
+  DevTools = require('mobx-react-devtools').default;
 }
 
 export default DevTools;
