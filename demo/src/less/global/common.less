@@ -1,31 +1,42 @@
-
 //  变量文件
 @import './var.less'; // 其他
 // @import './var-mobile.less';  // 手机端变量
 // 自定义函数文件
 @import './mixins.less';
 // 重置文件
-@import '~component/reset.less'; 
+@import '~component/reset.less';
 // 公共常用样式
 @import './public.less';
 // 模板
 @import './mask.less';
 
-body{.dpr(@fs2);-webkit-overflow-scrolling : touch;}
-body div{
-    font-size: inherit;
-    color: inherit;
+body {
+  .dpr(@fs2);
+  -webkit-overflow-scrolling: touch;
 }
-html{ font-family: Tahoma, Hiragino Sans GB, "Helvetica Neue", Microsoft YaHei; }
+body div {
+  font-size: inherit;
+  color: inherit;
+}
+html {
+  font-family: Tahoma, Hiragino Sans GB, 'Helvetica Neue', Microsoft YaHei;
+}
 
-a{text-decoration: none;color:inherit;}
+a {
+  text-decoration: none;
+  color: inherit;
+}
 // 去除手机点击选中
-*{-webkit-tap-highlight-color: rgba(0,0,0,0);}
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
 
-[class="icon"],[class^="icon-"], [class*=" icon-"] {
-    width: 1em; 
-    height: 1em;
-    vertical-align: -0.15em;
-    fill: currentColor;
-    overflow: hidden;
+[class='icon'],
+[class^='icon-'],
+[class*=' icon-'] {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
 }

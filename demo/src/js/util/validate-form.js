@@ -1,7 +1,7 @@
 /**
-* 验证对象数据
-*
-*/
+ * 验证对象数据
+ *
+ */
 
 // 获取表单数据
 // function getForm(id) {
@@ -48,64 +48,69 @@ import _ from 'lodash';
 *   @param config (可无) {} 公共配置(参数和上面一样)
 **/
 function verify(obj, nameObj, config) {
-    var p, _l,
-        _nameObj,  // 当前nameObj数据
-        _form = obj,
-        nameObj = nameObj || {};
+  let p;
+  let _l;
+  let _nameObj; // 当前nameObj数据
+  let _form = obj;
+  let nameObj = nameObj || {};
 
-    if (typeof _form === 'object') {
-        for (p in nameObj) {
-            _nameObj = nameObj[p];
+  if (typeof _form === 'object') {
+    for (p in nameObj) {
+      _nameObj = nameObj[p];
 
-            if (typeof _nameObj === 'object') {
-                _l = _nameObj.length;
+      if (typeof _nameObj === 'object') {
+        _l = _nameObj.length;
 
-                if (typeof _l === 'number') {
-                    for (let i = 0; i < _l; i++) {
-                        if (!judgeRegular(_form[p], _nameObj[i], config)) {
-                            return false;
-                        }
-                    }
-                } else {
-                    if (!judgeRegular(_form[p], _nameObj, config)) {
-                        return false;
-                    }
-                }
+        if (typeof _l === 'number') {
+          for (let i = 0; i < _l; i++) {
+            if (!judgeRegular(_form[p], _nameObj[i], config)) {
+              return false;
             }
+          }
+        } else {
+          if (!judgeRegular(_form[p], _nameObj, config)) {
+            return false;
+          }
         }
-        return _form;
+      }
     }
+    return _form;
+  }
 }
 
 function judgeRegular(data, regulars, config) {
-    let _bool = false;
+  let _bool = false;
 
-    regulars = _.assign({}, config, regulars);
-    if (!regulars.off) { // 判断是否开启
-        if (typeof regulars.way === 'function') { // 判断是否为方法
-            _bool = regulars.way(data, regulars);
-        } else {
-            if (typeof regulars.return === 'boolean') { // 判断是否为 boolean 类型
-                _bool = regulars.return;
-            } else if (typeof regulars.return === 'function') { // 判断是否为方法
-                _bool = regulars.return(data, regulars);
-            } else {
-                regulars.regular = regulars.regular || /.+/;// 是否存在相对应的正则 无则默认为不能为空
-                _bool = data.match(regulars.regular);
-                if (regulars.back) {
-                    _bool = !_bool;
-                } else {
-                    _bool = !!_bool;
-                }
-            }
-            if (!_bool) {
-                regulars.tip && regulars.tip(data, regulars);// $.alert(regulars.info,1000);
-            }
-        }
+  regulars = _.assign({}, config, regulars);
+  if (!regulars.off) {
+    // 判断是否开启
+    if (typeof regulars.way === 'function') {
+      // 判断是否为方法
+      _bool = regulars.way(data, regulars);
     } else {
-        _bool = true;
+      if (typeof regulars.return === 'boolean') {
+        // 判断是否为 boolean 类型
+        _bool = regulars.return;
+      } else if (typeof regulars.return === 'function') {
+        // 判断是否为方法
+        _bool = regulars.return(data, regulars);
+      } else {
+        regulars.regular = regulars.regular || /.+/; // 是否存在相对应的正则 无则默认为不能为空
+        _bool = data.match(regulars.regular);
+        if (regulars.back) {
+          _bool = !_bool;
+        } else {
+          _bool = !!_bool;
+        }
+      }
+      if (!_bool) {
+        regulars.tip && regulars.tip(data, regulars); // $.alert(regulars.info,1000);
+      }
     }
-    return _bool;
+  } else {
+    _bool = true;
+  }
+  return _bool;
 }
 
 /**
@@ -115,10 +120,10 @@ function judgeRegular(data, regulars, config) {
  * @returns {Boolean} 超出长度返回false，其余返回true
  */
 function verifyLength(str, length) {
-    var length = length || 20;
-    return str.length <= length;
+  length = length || 20;
+  return str.length <= length;
 }
 
 module.exports = {
-    go: verify
+  go: verify
 };

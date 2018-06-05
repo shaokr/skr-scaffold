@@ -4,8 +4,8 @@ const paths = require('path');
 const HtmlSystemjsConfig = require('./html-systemjs-config');
 
 const itemWebConfig = {
-    go: paths.resolve(__dirname, 'webpackConfig.js'),
-    build: paths.resolve(__dirname, 'webpackConfig-build.js')
+  go: paths.resolve(__dirname, 'webpackConfig.js'),
+  build: paths.resolve(__dirname, 'webpackConfig-build.js')
 };
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -13,56 +13,63 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
  * 拷贝的目录
  */
 function Copy(path, build) {
-    const _data = [];
-    const _pa = paths.resolve(path, `../dist${build ? '/min' : ''}/systemjs`);
+  const _data = [];
+  const _pa = paths.resolve(path, `../dist${build ? '/min' : ''}/systemjs`);
 
-    if (!fs.existsSync(_pa)) {
-        _data.push({ context: 'node_modules/systemjs/dist', from: '*', to: 'systemjs' });
-    }
-    _data.push({ context: `${path}/js/config/lang/data`, from: '**', to: 'lang' });
+  if (!fs.existsSync(_pa)) {
+    _data.push({
+      context: 'node_modules/systemjs/dist',
+      from: '*',
+      to: 'systemjs'
+    });
+  }
+  _data.push({
+    context: `${path}/js/config/lang/data`,
+    from: '**',
+    to: 'lang'
+  });
 
-    return new CopyWebpackPlugin(_data);
+  return new CopyWebpackPlugin(_data);
 }
 
 /**
  * 最后配置
  */
 function Last({ data, build, path, userConfig, packPath }) {
-    // 判断是否存在当前项目配置
-    if (!build && fs.existsSync(itemWebConfig.go)) {
-        return require(itemWebConfig.go);
-    } else if (fs.existsSync(itemWebConfig.build)) {
-        return require(itemWebConfig.build);
-    }
-    /**
-     * 多项目情况-----------------------------------------
-     * 可对部分项目不进行编译
-     * */
-    // const entry = {};
-    // _.forEach([
-    //     'main',
-    //     'config'
-    // ], (item) => entry[item] = data.entry[item]);
-    // data.entry = entry;
+  // 判断是否存在当前项目配置
+  if (!build && fs.existsSync(itemWebConfig.go)) {
+    return require(itemWebConfig.go);
+  } else if (fs.existsSync(itemWebConfig.build)) {
+    return require(itemWebConfig.build);
+  }
+  /**
+   * 多项目情况-----------------------------------------
+   * 可对部分项目不进行编译
+   * */
+  // const entry = {};
+  // _.forEach([
+  //     'main',
+  //     'config'
+  // ], (item) => entry[item] = data.entry[item]);
+  // data.entry = entry;
 
-    data.resolve.modules.unshift(paths.resolve(__dirname, '../node_modules'));
-    // data.resolve.modules.push(...userConfig.modules)
-    /**
-     * ------------------------------------------------
-     * */
+  data.resolve.modules.unshift(paths.resolve(__dirname, '../node_modules'));
+  // data.resolve.modules.push(...userConfig.modules)
+  /**
+   * ------------------------------------------------
+   * */
 
-    // data.externals[] = '';
-    // 添加目录拷贝
-    const _copyList = Copy(path, build);
-    if (_copyList) {
-        data.plugins.push(_copyList);
-    }
+  // data.externals[] = '';
+  // 添加目录拷贝
+  const _copyList = Copy(path, build);
+  if (_copyList) {
+    data.plugins.push(_copyList);
+  }
 
-    data.plugins.push(new HtmlSystemjsConfig());
-    // data.output.library = '[name]'; // 输出到全局的名称
-    // data.output.libraryTarget = 'umd'; // 输出方式
-    return data;
+  data.plugins.push(new HtmlSystemjsConfig());
+  // data.output.library = '[name]'; // 输出到全局的名称
+  // data.output.libraryTarget = 'umd'; // 输出方式
+  return data;
 }
-
 
 module.exports = Last;

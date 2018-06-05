@@ -12,20 +12,20 @@ import { AppComputed } from './computed';
 useStrict(true);
 
 const store = {
-    title: new Title(),
-    tab: new Tab()
+  title: new Title(),
+  tab: new Tab()
 };
 
 const action = {
-    title: new AppAction(store)
+  title: new AppAction(store)
 };
 
 const computed = {
-    title: new AppComputed(store)
+  title: new AppComputed(store)
 };
 
 export default {
-    store,
-    action,
-    computed
+  store,
+  action,
+  computed
 };

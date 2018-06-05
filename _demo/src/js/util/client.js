@@ -23,13 +23,13 @@ export default (() => {
   // 检测呈现引擎和浏览器
   const ua = navigator.userAgent;
   if (/AppleWebKit\/(\S+)/.test(ua)) {
-    engine.webkit = parseFloat(RegExp["$1"]);
+    engine.webkit = parseFloat(RegExp['$1']);
   }
 
   // 移动设备
-  system.iphone = ua.indexOf("iPhone") > -1;
-  system.ipad = ua.indexOf("iPad") > -1;
-  system.nokiaN = ua.indexOf("NokiaN") > -1;
+  system.iphone = ua.indexOf('iPhone') > -1;
+  system.ipad = ua.indexOf('iPad') > -1;
+  system.nokiaN = ua.indexOf('NokiaN') > -1;
 
   // 判断是否为ios
   if (system.ipad || system.iphone) {
@@ -37,12 +37,12 @@ export default (() => {
   }
 
   // window mobile
-  if (system.win == "CE") {
+  if (system.win == 'CE') {
     system.winMobile = system.win;
-  } else if (system.win == "Ph") {
+  } else if (system.win == 'Ph') {
     if (/Windows Phone OS (\d+.\d+)/.test(ua)) {
-      system.win = "Phone";
-      system.winMobile = parseFloat(RegExp["$1"]);
+      system.win = 'Phone';
+      system.winMobile = parseFloat(RegExp['$1']);
     }
   }
 
@@ -51,7 +51,7 @@ export default (() => {
     system.android = parseFloat(RegExp.$1);
   }
 
-  if (ua.toLowerCase().match(/MicroMessenger/i) == "micromessenger") {
+  if (ua.toLowerCase().match(/MicroMessenger/i) == 'micromessenger') {
     system.microMessenger = true;
   }
   if (!(system.ios || system.android || system.winMobile || system.nokiaN)) {
