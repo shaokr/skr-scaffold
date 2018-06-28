@@ -4,9 +4,11 @@
 import { computed } from 'mobx';
 
 export class AppComputed {
-  constructor({ title, tab }) {
-    this.title = title;
-    this.tab = tab;
+  constructor(props) {
+    this.props = props;
+    const { store } = props;
+    this.title = store.title;
+    this.tab = store.tab;
   }
   // 创建计算
   @computed

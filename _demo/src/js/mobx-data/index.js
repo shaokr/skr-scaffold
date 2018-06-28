@@ -16,7 +16,7 @@ export default new class {
   };
 
   action = {
-    title: new AppAction(this.store)
+    title: new AppAction(this)
   };
 
   computed = {
