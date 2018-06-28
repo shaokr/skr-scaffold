@@ -4,8 +4,10 @@
 import { action, runInAction } from 'mobx';
 
 export class AppAction {
-  constructor({ title }) {
-    this.title = title;
+  constructor(props) {
+    this.props = props;
+    const { store } = props;
+    this.title = store.title;
   }
 
   // 创建动作

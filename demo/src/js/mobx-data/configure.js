@@ -1,5 +1,5 @@
 /**
- * 数据,操作,计算 整合文件
+ * mobx配置
  */
 import { configure } from 'mobx';
 
