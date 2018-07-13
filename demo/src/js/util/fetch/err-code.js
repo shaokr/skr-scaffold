@@ -30,6 +30,10 @@ const errList = {
   '-6': {
     err_code: '-6',
     err_msg: '请求中断'
+  },
+  '-8': {
+    err_code: '-8',
+    err_msg: '本地网络访问错误'
   }
 };
 
