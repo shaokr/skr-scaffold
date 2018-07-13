@@ -391,7 +391,7 @@ function function_name(env) {
                 watch: false
             };
             let ThisWebpack;
-            if (dev) {
+            if (dev === 'true') {
                 ThisWebpack = Wkcf;
             } else {
                 ThisWebpack = WkcfBuild;

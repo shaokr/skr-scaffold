@@ -9,21 +9,17 @@ import { AppAction } from './action';
 // 计算
 import { AppComputed } from './computed';
 
-const store = {
-  title: new Title(),
-  tab: new Tab()
-};
+export default new class {
+  store = {
+    title: new Title(),
+    tab: new Tab()
+  };
 
-const action = {
-  title: new AppAction(store)
-};
+  action = {
+    title: new AppAction(this)
+  };
 
-const computed = {
-  title: new AppComputed(store)
-};
-
-export default {
-  store,
-  action,
-  computed
-};
+  computed = {
+    title: new AppComputed(this)
+  };
+}();

@@ -12,9 +12,9 @@ export const getParam = url => {
   let search = url.match(/\?([^#]+)/);
   if (search) {
     search = search[1];
-    const reg = /(?:([^&]+)=([^&]+))/g;
+    const reg = /(?:([^&]+)=([^&]*))/g;
     while ((match = reg.exec(search)) !== null) {
-      if (match[2]) {
+      if (match[1]) {
         args[match[1]] = decodeURIComponent(match[2].replace(/\+/g, '%20'));
       }
     }

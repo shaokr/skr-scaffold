@@ -8,6 +8,7 @@ const errList = {
     err_msg: '服务器500错误'
   },
   '-1': {
+    err_code: '-1',
     err_msg: '未知错误'
   },
   '-2': {
