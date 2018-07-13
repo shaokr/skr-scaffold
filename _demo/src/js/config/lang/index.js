@@ -50,7 +50,15 @@ class Language {
   }
 
   @action('设置语言')
-  setLang = async function(name = this.Language, isReload = false) {
+  setLang = async function(name = this.Language, option = {}) {
+    let isReload = false; // 是否刷新页面
+    let isLocal = true; // 是否改变local
+    if (_.isObject(option)) {
+      isReload = _.get(option, 'isReload', isReload);
+      isLocal = _.get(option, 'isLocal', isLocal);
+    } else {
+      isReload = !!option;
+    }
     const data = await Systemjs.import(
       `${__webpack_public_path__}/lang/${this.path}/${name}.js`
     ).catch(() => {
@@ -58,7 +66,7 @@ class Language {
       return false;
     });
     if (data) {
-      local.set(localKey, name, true);
+      if (isLocal) local.set(localKey, name, true);
       this.triggerChange(name);
       if (isReload) {
         window.location.reload();
@@ -69,16 +77,14 @@ class Language {
         });
       }
     } else if (name !== DefLang) {
+      const _language = DefLang;
       const _name = name.split(/[-_]/)[0];
-      if (_name !== name) {
-        this.setLang(_name);
-        return;
+      if (name !== _name) {
+        _language = _name;
+      } else if (name !== this.Language) {
+        _language = this.language;
       }
-      if (name !== this.Language) {
-        this.setLang();
-      } else {
-        this.setLang(DefLang);
-      }
+      this.setLang(_language, { isLocal: false });
     }
   };
 }
