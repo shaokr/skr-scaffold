@@ -113,7 +113,6 @@ export async function fetchParam({ host, url, param = {}, explain = '' }) {
   _fetch(fetchApiUrl, param)
     .then(res => {
       let _res = '';
-      console.log(res);
       if (res.ok) {
         const contentType = res.headers.get('Content-Type');
         if (contentType.match(/application\/json/)) {
