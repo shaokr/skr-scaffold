@@ -77,7 +77,7 @@ class Language {
         });
       }
     } else if (name !== DefLang) {
-      const _language = DefLang;
+      let _language = DefLang;
       const _name = name.split(/[-_]/)[0];
       if (name !== _name) {
         _language = _name;
