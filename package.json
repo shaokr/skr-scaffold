@@ -11,7 +11,7 @@
     "g": "gulp",
     "gb": "gulp build",
     "ga": "gulp all",
-    "b": "./node_modules/.bin/webpack --progress --config webpack.production.js"
+    "b": "webpack --progress --config webpack.production.js"
   },
   "dependencies": {
     "classnames": "^2.2.5",
