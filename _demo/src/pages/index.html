@@ -54,6 +54,7 @@
 
 	<script src="./systemjs/system.js"></script>
 	<script>
+		var projectOtherConfig = <%= JSON.stringify(htmlWebpackPlugin.options.projectOtherConfig) %>;
 		var fedBuildDate = '<%= `${new Date()}` %>'; // 编译时间
 		var SystemJSConfig = <%= JSON.stringify(htmlWebpackPlugin.options.systemJSConfig) %>;
 		SystemJS.config(SystemJSConfig);
