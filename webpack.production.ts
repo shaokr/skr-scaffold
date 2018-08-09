@@ -15,25 +15,58 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const md5File = require('md5-file');
 // const AppCachePlugin = require('appcache-webpack-plugin');
 const { sep } = paths;
+/**
+ * * 源码配置
+ * 
+ * path: String; // 目录地址(与src同级
+ * 
+  js: String; // 需要编译的js目录
+
+  css: String; // 需要编译的样式目录
+
+  html: String; // 需要编译的html目录
+
+  packconf: Array<String>; // 项目独立webpack配置
+
+ */
+interface UserConfigSrc {
+  path: String; // 目录地址(与src同级
+  js: String; // 需要编译的js目录
+  css: String; // 需要编译的样式目录
+  html: String; // 需要编译的html目录
+  packconf: Array<String>; // 项目独立webpack配置
+}
+/**
+ * 产出配置
+ * 
+ * path: String; // 目录地址(与src同级
+ * 
+  img: String; // img目录
+
+ */
+interface UserConfigDist {
+  path: String; // 目录地址(与src同级
+  img: String; // img目录
+}
+
+/**
+ * 
+ * path: String; // 项目目录
+ * 
+  webpackConfig: String; // 共用webpack配置
+
+  browsers: Array<String>; // browsers的配置
+
+  modules: Array<String>; // 查找资源的目录相对于 src中的path地址
+
+ */
 interface UserConfig {
   path: String; // 项目目录
   webpackConfig: String; // 共用webpack配置
-  browsers: Array<String>;
+  browsers: Array<String>; // browsers的配置
   modules: Array<String>; // 查找资源的目录相对于 src中的path地址
-  src: Object<{js: String}>;
-  //  {
-  //     path: 'src', // 目录地址(与src同级
-  //     js: 'js/entry', // 需要编译的js目录
-  //     css: 'less/pages', // 需要编译的样式目录
-  //     html: 'pages', // 需要编译的html目录
-  //     packconf: ['packconf/config.js', '../packconf/config.js'] // 项目独立webpack配置
-  // };    // 源码目录名
-  // dist: { // 产出配置
-  //     path: 'dist', // 目录地址(与src同级
-  //     // build: 'build', // htmljs和css目录
-  //     // html: '.',
-  //     img: 'img' // img目录
-  // }
+  src: UserConfigSrc;
+  dist: UserConfigDist;
 }
 /**
  * 共用打包配置构造函数
@@ -43,7 +76,9 @@ interface WebpackGeProps {
   userConfig: UserConfig;
   watch: Boolean;
 }
-// [propName: string]
+/**
+ * 这里的配置去看webpack的文档吧~
+ */
 class WebpackGe {
   entry: Object;
   output: Object;
@@ -52,7 +87,9 @@ class WebpackGe {
   plugins: Array<object>;
   watch: Boolean;
   watchOptions: Object;
-  constructor(props: WebpackGeProps ) {
+  module: Object;
+  mode: String;
+  constructor(props: WebpackGeProps) {
     const { path, userConfig, watch = true } = props;
     const entryArr = glob.sync(`${path}/${userConfig.src.js}/**/*.js`);
     const _entry = {};
@@ -123,7 +160,7 @@ class WebpackGe {
 class Wkcf extends WebpackGe {
   constructor(props) {
     super(props);
-    const { path, userConfig } = props;
+    const { path, userConfig, projectOtherConfig } = props;
 
     const autoprefixer = require('autoprefixer')({
       browsers: userConfig.browsers
@@ -229,6 +266,7 @@ class Wkcf extends WebpackGe {
         { path, userConfig },
         {
           configJs: './config.js',
+          projectOtherConfig,
           minName: ''
         }
       )
@@ -239,7 +277,7 @@ class Wkcf extends WebpackGe {
 class WkcfBuild extends WebpackGe {
   constructor(props) {
     super(props);
-    const { path, userConfig } = props;
+    const { path, userConfig, projectOtherConfig } = props;
 
     const autoprefixer = require('autoprefixer')({
       browsers: userConfig.browsers
@@ -283,31 +321,6 @@ class WkcfBuild extends WebpackGe {
             'less-loader'
           ]
         },
-        // {
-        //     test: /\.less$/,
-        //     // exclude: /node_modules/,
-        //     use: ExtractTextPlugin.extract({
-        //         fallback: 'style-loader',
-        //         use: [
-        //             {
-        //                 loader: 'css-loader',
-        //                 options: {
-        //                     minimize: true // css压缩
-        //                 }
-        //             },
-        //             {
-        //                 loader: 'postcss-loader',
-        //                 options: {
-        //                     plugins: [
-        //                         autoprefixer
-        //                     ]
-        //                 }
-        //             },
-        //             'less-loader'
-        //         ],
-        //         allChunks: true
-        //     })
-        // },
         {
           test: /\.(jpe?g|png|gif|svg|ico)$/i,
           use: [
@@ -349,6 +362,7 @@ class WkcfBuild extends WebpackGe {
         { path, userConfig },
         {
           configJs: './config.min.js',
+          projectOtherConfig,
           minName: '.min'
         },
         true
@@ -360,7 +374,7 @@ class WkcfBuild extends WebpackGe {
  * 生成html
  */
 const oldHtmlMd5 = {};
-const generateHtml = ({ path, userConfig }, data = {}, build) => {
+const generateHtml = ({ path, userConfig }, data = {}, build?) => {
   let lists = glob.sync(`${path}/${userConfig.src.js}/**/*.html`);
   if (build) {
     if (!lists.length) {
@@ -420,7 +434,7 @@ const assignRecursion = (object, ...sources) => {
 
 function function_name(env) {
   const userConfig = require('./gulp-config');
-  let { path = '', dev = false } = env;
+  let { path = '', dev = false, projectOtherConfig = {} } = env;
   if (path) {
     if (!path.match(/src[\/\\]?$/)) {
       path = glob.sync(`${path}/**{!node_modules,/${userConfig.src.path}}`, {
@@ -433,7 +447,8 @@ function function_name(env) {
       const data = {
         path,
         userConfig,
-        watch: false
+        watch: false,
+        projectOtherConfig
       };
       let ThisWebpack;
       if (dev === 'true') {
@@ -471,4 +486,5 @@ function_name.getPackPlugins = data => new Wkcf(data);
  * 查询build配置
  */
 function_name.getPackPluginsBuild = data => new WkcfBuild(data);
+
 module.exports = function_name;
