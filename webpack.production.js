@@ -1,33 +1,28 @@
-
 const webpack = require('webpack');
-
 const _ = require('lodash');
 const glob = require('glob');
 const paths = require('path');
 const fs = require('fs');
 // const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
-
 // const userConfig = require('./gulp-config');
-
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const md5File = require('md5-file');
 // const AppCachePlugin = require('appcache-webpack-plugin');
-const {sep} = paths;
+const { sep } = paths;
 /**
- * 共用打包配置构造函数
+ * 这里的配置去看webpack的文档吧~
  */
 class WebpackGe {
-    constructor({ path, userConfig, watch = true }) {
+    constructor(props) {
+        const { path, userConfig, watch = true } = props;
         const entryArr = glob.sync(`${path}/${userConfig.src.js}/**/*.js`);
         const _entry = {};
         for (const item of entryArr) {
             const _name = item.match(/entry[\/\\](.+).js/)[1];
             _entry[_name] = item;
         }
-
         this.entry = _entry;
         this.output = {
             // path: `${__dirname}/${userConfig.dist.build}`
@@ -48,7 +43,7 @@ class WebpackGe {
             mobx: 'mobx',
             'mobx-react': 'mobxReact',
             'mobx-react-devtools': 'mobxDevtools',
-            'mock': 'Mock',
+            mock: 'Mock',
             'fed-const': 'fedConst',
             'react-router-dom': 'ReactRouterDOM',
             'debug-tool': 'debugTool'
@@ -83,16 +78,16 @@ class WebpackGe {
         // };
     }
 }
-
 /**
  * 打包配置
  */
 class Wkcf extends WebpackGe {
     constructor(props) {
         super(props);
-        const { path, userConfig } = props;
-
-        const autoprefixer = require('autoprefixer')({ browsers: userConfig.browsers });
+        const { path, userConfig, projectOtherConfig } = props;
+        const autoprefixer = require('autoprefixer')({
+            browsers: userConfig.browsers
+        });
         this.module = {
             rules: [
                 {
@@ -103,12 +98,15 @@ class Wkcf extends WebpackGe {
                         options: {
                             presets: [
                                 // 'es2017',
-                                ['env', {
-                                    'targets': {
-                                        ie: 10,
-                                        'browsers': userConfig.browsers
+                                [
+                                    'env',
+                                    {
+                                        targets: {
+                                            ie: 10,
+                                            browsers: userConfig.browsers
+                                        }
                                     }
-                                }],
+                                ],
                                 'react',
                                 'stage-0'
                             ],
@@ -131,9 +129,7 @@ class Wkcf extends WebpackGe {
                             loader: 'postcss-loader',
                             options: {
                                 sourceMap: true,
-                                plugins: [
-                                    autoprefixer
-                                ]
+                                plugins: [autoprefixer]
                             }
                         },
                         'less-loader?sourceMap'
@@ -169,14 +165,12 @@ class Wkcf extends WebpackGe {
                 }
             ]
         };
-
         // this.devtool = 'eval-source-map';
         this.mode = 'development';
         _.assign(this.output, {
             filename: '[name].js',
             path: paths.resolve(path, '../dist')
         });
-
         this.plugins = [
             ...this.plugins,
             // new webpack.HotModuleReplacementPlugin(),
@@ -186,23 +180,24 @@ class Wkcf extends WebpackGe {
                 __BUILD_EXT__: '""'
             }),
             new MiniCssExtractPlugin({
-                filename: "[name].css"
+                filename: '[name].css'
             }),
             // new ExtractTextPlugin('[name].css'),
             ...generateHtml({ path, userConfig }, {
                 configJs: './config.js',
+                projectOtherConfig,
                 minName: ''
             })
         ];
     }
 }
-
 class WkcfBuild extends WebpackGe {
     constructor(props) {
         super(props);
-        const { path, userConfig } = props;
-
-        const autoprefixer = require('autoprefixer')({ browsers: userConfig.browsers });
+        const { path, userConfig, projectOtherConfig } = props;
+        const autoprefixer = require('autoprefixer')({
+            browsers: userConfig.browsers
+        });
         this.module = {
             rules: [
                 {
@@ -211,11 +206,7 @@ class WkcfBuild extends WebpackGe {
                     use: {
                         loader: 'babel-loader',
                         options: {
-                            presets: [
-                                'es2015',
-                                'stage-0',
-                                'react'
-                            ],
+                            presets: ['es2015', 'stage-0', 'react'],
                             plugins: [
                                 // "react-hot-loader/babel",
                                 'transform-runtime',
@@ -240,39 +231,12 @@ class WkcfBuild extends WebpackGe {
                         {
                             loader: 'postcss-loader',
                             options: {
-                                plugins: [
-                                    autoprefixer
-                                ]
+                                plugins: [autoprefixer]
                             }
                         },
                         'less-loader'
                     ]
                 },
-                // {
-                //     test: /\.less$/,
-                //     // exclude: /node_modules/,
-                //     use: ExtractTextPlugin.extract({
-                //         fallback: 'style-loader',
-                //         use: [
-                //             {
-                //                 loader: 'css-loader',
-                //                 options: {
-                //                     minimize: true // css压缩
-                //                 }
-                //             },
-                //             {
-                //                 loader: 'postcss-loader',
-                //                 options: {
-                //                     plugins: [
-                //                         autoprefixer
-                //                     ]
-                //                 }
-                //             },
-                //             'less-loader'
-                //         ],
-                //         allChunks: true
-                //     })
-                // },
                 {
                     test: /\.(jpe?g|png|gif|svg|ico)$/i,
                     use: [
@@ -286,7 +250,6 @@ class WkcfBuild extends WebpackGe {
                 }
             ]
         };
-
         _.assign(this.output, {
             filename: '[name].min.js',
             path: paths.resolve(path, '../dist/min')
@@ -294,24 +257,21 @@ class WkcfBuild extends WebpackGe {
         this.mode = 'production';
         this.plugins = [
             ...this.plugins,
-
             // new webpack.LoaderOptionsPlugin({
             //     minimize: true,
             //     debug: false
             // }),
-
             new webpack.DefinePlugin({
                 __DEV__: false,
                 __PRE__: true,
                 __BUILD_EXT__: '".min"'
             }),
-
             new MiniCssExtractPlugin({
-                filename: "[name].min.css"
+                filename: '[name].min.css'
             }),
-
             ...generateHtml({ path, userConfig }, {
                 configJs: './config.min.js',
+                projectOtherConfig,
                 minName: '.min'
             }, true)
         ];
@@ -327,11 +287,11 @@ const generateHtml = ({ path, userConfig }, data = {}, build) => {
         if (!lists.length) {
             lists = glob.sync(`${path}/${userConfig.src.html}/**/*.html`);
         }
-    } else {
+    }
+    else {
         lists = _.concat([], glob.sync(`${path}/${userConfig.src.html}/**/*.html`), lists);
     }
-
-    return lists.map((item) => {
+    return lists.map(item => {
         const itemData = paths.resolve(item);
         const jsPath = paths.resolve(path, userConfig.src.js);
         let name = itemData.split(jsPath)[1];
@@ -339,21 +299,19 @@ const generateHtml = ({ path, userConfig }, data = {}, build) => {
             const htmlPath = paths.resolve(path, userConfig.src.html);
             name = itemData.split(htmlPath)[1];
         }
-
-        return new HtmlWebpackPlugin(
-            _.assign({
-                // 根据模板插入css/js等生成最终HTML
-                filename: `.${name}`,    // 生成的html存放路径，相对于 path
-                template: item,    // html模板路径
-                inject: false,    // 允许插件修改哪些内容，包括head与body
-                hash: false,    // 为静态资源生成hash值
-                minify: {    // 压缩HTML文件
-                    removeComments: true,    // 移除HTML中的注释
-                    collapseWhitespace: false    // 删除空白符与换行符
-                }
-                // excludeChunks: ['config'],
-
-            }, data));
+        return new HtmlWebpackPlugin(_.assign({
+            // 根据模板插入css/js等生成最终HTML
+            filename: `.${name}`,
+            template: item,
+            inject: false,
+            hash: false,
+            minify: {
+                // 压缩HTML文件
+                removeComments: true,
+                collapseWhitespace: false // 删除空白符与换行符
+            }
+            // excludeChunks: ['config'],
+        }, data));
     });
 };
 /**
@@ -370,34 +328,32 @@ const assignRecursion = (object, ...sources) => {
     }
     return object;
 };
-
 function function_name(env) {
     const userConfig = require('./gulp-config');
-    let { path = '', dev = false } = env;
+    let { path = '', dev = false, projectOtherConfig = {} } = env;
     if (path) {
         if (!path.match(/src[\/\\]?$/)) {
             path = glob.sync(`${path}/**{!node_modules,/${userConfig.src.path}}`, {
-                ignore: [
-                    '**/node_modules/**'
-                ],
+                ignore: ['**/node_modules/**'],
                 absolute: true
             })[0];
         }
-
         if (path) {
             const data = {
                 path,
                 userConfig,
-                watch: false
+                watch: false,
+                projectOtherConfig
             };
             let ThisWebpack;
             if (dev === 'true') {
                 ThisWebpack = Wkcf;
-            } else {
+            }
+            else {
                 ThisWebpack = WkcfBuild;
             }
             let _webpackConfig;
-            _.forEach(userConfig.src.packconf, (item) => {
+            _.forEach(userConfig.src.packconf, item => {
                 const ItemConfigName = `${path}/${item}`;
                 if (fs.existsSync(ItemConfigName)) {
                     const ItemConfig = require(ItemConfigName);
@@ -412,7 +368,6 @@ function function_name(env) {
                     return false;
                 }
             });
-
             return _webpackConfig || new ThisWebpack(data);
         }
     }
@@ -421,9 +376,9 @@ function function_name(env) {
 /**
  * 查询打包配置
  */
-function_name.getPackPlugins = (data) => new Wkcf(data);
+function_name.getPackPlugins = data => new Wkcf(data);
 /**
  * 查询build配置
  */
-function_name.getPackPluginsBuild = (data) => new WkcfBuild(data);
+function_name.getPackPluginsBuild = data => new WkcfBuild(data);
 module.exports = function_name;
