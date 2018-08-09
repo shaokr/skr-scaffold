@@ -434,7 +434,7 @@ const assignRecursion = (object, ...sources) => {
 
 function function_name(env) {
   const userConfig = require('./gulp-config');
-  let { path = '', dev = false, projectOtherConfig = {} } = env;
+  let { path = '', dev = false, projectOtherConfig = '{}' } = env;
   if (path) {
     if (!path.match(/src[\/\\]?$/)) {
       path = glob.sync(`${path}/**{!node_modules,/${userConfig.src.path}}`, {
