@@ -48,7 +48,10 @@ class Language {
     // });
   }
   replace(data, ...arr) {
-    return data.langReplace(...arr);
+    if (_.isString(data)) {
+      return data.langReplace(...arr);
+    }
+    return data;
   }
   // 获取需要尝试的语言包列表
   getLangList = data => {
