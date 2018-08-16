@@ -197,7 +197,7 @@ class Wkcf extends WebpackGe {
           }
         },
         {
-          test: /\.less$/,
+          test: /\.(less|css)$/,
           // exclude: /node_modules/,
           use: [
             MiniCssExtractPlugin.loader,
@@ -302,7 +302,7 @@ class WkcfBuild extends WebpackGe {
           }
         },
         {
-          test: /\.less$/,
+          test: /\.(less|css)$/,
           // exclude: /node_modules/,
           use: [
             MiniCssExtractPlugin.loader,
