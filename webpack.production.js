@@ -78,76 +78,6 @@ class WebpackGe {
         // };
     }
 }
-const jsRules = ({ userConfig }) => ({
-    test: /\.(js|jsx)$/i,
-    exclude: /node_modules/,
-    use: {
-        loader: 'babel-loader',
-        options: {
-            presets: [
-                // 'es2017',
-                [
-                    '@babel/env',
-                    {
-                        targets: {
-                            ie: 10,
-                            browsers: userConfig.browsers
-                        }
-                    }
-                ],
-                '@babel/react'
-            ],
-            plugins: [
-                //Stage0
-                '@babel/plugin-proposal-function-bind',
-                //Stage1
-                '@babel/plugin-proposal-export-default-from',
-                '@babel/plugin-proposal-logical-assignment-operators',
-                ['@babel/plugin-proposal-optional-chaining', { loose: false }],
-                ['@babel/plugin-proposal-pipeline-operator', { proposal: 'minimal' }],
-                [
-                    '@babel/plugin-proposal-nullish-coalescing-operator',
-                    { loose: false }
-                ],
-                '@babel/plugin-proposal-do-expressions',
-                //Stage2
-                ['@babel/plugin-proposal-decorators', { legacy: true }],
-                '@babel/plugin-proposal-function-sent',
-                '@babel/plugin-proposal-export-namespace-from',
-                '@babel/plugin-proposal-numeric-separator',
-                '@babel/plugin-proposal-throw-expressions',
-                //Stage3
-                '@babel/plugin-syntax-dynamic-import',
-                '@babel/plugin-syntax-import-meta',
-                ['@babel/plugin-proposal-class-properties', { loose: true }],
-                '@babel/plugin-proposal-json-strings',
-                '@babel/plugin-transform-runtime',
-                'lodash'
-            ]
-        }
-    }
-});
-const lessRules = ({ path, userConfig, projectOtherConfig }) => {
-    const autoprefixer = require('autoprefixer')({
-        browsers: userConfig.browsers
-    });
-    return {
-        test: /\.(less|css)$/,
-        // exclude: /node_modules/,
-        use: [
-            MiniCssExtractPlugin.loader,
-            'css-loader?sourceMap',
-            {
-                loader: 'postcss-loader',
-                options: {
-                    sourceMap: true,
-                    plugins: [autoprefixer]
-                }
-            },
-            'less-loader?sourceMap'
-        ]
-    };
-};
 /**
  * 打包配置
  */
@@ -155,10 +85,76 @@ class Wkcf extends WebpackGe {
     constructor(props) {
         super(props);
         const { path, userConfig, projectOtherConfig } = props;
+        const autoprefixer = require('autoprefixer')({
+            browsers: userConfig.browsers
+        });
         this.module = {
             rules: [
-                jsRules(props),
-                lessRules(props),
+                {
+                    test: /\.(js|jsx)$/i,
+                    exclude: /node_modules/,
+                    use: {
+                        loader: 'babel-loader',
+                        options: {
+                            presets: [
+                                // 'es2017',
+                                [
+                                    'env',
+                                    {
+                                        targets: {
+                                            ie: 10,
+                                            browsers: userConfig.browsers
+                                        }
+                                    }
+                                ],
+                                'react',
+                                'stage-0'
+                            ],
+                            plugins: [
+                                'lodash',
+                                'transform-decorators-legacy',
+                                'transform-class-properties',
+                                'transform-runtime'
+                            ]
+                        }
+                    }
+                },
+                {
+                    test: /\.(less|css)$/,
+                    // exclude: /node_modules/,
+                    use: [
+                        MiniCssExtractPlugin.loader,
+                        'css-loader?sourceMap',
+                        {
+                            loader: 'postcss-loader',
+                            options: {
+                                sourceMap: true,
+                                plugins: [autoprefixer]
+                            }
+                        },
+                        'less-loader?sourceMap'
+                    ]
+                },
+                // {
+                //     test: /\.less$/,
+                //     // exclude: /node_modules/,
+                //     use: ExtractTextPlugin.extract({
+                //         fallback: 'style-loader',
+                //         use: [
+                //             'css-loader?sourceMap',
+                //             {
+                //                 loader: 'postcss-loader',
+                //                 options: {
+                //                     plugins: [
+                //                         autoprefixer
+                //                     ]
+                //                 }
+                //             },
+                //             'less-loader?sourceMap'
+                //         ],
+                //         allChunks: true
+                //     })
+                // },
                 {
                     test: /\.(jpe?g|png|gif|svg|ico)$/i,
                     use: [`url-loader?limit=1&name=${userConfig.dist.img}/[hash].[ext]`]
@@ -199,10 +195,48 @@ class WkcfBuild extends WebpackGe {
     constructor(props) {
         super(props);
         const { path, userConfig, projectOtherConfig } = props;
+        const autoprefixer = require('autoprefixer')({
+            browsers: userConfig.browsers
+        });
         this.module = {
             rules: [
-                jsRules(props),
-                lessRules(props),
+                {
+                    test: /\.(js|jsx)$/i,
+                    exclude: /node_modules/,
+                    use: {
+                        loader: 'babel-loader',
+                        options: {
+                            presets: ['es2015', 'stage-0', 'react'],
+                            plugins: [
+                                // "react-hot-loader/babel",
+                                'transform-runtime',
+                                'transform-es2015-typeof-symbol',
+                                'transform-decorators-legacy',
+                                'lodash'
+                            ]
+                        }
+                    }
+                },
+                {
+                    test: /\.(less|css)$/,
+                    // exclude: /node_modules/,
+                    use: [
+                        MiniCssExtractPlugin.loader,
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                minimize: true
+                            }
+                        },
+                        {
+                            loader: 'postcss-loader',
+                            options: {
+                                plugins: [autoprefixer]
+                            }
+                        },
+                        'less-loader'
+                    ]
+                },
                 {
                     test: /\.(jpe?g|png|gif|svg|ico)$/i,
                     use: [
