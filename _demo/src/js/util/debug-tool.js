@@ -9,6 +9,7 @@
 // import Systemjs from 'systemjs';
 import param from 'util/param';
 import Monitor from 'util/monitor';
+import client from './client';
 
 const {
   debugToolOpen: windowDebugToolOpen,
@@ -39,30 +40,31 @@ if (param.debug) {
 }
 let i = 0;
 let ct = 0;
-const onClearTimeout = () => {
-  if (i > 4) {
-    i = 0;
-    clearTimeout(ct);
-  }
-};
-const onOpenDebug = () => {
-  clearTimeout(ct);
-  i++;
-  if (i < 4) {
-    ct = setTimeout(() => {
+if (!client.system.pc) {
+  const onClearTimeout = () => {
+    if (i > 4) {
       i = 0;
-    }, 500);
-  } else {
-    ct = setTimeout(() => {
-      debugToolOpen();
-      document.removeEventListener('click', onOpenDebug);
-      document.removeEventListener('click', onClearTimeout);
-    }, 5000);
-  }
-};
-document.addEventListener('click', onOpenDebug);
-document.addEventListener('click', onClearTimeout);
-
+      clearTimeout(ct);
+    }
+  };
+  const onOpenDebug = () => {
+    clearTimeout(ct);
+    i++;
+    if (i < 4) {
+      ct = setTimeout(() => {
+        i = 0;
+      }, 500);
+    } else {
+      ct = setTimeout(() => {
+        debugToolOpen();
+        document.removeEventListener('click', onOpenDebug);
+        document.removeEventListener('click', onClearTimeout);
+      }, 5000);
+    }
+  };
+  document.addEventListener('click', onOpenDebug);
+  document.addEventListener('click', onClearTimeout);
+}
 function tool(key, ...data) {
   if (monitorList && Promise) {
     return new Promise((resolve, reject) => {
