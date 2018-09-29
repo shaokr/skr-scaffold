@@ -81,12 +81,12 @@ export async function fetchParam({ host, url, param = {}, explain = '' }) {
   let fetchApiUrl = urlJoin(url, host);
   if (param.method === 'POST') {
     let _form;
-    if (param.isBodyJson) {
+    if (param.isFormData || isBodyFile(body)) {
       param.headers = {
         'Content-Type': 'application/json;charset=utf-8'
       };
       _form = JSON.stringify(body);
-    } else if (param.isFormData || isBodyFile(body)) {
+    } else if (param.isBodyJson) {
       _form = new FormData();
       _.forEach(toFetch(body), (v, k) => {
         _form.append(k, v);

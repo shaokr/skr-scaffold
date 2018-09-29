@@ -1,3 +1,4 @@
+import Systemjs from 'systemjs';
 import _ from 'lodash';
 import createUrl from '../create-url-params';
 import { log as utilLog } from '../debug-tool';
@@ -6,6 +7,10 @@ import PromiseClass from '../promise-class';
 import errCode from './err-code';
 
 const { Blob, File } = window;
+
+if (!window.fetch && Systemjs) {
+  Systemjs.import('fetch');
+}
 
 const scheme =
   window.location.protocol === 'file:' ? 'http:' : window.location.protocol;
@@ -58,6 +63,9 @@ const isBodyFile = params => {
 let i = 0;
 const log = a => utilLog(a, 'fetch请求');
 export async function fetchParam({ host, url, param = {}, explain = '' }) {
+  if (!window.fetch && Systemjs) {
+    await Systemjs.import('fetch');
+  }
   const { body = '' } = param;
   const _i = i++;
   const _promise = new PromiseClass();
@@ -65,15 +73,20 @@ export async function fetchParam({ host, url, param = {}, explain = '' }) {
     log([_i, 'abort中断', msg, ['请求参数:', body]]);
     _promise.resolve(errCode(-6));
   };
+  if (!_.get(window, ['navigator', 'onLine'], true)) {
+    // 先判断断网
+    _promise.resolve(errCode('-8'));
+    return _promise.promise;
+  }
   let fetchApiUrl = urlJoin(url, host);
   if (param.method === 'POST') {
     let _form;
-    if (param.isBodyJson) {
+    if (param.isFormData || isBodyFile(body)) {
       param.headers = {
         'Content-Type': 'application/json;charset=utf-8'
       };
       _form = JSON.stringify(body);
-    } else if (param.isFormData || isBodyFile(body)) {
+    } else if (param.isBodyJson) {
       _form = new FormData();
       _.forEach(toFetch(body), (v, k) => {
         _form.append(k, v);
@@ -109,6 +122,7 @@ export async function fetchParam({ host, url, param = {}, explain = '' }) {
     clearTimeout(timeoutId);
     if (res.err_code != '-5') log([_i, '回调', res, ['请求参数:', body]]);
   });
+
   const _fetch = window.fetch;
   _fetch(fetchApiUrl, param)
     .then(res => {
@@ -129,13 +143,8 @@ export async function fetchParam({ host, url, param = {}, explain = '' }) {
       _promise.resolve(_res);
     })
     .catch(e => {
-      // 先判断断网
-      if (_.get(window, ['navigator', 'onLine'], true)) {
-        log([_i, '错误', e.toString(), e, ['请求参数:', body]]);
-        _promise.resolve(errCode('-3'));
-      } else {
-        _promise.resolve(errCode('-8'));
-      }
+      log([_i, '错误', e.toString(), e, ['请求参数:', body]]);
+      _promise.resolve(errCode(-3));
     });
   return _promise.promise;
 }
