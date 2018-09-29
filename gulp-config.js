@@ -1,6 +1,6 @@
 let path = require('path');
 module.exports = {
-    path: path.resolve(__dirname, 'demo'), // 项目目录
+    path: path.resolve(__dirname, 'project'), // 项目目录
     webpackConfig: path.resolve(__dirname, 'webpack.production.js'), // 共用webpack配置
     browsers: ['> 1%', 'last 5 versions'],
     modules: ['js', 'less', 'img'], // 查找资源的目录相对于 src中的path地址
