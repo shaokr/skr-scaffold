@@ -4,12 +4,6 @@ node_modules
 dist
 .idea/
 
-doc/*
-!doc/*.zip
-!doc/*.rar
-!doc/*.7z
-
-trunk/doc/*
-!trunk/doc/*.zip
-!trunk/doc/*.rar
-!trunk/doc/*.7z
+project/*
+!project/_demo
+!project/demo
