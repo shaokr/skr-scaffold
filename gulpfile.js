@@ -6,7 +6,9 @@ let fp = require('lodash/fp');
 let paths = require('path');
 let glob = require('glob');
 let connect = require('gulp-connect');
-const gutil = require('gulp-util');
+const log = require('fancy-log');
+const c = require('ansi-colors');
+
 const argv = require('optimist').argv;
 
 let webpack = require('webpack');
@@ -83,12 +85,20 @@ let web = ({ path, name, build, all }) => {
   // webpackStream(_webpackConfig, webpack)
 
   return new Promise((resolve, reject) => {
-    const _resolve = fp.debounce(300, () => {
-      gulp.src('').pipe(connect.reload());
+    const _resolve = fp.debounce(500, () => {
+      gulp.src('/').pipe(connect.reload());
     });
     webpack(_webpackConfig[0], function(err, stats) {
-      if (err) throw new gutil.PluginError('webpack', err);
-      gutil.log('[webpack]', stats.toString({ colors: true }));
+      if (err) throw new Error(err);
+      let rendering = c.green;
+      if (stats.hasErrors()) {
+        rendering = c.red;
+      } else if (stats.hasWarnings()) {
+        rendering = c.yellow;
+      }
+      log(`-----webpack:(${path})`, stats.toString({ colors: true }));
+      log(rendering(`[${path}]------webpackEnd`));
+
       _resolve();
     });
   });
@@ -100,11 +110,11 @@ let web = ({ path, name, build, all }) => {
   //     .pipe(connect.reload());
 };
 // 本地服务
-gulp.task('connect', () => {
+gulp.task('connect', done => {
   connect.server({
     host: '0.0.0.0',
     root: userConfig.path,
-    port: 8080,
+    port: 8081,
     livereload: true,
     middleware: function(connect, options, next) {
       return [
@@ -120,13 +130,14 @@ gulp.task('connect', () => {
       ];
     }
   });
+  done();
 });
 
 // 系统文件变化事件
 let timeoutList = {}; // 防止多次保持按键和git更新时
-let _change = ({ event, build = false, all = false }) => {
+let _change = ({ path, build = false, all = false }) => {
   let [_path, _name] = paths
-    .resolve(event.path)
+    .resolve(path)
     .split(sep + userConfig.src.path + sep);
   const key = `${build}${_path}`;
   _path += sep + userConfig.src.path;
@@ -146,36 +157,44 @@ let _change = ({ event, build = false, all = false }) => {
   }
 };
 // 开始监听
-gulp.task('go', ['connect'], () => {
-  const matches = glob.sync(
-    `${userConfig.path}/**/{!node_modules,${userConfig.src.path}/${
-      userConfig.src.js
-    }/**/*.*}`
-  );
-  let _watch = gulp.watch(matches);
-  // let _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/${userConfig.src.js}/**/*.*`);
-  _watch.on('change', event => {
-    // _change({ event });
-    _change({ event });
-  });
-});
+gulp.task(
+  'go',
+  gulp.parallel('connect', done => {
+    const matches = glob.sync(
+      `${userConfig.path}/**/{!node_modules,${userConfig.src.path}/${
+        userConfig.src.js
+      }/**/*.*}`
+    );
+    let _watch = gulp.watch(matches);
+    // let _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/${userConfig.src.js}/**/*.*`);
+    _watch.on('change', path => {
+      // _change({ event });
+      _change({ path });
+    });
+    done();
+  })
+);
 // 开始监听（压缩
-gulp.task('build', ['connect'], () => {
-  const matches = glob.sync(
-    `${userConfig.path}/**/{!node_modules,${userConfig.src.path}/${
-      userConfig.src.js
-    }/**/*.*}`
-  );
-  let _watch = gulp.watch(matches);
-  // let _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/${userConfig.src.js}/**/*.*`);
+gulp.task(
+  'build',
+  gulp.parallel('connect', done => {
+    const matches = glob.sync(
+      `${userConfig.path}/**/{!node_modules,${userConfig.src.path}/${
+        userConfig.src.js
+      }/**/*.*}`
+    );
+    let _watch = gulp.watch(matches);
+    // let _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/${userConfig.src.js}/**/*.*`);
 
-  _watch.on('change', event => {
-    _change({ event, build: true });
-  });
-});
+    _watch.on('change', path => {
+      _change({ path, build: true });
+    });
+    done();
+  })
+);
 
 // 开始监听 (压缩和非压缩)
-gulp.task('all', ['go', 'build']);
+gulp.task('all', gulp.parallel('go', 'build', done => done()));
 // gulp.task('all', ['connect'],() => {
 //      let _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/**/*.*`);
 
@@ -185,4 +204,4 @@ gulp.task('all', ['go', 'build']);
 // });
 
 // 监听文件变化
-gulp.task('default', ['go']);
+gulp.task('default', gulp.parallel('go', done => done()));
