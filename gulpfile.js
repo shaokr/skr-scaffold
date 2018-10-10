@@ -96,8 +96,8 @@ let web = ({ path, name, build, all }) => {
       } else if (stats.hasWarnings()) {
         rendering = c.yellow;
       }
-      log(`-----webpack:(${path})`, stats.toString({ colors: true }));
-      log(rendering(`[${path}]------webpackEnd`));
+      log(`-----webpack:(${path})\n`, stats.toString({ colors: true }));
+      log(rendering(`[${path}]--项目编译完成`));
 
       _resolve();
     });
