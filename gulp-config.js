@@ -1,6 +1,9 @@
 let path = require('path');
+const _path = path.resolve(__dirname, 'project'); // 项目目录
+// const _path = path.resolve(__dirname, '../kook-web-fed'); // 项目目录
+
 module.exports = {
-  path: path.resolve(__dirname, 'project'), // 项目目录
+  path: _path,
   webpackConfig: path.resolve(__dirname, 'webpack.production.js'), // 共用webpack配置
   browsers: ['> 1%', 'last 5 versions'],
   modules: ['js', 'less', 'img'], // 查找资源的目录相对于 src中的path地址
@@ -17,5 +20,13 @@ module.exports = {
     // build: 'build', // htmljs和css目录
     // html: '.',
     img: 'img' // img目录
+  },
+  // 本地服务配置
+  connect: {
+    host: '0.0.0.0',
+    root: _path,
+    port: 8081,
+    livereload: true
+    // https: true
   }
 };

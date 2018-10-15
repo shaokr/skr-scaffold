@@ -8,9 +8,6 @@ let glob = require('glob');
 let connect = require('gulp-connect');
 const log = require('fancy-log');
 const c = require('ansi-colors');
-
-const argv = require('optimist').argv;
-
 let webpack = require('webpack');
 
 // let md5File = require('md5-file');
@@ -19,8 +16,6 @@ let fs = require('fs');
 let { sep } = paths;
 // 引入配置
 let userConfig = require('./gulp-config');
-const www = fp.get(['project'])(argv);
-userConfig = fp.assign(userConfig)(www);
 
 let webpackConfig = require(userConfig.webpackConfig);
 const { getPackPlugins, getPackPluginsBuild } = webpackConfig;
@@ -102,20 +97,34 @@ let web = ({ path, name, build, all }) => {
       _resolve();
     });
   });
+};
 
-  // webpackStream(_webpackConfig[0], webpack);
-  // gulp.src(path)
-  //     .pipe(webpackStream(_webpackConfig[0], webpack))
-  //     .pipe(gulp.dest(`${path}/../${userConfig.dist.path}${build ? '/min':''}`))
-  //     .pipe(connect.reload());
+// 系统文件变化事件
+const timeoutList = new Map(); // 防止多次保持按键和git更新时
+const _change = ({ path, build = false, all = false }) => {
+  let [_path, _name] = paths
+    .resolve(path)
+    .split(sep + userConfig.src.path + sep);
+  const key = `${build}${_path}`;
+  _path += sep + userConfig.src.path;
+
+  _name = _name.split(sep);
+  _name = _name[_name.length - 1];
+  if (!timeoutList.has(key)) {
+    timeoutList.set(key, true);
+    web({
+      path: _path,
+      name: _name,
+      build,
+      all
+    }).catch(() => {
+      timeoutList.delete(key);
+    });
+  }
 };
 // 本地服务
 gulp.task('connect', done => {
   connect.server({
-    host: '0.0.0.0',
-    root: userConfig.path,
-    port: 8081,
-    livereload: true,
     middleware: function(connect, options, next) {
       return [
         function(req, res, next) {
@@ -128,80 +137,44 @@ gulp.task('connect', done => {
           return next();
         }
       ];
-    }
+    },
+    ...userConfig.connect
+  });
+  done();
+});
+// 开始监听
+gulp.task('go', done => {
+  const matches = glob.sync(
+    `${userConfig.path}/**/{!node_modules,${userConfig.src.path}/${
+      userConfig.src.js
+    }/**/*.*}`
+  );
+  let _watch = gulp.watch(matches);
+  // let _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/${userConfig.src.js}/**/*.*`);
+  _watch.on('change', path => {
+    // _change({ event });
+    _change({ path });
+  });
+  done();
+});
+// 开始监听（压缩
+gulp.task('build', done => {
+  const matches = glob.sync(
+    `${userConfig.path}/**/{!node_modules,${userConfig.src.path}/${
+      userConfig.src.js
+    }/**/*.*}`
+  );
+  let _watch = gulp.watch(matches);
+  // let _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/${userConfig.src.js}/**/*.*`);
+
+  _watch.on('change', path => {
+    _change({ path, build: true });
   });
   done();
 });
 
-// 系统文件变化事件
-let timeoutList = {}; // 防止多次保持按键和git更新时
-let _change = ({ path, build = false, all = false }) => {
-  let [_path, _name] = paths
-    .resolve(path)
-    .split(sep + userConfig.src.path + sep);
-  const key = `${build}${_path}`;
-  _path += sep + userConfig.src.path;
-
-  _name = _name.split(sep);
-  _name = _name[_name.length - 1];
-  if (!timeoutList[key]) {
-    timeoutList[key] = true;
-    web({
-      path: _path,
-      name: _name,
-      build,
-      all
-    }).catch(() => {
-      delete timeoutList[key];
-    });
-  }
-};
-// 开始监听
-gulp.task(
-  'go',
-  gulp.parallel('connect', done => {
-    const matches = glob.sync(
-      `${userConfig.path}/**/{!node_modules,${userConfig.src.path}/${
-        userConfig.src.js
-      }/**/*.*}`
-    );
-    let _watch = gulp.watch(matches);
-    // let _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/${userConfig.src.js}/**/*.*`);
-    _watch.on('change', path => {
-      // _change({ event });
-      _change({ path });
-    });
-    done();
-  })
-);
-// 开始监听（压缩
-gulp.task(
-  'build',
-  gulp.parallel('connect', done => {
-    const matches = glob.sync(
-      `${userConfig.path}/**/{!node_modules,${userConfig.src.path}/${
-        userConfig.src.js
-      }/**/*.*}`
-    );
-    let _watch = gulp.watch(matches);
-    // let _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/${userConfig.src.js}/**/*.*`);
-
-    _watch.on('change', path => {
-      _change({ path, build: true });
-    });
-    done();
-  })
-);
-
 // 开始监听 (压缩和非压缩)
-gulp.task('all', gulp.parallel('go', 'build', done => done()));
-// gulp.task('all', ['connect'],() => {
-//      let _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/**/*.*`);
-
-//     _watch.on('change', (event) => {
-//         _change({ event, all: true });
-//     });
-// });
+gulp.task('all', gulp.parallel('connect', 'go', 'build', done => done()));
 
 // 监听文件变化
-gulp.task('default', gulp.parallel('go', done => done()));
+gulp.task('default', gulp.parallel('connect', 'go', done => done()));

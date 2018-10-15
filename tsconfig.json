@@ -1,7 +1,9 @@
 {
     "compilerOptions": {
         "module": "none",
-        "target": "es2017"
+        "target": "es2017",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true
     },
     "include": [
         "./*.ts"

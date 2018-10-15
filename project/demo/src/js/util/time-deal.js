@@ -146,7 +146,7 @@ function patchZero(a, l) {
   return a;
 }
 
-module.exports = {
+export default {
   setTime, // 获取时间差
   getDate, // 获取相对应的年月日等
   patchZero, // 前面加0

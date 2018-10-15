@@ -165,7 +165,7 @@ const jsRules = ({ userConfig }) => ({
           '@babel/env',
           {
             targets: {
-              ie: 10,
+              ie: 9,
               browsers: userConfig.browsers
             }
           }
@@ -247,7 +247,7 @@ class Wkcf extends WebpackGe {
       ]
     };
 
-    // this.devtool = 'eval-source-map';
+    // this.devtool = 'inline-source-map';
     this.mode = 'development';
     _.assign(this.output, {
       filename: '[name].js',

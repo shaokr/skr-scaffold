@@ -68,7 +68,7 @@ function Last({ data, build, path, userConfig, packPath }) {
 
   data.plugins.push(new HtmlSystemjsConfig());
   // data.output.library = '[name]'; // 输出到全局的名称
-  // data.output.libraryTarget = 'umd'; // 输出方式
+  data.output.libraryTarget = 'umd'; // 输出方式
   return data;
 }
 
