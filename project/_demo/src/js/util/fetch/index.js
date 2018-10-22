@@ -82,15 +82,15 @@ export async function fetchParam({ host, url, param = {}, explain = '' }) {
   if (param.method === 'POST') {
     let _form;
     if (param.isFormData || isBodyFile(body)) {
-      param.headers = {
-        'Content-Type': 'application/json;charset=utf-8'
-      };
-      _form = JSON.stringify(body);
-    } else if (param.isBodyJson) {
       _form = new FormData();
       _.forEach(toFetch(body), (v, k) => {
         _form.append(k, v);
       });
+    } else if (param.isBodyJson) {
+      param.headers = {
+        'Content-Type': 'application/json;charset=utf-8'
+      };
+      _form = JSON.stringify(body);
     } else {
       param.headers = {
         'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
