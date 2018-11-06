@@ -448,7 +448,7 @@ function function_name(env) {
         path,
         userConfig,
         watch: false,
-        projectOtherConfig
+        projectOtherConfig: JSON.parse(projectOtherConfig)
       };
       let ThisWebpack;
       if (dev === 'true') {
