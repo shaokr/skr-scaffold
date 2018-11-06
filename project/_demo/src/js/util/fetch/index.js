@@ -104,7 +104,7 @@ export async function fetchParam({ host, url, param = {}, explain = '' }) {
   }
   // 超时
   let timeout = param.timeout * 1;
-  if (!_.isNumber(timeout) || _.isNaN(timeout)) {
+  if (param.timeout === false || !_.isNumber(timeout) || _.isNaN(timeout)) {
     timeout = false;
   }
 
