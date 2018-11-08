@@ -84,7 +84,7 @@ class WebpackGe {
 class Wkcf extends WebpackGe {
     constructor(props) {
         super(props);
-        const { path, userConfig, projectOtherConfig } = props;
+        const { path, userConfig, projectOtherConfig = {} } = props;
         const autoprefixer = require('autoprefixer')({
             browsers: userConfig.browsers
         });
@@ -194,7 +194,7 @@ class Wkcf extends WebpackGe {
 class WkcfBuild extends WebpackGe {
     constructor(props) {
         super(props);
-        const { path, userConfig, projectOtherConfig } = props;
+        const { path, userConfig, projectOtherConfig = {} } = props;
         const autoprefixer = require('autoprefixer')({
             browsers: userConfig.browsers
         });
