@@ -127,7 +127,8 @@ class WebpackGe {
       modules: [
         paths.resolve(__dirname, 'node_modules'),
         path,
-        ..._.map(userConfig.modules, item => paths.join(path, item))
+        ..._.map(userConfig.modules, item => paths.join(path, item)),
+        'node_modules'
       ]
     };
     this.plugins = [
