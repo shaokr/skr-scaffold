@@ -1,8 +1,9 @@
 # 前端打包构建工具
 
 ## 功能 
+先安装yarn安装
 
-安装cnpm: ```npm run cnpm```
+设置yarn: ```npm run setYarn```
 
 安装eslint的相关内容: ```npm run eslint```
 
