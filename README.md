@@ -1,7 +1,7 @@
 # 前端打包构建工具
 
 ## 功能 
-先安装yarn安装
+推荐使用yarn安装
 
 设置yarn: ```npm run setYarn```
 
