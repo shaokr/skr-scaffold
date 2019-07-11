@@ -15,13 +15,11 @@ if (!window.fetch && Systemjs) {
 const scheme =
   window.location.protocol === 'file:' ? 'http:' : window.location.protocol;
 
-const isBodyFilePrototype = val => {
-  const valC = _.get(val, 'constructor', false);
-  return (
-    valC === _.get(File, 'prototype.constructor') ||
-    valC === _.get(Blob, 'prototype.constructor')
+const isBodyFilePrototype = val =>
+  _.includes(
+    ['[object File]', '[object Blob]'],
+    Object.prototype.toString.call(val)
   );
-};
 // 转换变量
 export function toFetch(params, pkey, objectList = {}) {
   _.forEach(params, (val, key) => {
