@@ -148,8 +148,7 @@ let _change = ({ path, build = false, all = false }) => {
 };
 // 开始监听
 gulp.task(
-  'go',
-  gulp.parallel('connect', done => {
+  'go', done => {
     const matches = glob.sync(
       `${userConfig.path}/**/{!node_modules,${userConfig.src.path}/${
         userConfig.src.js
@@ -162,12 +161,11 @@ gulp.task(
       _change({ path });
     });
     done();
-  })
+  }
 );
 // 开始监听（压缩
 gulp.task(
-  'build',
-  gulp.parallel('connect', done => {
+  'build', done => {
     const matches = glob.sync(
       `${userConfig.path}/**/{!node_modules,${userConfig.src.path}/${
         userConfig.src.js
@@ -180,11 +178,11 @@ gulp.task(
       _change({ path, build: true });
     });
     done();
-  })
+  }
 );
 
 // 开始监听 (压缩和非压缩)
-gulp.task('all', gulp.parallel('go', 'build', done => done()));
+gulp.task('all', gulp.series('connect', gulp.parallel('go', 'build', done => done())));
 // gulp.task('all', ['connect'],() => {
 //      let _watch = gulp.watch(`${userConfig.path}/**/${userConfig.src.path}/**/*.*`);
 
@@ -194,4 +192,4 @@ gulp.task('all', gulp.parallel('go', 'build', done => done()));
 // });
 
 // 监听文件变化
-gulp.task('default', gulp.parallel('go', done => done()));
+gulp.task('default', gulp.series('connect',gulp.parallel('go', done => done())));
